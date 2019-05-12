@@ -1,0 +1,11 @@
+<div class="recommend">
+  <wy-carousel #wyCarousel [activeIndex]="carouselActiveIndex" [bgColor]="bannerBg" (changeSlide)="onChangeSlide($event)">
+    <nz-carousel nzAutoPlay [nzEffect]="'fade'" [nzDotRender]="wyCarousel.dotRef" (nzBeforeChange)="nzBeforeChange($event)">
+      <div nz-carousel-content *ngFor="let item of banners; trackBy: trackByBanners">
+        <a [href]="item.url" target="_blank" class="banner-item">
+          <img [src]="item.imageUrl" />
+        </a>
+      </div>
+    </nz-carousel>
+  </wy-carousel>
+</div>
