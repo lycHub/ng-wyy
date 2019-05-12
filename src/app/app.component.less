@@ -1,0 +1,33 @@
+@import '../assets/styles/zorro';
+#app .layout{
+  .header {
+    .wrap{
+      display: flex;
+      justify-content: space-between;
+      .left{
+        display: flex;
+        h1{
+          width: 157px;
+          color: @normal-color;
+          font-size: @font-size-lgx;
+          margin-bottom: 0;
+          margin-right: 20px;
+          text-align: center;
+        }
+        ul{
+          height:64px;
+          line-height:64px;
+        }
+      }
+      .right{
+        display: flex;
+        .search{
+          margin-right: 15px;
+        }
+      }
+    }
+  }
+  .content{
+    background-color: @body-color;
+  }
+}

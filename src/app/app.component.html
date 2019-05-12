@@ -1,0 +1,46 @@
+<div id="app">
+  <nz-layout class="layout">
+    <nz-header class="header">
+      <div class="wrap">
+        <div class="left">
+          <h1>Music</h1>
+          <ul nz-menu [nzTheme]="'dark'" [nzMode]="'horizontal'">
+            <li nz-menu-item>推荐</li>
+            <li nz-menu-item>歌单</li>
+            <li nz-menu-item>歌手</li>
+          </ul>
+        </div>
+        <div class="right">
+          <div class="search">
+            <nz-input-group [nzSuffix]="suffixIconSearch">
+              <input type="text" nz-input placeholder="input search text" />
+            </nz-input-group>
+            <ng-template #suffixIconSearch>
+              <i nz-icon type="search"></i>
+            </ng-template>
+          </div>
+          <div class="member">
+            <nz-dropdown>
+              <a nz-dropdown> 登陆 <i nz-icon type="down"></i> </a>
+              <ul nz-menu nzSelectable>
+                <li nz-menu-item>
+                  <a>手机登陆</a>
+                </li>
+                <li nz-menu-item>
+                  <a>手机登陆</a>
+                </li>
+                <li nz-menu-item>
+                  <a>手机登陆</a>
+                </li>
+              </ul>
+            </nz-dropdown>
+          </div>
+        </div>
+      </div>
+    </nz-header>
+    <nz-content class="content">
+      <router-outlet></router-outlet>
+    </nz-content>
+    <nz-footer style="text-align: center;">Ant Design ©2019 Implement By Angular</nz-footer>
+  </nz-layout>
+</div>
