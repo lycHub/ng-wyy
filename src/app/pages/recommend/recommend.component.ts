@@ -10,6 +10,7 @@ import {NzCarouselComponent} from "ng-zorro-antd";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RecommendComponent implements OnInit {
+  arr = Array(8).fill(4);
   banners: Banner[];
   
   // 轮播当前索引

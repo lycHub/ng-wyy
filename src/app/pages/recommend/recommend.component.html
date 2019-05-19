@@ -8,4 +8,51 @@
       </div>
     </nz-carousel>
   </wy-carousel>
+
+  <div class="main">
+    <div class="wrap">
+      <div class="left">
+        <section class="sec hot-rec">
+          <div class="up">
+            <div class="navs">
+              <h2>
+                <i></i>
+                <a href="#">热门推荐</a>
+              </h2>
+              <nav>
+                <a href="/html/">HTML</a> |
+                <a href="/css/">CSS</a> |
+                <a href="/js/">JavaScript</a> |
+                <a href="/jquery/">jQuery</a>
+              </nav>
+            </div>
+            <a href="#">
+              更多
+              <i nz-icon type="arrow-right" theme="outline"></i>
+            </a>
+          </div>
+
+          <div class="down">
+            <div class="down-wrap">
+              <div class="sheet-item" *ngFor="let item of arr">
+                <a class="cover">
+                  <img src="http://p2.music.126.net/3Uo6W3DogOqZ6TxwDp8VbA==/109951164080624520.jpg?param=140y140" alt="">
+                  <div class="bottom">
+                    bottom
+                  </div>
+                </a>
+                <a href="#" class="dec">
+                  拯救歌荒大作战！下一首单曲循环
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="right">
+        dasdasdadada
+      </div>
+    </div>
+  </div>
 </div>

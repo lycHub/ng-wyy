@@ -1,6 +1,84 @@
+@import "../../../assets/styles/varibles";
 .recommend{
   .banner-item{
     display: block;
     width: 100%;
+  }
+
+  .main{
+    .wrap{
+      display: flex;
+      background-color: @white-color;
+      .left{
+        width: 726px;
+        padding: 20px 20px 40px;
+        .sec{
+          .up{
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding: 0 10px 10px 10px;
+            border-bottom: 2px solid @red-color;
+            margin-bottom: 15px;
+            .navs{
+              display: flex;
+              align-items: flex-end;
+              h2{
+                font-size: @font-size-lgs;
+                i{
+                  display: inline-block;
+                  width: 15px;
+                  height: 15px;
+                  background-color: @white-color;
+                  border:3px solid @red-color;
+                  border-radius: 50%;
+                  margin-right: 10px;
+                }
+              }
+              nav {
+                a {
+                  margin-left: 15px;
+                }
+              }
+            }
+          }
+
+          .down{
+            .down-wrap{
+              display: flex;
+              flex-wrap: wrap;
+              .sheet-item{
+                width: 140px;
+                height:204px;
+                margin-right: 42px;
+                &:nth-of-type(4n){
+                  margin-right: 0;
+                }
+                .cover{
+                  position: relative;
+                  display: block;
+                  height:140px;
+                  .bottom{
+                    width: 100%;
+                    position: absolute;
+                    bottom: 0;
+                    background-color: @black-color;
+                    color: @white-color;
+                    opacity: .5;
+                  }
+                }
+                .dec{
+                  display: block;
+                  margin-top: 8px;
+                }
+              }
+            }
+          }
+        }
+      }
+      .right{
+        width: 250px;
+      }
+    }
   }
 }
