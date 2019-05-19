@@ -8,7 +8,7 @@ import {catchError, map} from "rxjs/internal/operators";
 @Injectable({
   providedIn: ServiceModule
 })
-export class RecommendService {
+export class HomeService {
   constructor(private http: HttpClient, @Inject('API_CONFIG') private config: string) { }
   
   getBanners(): Observable<Banner[]> {// bgColor
@@ -19,10 +19,10 @@ export class RecommendService {
           item.bgColor = bgColor[key]
         });
         return res.banners;
-      }), catchError(RecommendService.handleError));
+      }), catchError(this.handleError));
   }
   
-  static handleError(error: HttpErrorResponse): never {
+  private handleError(error: HttpErrorResponse): never {
     console.error(error);
     throw new Error(error.error.message);
   };

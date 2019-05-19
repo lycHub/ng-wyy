@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import {RecommendComponent} from "./recommend.component";
+import {HomeComponent} from "./home.component";
 
 const routes: Routes = [
-  { path: 'recommend', component: RecommendComponent, data: { title: '推荐' } }
+  { path: 'home', component: HomeComponent, data: { title: '发现音乐' } }
 ];
 
 
@@ -11,4 +11,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class RecommendRoutingModule { }
+export class HomeRoutingModule { }

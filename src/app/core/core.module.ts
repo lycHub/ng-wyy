@@ -7,7 +7,6 @@ import {PagesModule} from "../pages/pages.module";
 import {ServiceModule} from "../service/service.module";
 
 @NgModule({
-  declarations: [],
   imports: [
     AppRoutingModule,
     HttpClientModule,

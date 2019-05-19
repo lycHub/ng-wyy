@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
-import {RecommendModule} from "./recommend/recommend.module";
+import {HomeModule} from "./home/home.module";
 
 @NgModule({
   imports: [
-    RecommendModule
+    HomeModule
   ],
   exports: [
-    RecommendModule
+    HomeModule
   ]
 })
 export class PagesModule { }
