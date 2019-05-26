@@ -1,7 +1,7 @@
-<div class="recommend">
+<div class="home">
   <wy-carousel #wyCarousel [activeIndex]="carouselActiveIndex" [bgColor]="bannerBg" (changeSlide)="onChangeSlide($event)">
     <nz-carousel nzAutoPlay [nzEffect]="'fade'" [nzDotRender]="wyCarousel.dotRef" (nzBeforeChange)="nzBeforeChange($event)">
-      <div nz-carousel-content *ngFor="let item of banners; trackBy: trackByBanners">
+      <div class="carousel-item" nz-carousel-content *ngFor="let item of banners; trackBy: trackByBanners">
         <a [href]="item.url" target="_blank" class="banner-item">
           <img [src]="item.imageUrl" />
         </a>
@@ -12,7 +12,7 @@
   <div class="main">
     <div class="wrap">
       <div class="left">
-        <section class="sec hot-rec">
+        <section class="sec">
           <div class="up">
             <div class="navs">
               <h2>
@@ -20,10 +20,7 @@
                 <a href="#">热门推荐</a>
               </h2>
               <nav>
-                <a href="/html/">HTML</a> |
-                <a href="/css/">CSS</a> |
-                <a href="/js/">JavaScript</a> |
-                <a href="/jquery/">jQuery</a>
+                <a href="/html/" *ngFor="let item of hotTags;trackBy: trackByHotTags">{{item.name}}</a>
               </nav>
             </div>
             <a href="#">
@@ -34,20 +31,18 @@
 
           <div class="down">
             <div class="down-wrap">
-              <div class="sheet-item" *ngFor="let item of arr">
+              <div class="sheet-item" *ngFor="let item of songList;trackBy: trackBySongList">
                 <a class="cover">
-                  <img src="http://p2.music.126.net/3Uo6W3DogOqZ6TxwDp8VbA==/109951164080624520.jpg?param=140y140" alt="">
+                  <img src="{{item.picUrl}}" alt="{{item.name}}">
                   <div class="bottom">
                     <div class="num">
                       <i nz-icon [nzIconfont]="'icon-erji'" style="color:#fff;"></i>
-                      <span>250万</span>
+                      <span>{{item.playCount}}</span>
                     </div>
                     <i nz-icon [nzIconfont]="'icon-play'" style="color:#fff;"></i>
                   </div>
                 </a>
-                <a href="#" class="dec">
-                  拯救歌荒大作战！下一首单曲循环
-                </a>
+                <a href="#" class="dec">{{item.name}}</a>
               </div>
             </div>
           </div>
@@ -57,6 +52,36 @@
       <div class="right">
         dasdasdadada
       </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="m-player">
+  <div class="wrap">
+    <div class="btns">
+      <i class="last"></i>
+      <i class="play"></i>
+      <i class="next"></i>
+    </div>
+    <div class="head">
+      <img src="http://p1.music.126.net/Mc2TmmKNCXLuUv5GoUDNhw==/109951163071274354.jpg?param=34y34">
+      <i class="mask"></i>
+    </div>
+    <div class="play">
+
+    </div>
+
+    <div class="oper">
+      <i class="like" title="收藏"></i>
+      <i class="share" title="分享"></i>
+    </div>
+    <div class="ctrl">
+      <i class="volume" title="音量"></i>
+      <i class="mode" title="模式"></i>
+      <p class="open">
+        <span>1000</span>
+      </p>
     </div>
   </div>
 </div>

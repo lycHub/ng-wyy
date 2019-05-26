@@ -1,8 +1,11 @@
 import {Component, OnInit, ChangeDetectionStrategy, ViewChild, Inject} from '@angular/core';
-import {HomeService} from "../../service/home/home.service";
-import {Banner} from "../../service/home/data.models";
+import {Banner, HotTag, SongItem} from "../../service/data.models";
 import {NzCarouselComponent} from "ng-zorro-antd";
 import {NzIconService} from "ng-zorro-antd/icon";
+import {Observable} from "rxjs/index";
+import {ActivatedRoute} from "@angular/router";
+import {map} from "rxjs/internal/operators";
+import {ICON_FONT} from "../../core/inject-tokens";
 
 @Component({
   selector: 'app-home',
@@ -11,26 +14,25 @@ import {NzIconService} from "ng-zorro-antd/icon";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HomeComponent implements OnInit {
-  arr = Array(8).fill(4);
   banners: Banner[];
+  hotTags: HotTag[];
+  songList: SongItem[];
   
   // 轮播当前索引
   carouselActiveIndex = 0;
+  
+  private data$: Observable<any[]>;
   
   get bannerBg(): string {
     return this.banners && this.banners[this.carouselActiveIndex].bgColor;
   }
   
   @ViewChild(NzCarouselComponent) private nzCarousel: NzCarouselComponent;
-  constructor(private homeServe: HomeService, @Inject('IconFont') private iconfont: NzIconService) {
-    
-    /*
-    * http://localhost:3000/playlist/hot
-    * http://localhost:3000/personalized
-    * */
-    this.homeServe.getBanners().subscribe(res => {
-      // console.log(res);
-      this.banners = res;
+  constructor(private route: ActivatedRoute, @Inject(ICON_FONT) private iconfont: NzIconService) {
+    this.route.data.pipe(map(res => res.homeDatas)).subscribe(([banners, hotTags, songList]) => {
+      this.banners = banners;
+      this.hotTags = hotTags;
+      this.songList = songList;
     });
   }
 
@@ -44,5 +46,8 @@ export class HomeComponent implements OnInit {
     this.carouselActiveIndex = to;
   }
   
+  
   trackByBanners(index: number, banner: Banner): number { return banner.targetId; }
+  trackByHotTags(index: number, tag: HotTag): number { return tag.id; }
+  trackBySongList(index: number, song: SongItem): number { return song.id; }
 }

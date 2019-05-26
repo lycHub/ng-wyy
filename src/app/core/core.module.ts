@@ -8,12 +8,12 @@ import {ServiceModule} from "../service/service.module";
 
 @NgModule({
   imports: [
-    AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
     ShareModule,
     PagesModule,
-    ServiceModule
+    ServiceModule,
+    AppRoutingModule,
   ],
   exports: [
     AppRoutingModule,

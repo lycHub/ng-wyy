@@ -4,7 +4,6 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {NgZorroAntdModule} from "ng-zorro-antd";
 
 @NgModule({
-  declarations: [],
   imports: [
     CommonModule,
     FormsModule,
