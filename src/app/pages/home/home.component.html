@@ -37,7 +37,7 @@
                   <div class="bottom">
                     <div class="num">
                       <i nz-icon [nzIconfont]="'icon-erji'" style="color:#fff;"></i>
-                      <span>{{item.playCount}}</span>
+                      <span>{{item.playCount | PlayCount}}</span>
                     </div>
                     <i nz-icon [nzIconfont]="'icon-play'" style="color:#fff;"></i>
                   </div>
@@ -56,32 +56,4 @@
   </div>
 </div>
 
-
-<div class="m-player">
-  <div class="wrap">
-    <div class="btns">
-      <i class="last"></i>
-      <i class="play"></i>
-      <i class="next"></i>
-    </div>
-    <div class="head">
-      <img src="http://p1.music.126.net/Mc2TmmKNCXLuUv5GoUDNhw==/109951163071274354.jpg?param=34y34">
-      <i class="mask"></i>
-    </div>
-    <div class="play">
-
-    </div>
-
-    <div class="oper">
-      <i class="like" title="收藏"></i>
-      <i class="share" title="分享"></i>
-    </div>
-    <div class="ctrl">
-      <i class="volume" title="音量"></i>
-      <i class="mode" title="模式"></i>
-      <p class="open">
-        <span>1000</span>
-      </p>
-    </div>
-  </div>
-</div>
+<app-wy-player></app-wy-player>

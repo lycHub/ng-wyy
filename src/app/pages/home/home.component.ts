@@ -14,6 +14,7 @@ import {ICON_FONT} from "../../core/inject-tokens";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HomeComponent implements OnInit {
+  // arr = Array(100).fill(3);
   banners: Banner[];
   hotTags: HotTag[];
   songList: SongItem[];

@@ -1,4 +1,5 @@
 @import "../../../assets/styles/varibles";
+@import "../../../assets/styles/mixins";
 .home{
   .banner-item{
     display: block;
@@ -100,112 +101,6 @@
       }
       .right{
         width: 250px;
-      }
-    }
-  }
-}
-
-
-.m-player{
-  position: fixed;
-  zoom: 1;
-  left: 0;
-  bottom:0;
-  width: 100%;
-  background-color: @black-color;
-  .wrap{
-    display: flex;
-    .btns{
-      width: 137px;
-      padding-top: 6px;
-      i{
-        display: inline-block;
-        width: 28px;
-        height:28px;
-        margin-right: 8px;
-        border-radius: 50%;
-        background: url(../../../assets/images/playbar.png) no-repeat;
-        cursor: pointer;
-        &.last{
-          background-position: 0 -130px;
-        }
-        &.play{
-          width: 36px;
-          height:36px;
-          background-position: -40px -204px;
-        }
-        &.next{
-          background-position: -80px -130px;
-        }
-      }
-    }
-    .head{
-      position: relative;
-      margin: 6px 15px 0 0;
-      .mask{
-        display: block;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 34px;
-        height: 35px;
-        background: url(../../../assets/images/playbar.png) no-repeat 0 -80px;
-      }
-    }
-    .play{
-      width: 608px;
-    }
-    .oper{
-      width: 60px;
-      i{
-        display: inline-block;
-        width: 25px;
-        height: 25px;
-        margin: 11px 2px 0 0;
-        background: url(../../../assets/images/playbar.png) no-repeat;
-        cursor: pointer;
-        &.like{
-          background-position: -88px -189px;
-        }
-        &.share{
-          background-position: -114px -163px;
-        }
-      }
-    }
-    .ctrl{
-      position: relative;
-      width: 113px;
-      padding-left: 13px;
-      i{
-        display: inline-block;
-        width: 25px;
-        height: 25px;
-        margin: 11px 2px 0 0;
-        background: url(../../../assets/images/playbar.png) no-repeat;
-        cursor: pointer;
-        &.volume{
-          background-position: -2px -248px;
-        }
-        &.mode{
-          background-position: -66px -248px;
-        }
-      }
-      .open{
-        display: inline-block;
-        vertical-align: 45%;
-        cursor: pointer;
-        span{
-          display: block;
-          width: 38px;
-          height:24px;
-          padding-left: 28px;
-          background: url(../../../assets/images/playbar.png) no-repeat -42px -68px;
-          text-align: center;
-          color: #666;
-          text-shadow: 0 1px 0 #080707;
-          text-indent: 0;
-          text-decoration: none;
-        }
       }
     }
   }
