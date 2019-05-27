@@ -1,4 +1,4 @@
-import {Component, OnInit, ChangeDetectionStrategy, ViewChild, Inject} from '@angular/core';
+import {Component, OnInit, ViewChild, Inject} from '@angular/core';
 import {Banner, HotTag, SongItem} from "../../service/data.models";
 import {NzCarouselComponent} from "ng-zorro-antd";
 import {NzIconService} from "ng-zorro-antd/icon";
@@ -10,8 +10,7 @@ import {ICON_FONT} from "../../core/inject-tokens";
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.less'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./home.component.less']
 })
 export class HomeComponent implements OnInit {
   // arr = Array(100).fill(3);
