@@ -29,11 +29,11 @@ export class HomeComponent implements OnInit {
   
   @ViewChild(NzCarouselComponent) private nzCarousel: NzCarouselComponent;
   constructor(private route: ActivatedRoute, @Inject(ICON_FONT) private iconfont: NzIconService) {
-    this.route.data.pipe(map(res => res.homeDatas)).subscribe(([banners, hotTags, songList]) => {
+    /* this.route.data.pipe(map(res => res.homeDatas)).subscribe(([banners, hotTags, songList]) => {
       this.banners = banners;
       this.hotTags = hotTags;
       this.songList = songList;
-    });
+    }); */
   }
 
   ngOnInit() {

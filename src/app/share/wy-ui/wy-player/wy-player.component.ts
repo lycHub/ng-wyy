@@ -8,8 +8,5 @@ import { Component, OnInit } from '@angular/core';
 export class WyPlayerComponent implements OnInit {
   arr = Array(100).fill(3);
   constructor() { }
-
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }
