@@ -23,7 +23,9 @@
         <i></i>
       </div>
       <div class="bar">
-        <div class="slider"></div>
+        <div class="slider-wrap">
+          <app-wy-slider></app-wy-slider>
+        </div>
         <span class="time">
           <em>04:13</em> / 05:33
         </span>
@@ -38,11 +40,13 @@
       <i class="volume" title="音量"></i>
       <i class="mode" title="模式"></i>
       <p class="open">
-        <span>1000</span>
+        <span></span>
       </p>
 
       <!--音量-->
-      <div class="control-vol"></div>
+      <div class="control-vol">
+        <app-wy-slider [nzVertical]="true"></app-wy-slider>
+      </div>
     </div>
 
     <!--面板-->

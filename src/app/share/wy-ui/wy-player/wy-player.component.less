@@ -48,6 +48,7 @@
   .wrap{
     position: relative;
     display: flex;
+    padding: 8px 0;
     .btns{
       width: 137px;
       padding-top: 6px;
@@ -111,12 +112,12 @@
       }
       .bar{
         color: @white-color;
-        .slider{
-          width: 490px;
-          height: 10px;
+        .slider-wrap{
           display: inline-block;
-          background: aqua;
+          width: 490px;
           margin-right: 10px;
+          vertical-align: bottom;
+          padding: 8px 0;
         }
       }
     }
@@ -161,15 +162,13 @@
       }
       .open{
         display: inline-block;
-        vertical-align: 45%;
         cursor: pointer;
         span{
           display: block;
-          padding-left: 28px;
           text-align: center;
           color: @text-color;
           text-shadow: 0 1px 0 @box-shadow-base;
-          .icon('../images/playbar.png', 38px, 24px);
+          .icon('../images/playbar.png', 24px, 24px);
           background-position: -42px -68px;
           &:hover{
             background-position: -42px -98px;
@@ -179,10 +178,10 @@
 
       .control-vol{
         position: absolute;
-        top: -113px;
+        top: -128px;
         left: 9px;
-        width: 32px;
-        height: 113px;
+        padding: 14px;
+        height: 120px;
         background-color: @black-color;
       }
     }

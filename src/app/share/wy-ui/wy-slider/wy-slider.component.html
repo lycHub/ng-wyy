@@ -1,0 +1,15 @@
+<div class="wy-slider" #slider [class.wy-slider-vertical]="nzVertical">
+  <!-- <div class="wy-slider-rail"></div> -->
+   <!-- 色条 -->
+   <app-wy-slider-track
+    [nzVertical]="nzVertical"
+    [nzLength]="offset">
+  </app-wy-slider-track>
+
+   <!-- 滑块 -->
+
+  <app-wy-slider-handle
+    [nzVertical]="nzVertical"
+    [nzOffset]="offset">
+  </app-wy-slider-handle>
+</div>

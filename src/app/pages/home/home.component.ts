@@ -21,8 +21,6 @@ export class HomeComponent implements OnInit {
   // 轮播当前索引
   carouselActiveIndex = 0;
   
-  private data$: Observable<any[]>;
-  
   get bannerBg(): string {
     return this.banners && this.banners[this.carouselActiveIndex].bgColor;
   }

@@ -1,0 +1,358 @@
+.m-player {
+  position: fixed;
+  zoom: 1;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: #272727;
+}
+.m-player .hand {
+  width: 100%;
+  height: 15px;
+  cursor: pointer;
+  background-color: #1890ff;
+}
+.m-player .lock {
+  position: relative;
+  /*  .right{
+        position: absolute;
+        top: -1px;
+        right: 0;
+        .icon('../images/playbar.png', 15px, 54px);
+        background-position: -52px -393px;
+        pointer-events: none;
+      }*/
+}
+.m-player .lock .left {
+  position: absolute;
+  top: -5px;
+  right: 15px;
+  display: inline-block;
+  width: 52px;
+  height: 67px;
+  background: url('../images/playbar.png') no-repeat;
+  cursor: pointer;
+  background-position: 0 -380px;
+}
+.m-player .lock .left i {
+  margin: 6px 0 0 17px;
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  background: url('../images/playbar.png') no-repeat;
+  cursor: pointer;
+  background-position: -80px -380px;
+}
+.m-player .lock .left i:hover {
+  background-position: -80px -400px;
+}
+.m-player .lock .left i.locked {
+  background-position: -100px -380px;
+}
+.m-player .lock .left i.locked:hover {
+  background-position: -100px -400px;
+}
+.m-player .wrap {
+  position: relative;
+  display: flex;
+  padding: 8px 0;
+}
+.m-player .wrap .btns {
+  width: 137px;
+  padding-top: 6px;
+}
+.m-player .wrap .btns i {
+  margin-right: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  background: url('../images/playbar.png') no-repeat;
+  cursor: pointer;
+}
+.m-player .wrap .btns i.last {
+  background-position: 0 -130px;
+}
+.m-player .wrap .btns i.last:hover {
+  background-position: -30px -130px;
+}
+.m-player .wrap .btns i.toggle {
+  width: 36px;
+  height: 36px;
+  background-position: -40px -204px;
+}
+.m-player .wrap .btns i.next {
+  background-position: -80px -130px;
+}
+.m-player .wrap .btns i.next:hover {
+  background-position: -110px -130px;
+}
+.m-player .wrap .head {
+  position: relative;
+  margin: 6px 15px 0 0;
+}
+.m-player .wrap .head img {
+  width: 34px;
+  height: 34px;
+}
+.m-player .wrap .head .mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: inline-block;
+  width: 34px;
+  height: 34px;
+  background: url('../images/playbar.png') no-repeat;
+  cursor: pointer;
+  background-position: 0 -80px;
+}
+.m-player .wrap .play {
+  width: 608px;
+}
+.m-player .wrap .play .words {
+  color: #fff;
+  text-shadow: 0 1px 0 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+.m-player .wrap .play .words span {
+  display: inline-block;
+  max-width: 300px;
+  margin-right: 10px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.m-player .wrap .play .words i {
+  display: inline-block;
+  width: 14px;
+  height: 15px;
+  background: url('../images/playbar.png') no-repeat;
+  cursor: pointer;
+  background-position: -110px -103px;
+}
+.m-player .wrap .play .words i:hover {
+  background-position: -130px -103px;
+}
+.m-player .wrap .play .bar {
+  color: #fff;
+}
+.m-player .wrap .play .bar .slider-wrap {
+  display: inline-block;
+  width: 490px;
+  margin-right: 10px;
+  vertical-align: bottom;
+  padding: 8px 0;
+}
+.m-player .wrap .oper {
+  width: 60px;
+}
+.m-player .wrap .oper i {
+  margin: 11px 2px 0 0;
+  display: inline-block;
+  width: 25px;
+  height: 25px;
+  background: url('../images/playbar.png') no-repeat;
+  cursor: pointer;
+}
+.m-player .wrap .oper i.like {
+  background-position: -88px -163px;
+}
+.m-player .wrap .oper i.like:hover {
+  background-position: -88px -189px;
+}
+.m-player .wrap .oper i.share {
+  background-position: -114px -163px;
+}
+.m-player .wrap .oper i.share:hover {
+  background-position: -114px -189px;
+}
+.m-player .wrap .ctrl {
+  position: relative;
+  width: 113px;
+  padding-left: 13px;
+}
+.m-player .wrap .ctrl i {
+  margin: 11px 2px 0 0;
+  display: inline-block;
+  width: 25px;
+  height: 25px;
+  background: url('../images/playbar.png') no-repeat;
+  cursor: pointer;
+}
+.m-player .wrap .ctrl i.volume {
+  background-position: -2px -248px;
+}
+.m-player .wrap .ctrl i.volume:hover {
+  background-position: -31px -248px;
+}
+.m-player .wrap .ctrl i.mode {
+  background-position: -66px -248px;
+}
+.m-player .wrap .ctrl i.mode:hover {
+  background-position: -93px -248px;
+}
+.m-player .wrap .ctrl .open {
+  display: inline-block;
+  cursor: pointer;
+}
+.m-player .wrap .ctrl .open span {
+  display: block;
+  text-align: center;
+  color: rgba(0, 0, 0, 0.65);
+  text-shadow: 0 1px 0 0 2px 8px rgba(0, 0, 0, 0.15);
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  background: url('../images/playbar.png') no-repeat;
+  cursor: pointer;
+  background-position: -42px -68px;
+}
+.m-player .wrap .ctrl .open span:hover {
+  background-position: -42px -98px;
+}
+.m-player .wrap .ctrl .control-vol {
+  position: absolute;
+  top: -128px;
+  left: 9px;
+  padding: 14px;
+  height: 120px;
+  background-color: #000;
+}
+.m-player .wrap .play-panel {
+  position: absolute;
+  bottom: 47px;
+  width: 100%;
+  height: 300px;
+  background-color: #272727;
+}
+.m-player .wrap .play-panel .hd {
+  background: url(../../../../assets/images/playlist_bg.png) no-repeat;
+}
+.m-player .wrap .play-panel .hd .hdc {
+  position: relative;
+  height: 40px;
+}
+.m-player .wrap .play-panel .hd .hdc h4 {
+  position: absolute;
+  left: 25px;
+  top: 0;
+  height: 39px;
+  line-height: 39px;
+  font-size: 14px;
+  color: #e2e2e2;
+}
+.m-player .wrap .play-panel .hd .hdc .add-all,
+.m-player .wrap .play-panel .hd .hdc .clear-all {
+  position: absolute;
+  left: 398px;
+  top: 12px;
+  height: 15px;
+  line-height: 15px;
+  cursor: pointer;
+  color: #ccc;
+  font-size: 12px;
+}
+.m-player .wrap .play-panel .hd .hdc .add-all:hover,
+.m-player .wrap .play-panel .hd .hdc .clear-all:hover {
+  color: #e2e2e2;
+}
+.m-player .wrap .play-panel .hd .hdc .add-all:hover .icon,
+.m-player .wrap .play-panel .hd .hdc .clear-all:hover .icon {
+  background-position: -88px -189px;
+}
+.m-player .wrap .play-panel .hd .hdc .add-all .icon,
+.m-player .wrap .play-panel .hd .hdc .clear-all .icon {
+  display: inline-block;
+  width: 25px;
+  height: 25px;
+  background: url('../images/playbar.png') no-repeat;
+  cursor: pointer;
+  background-position: -88px -163px;
+  vertical-align: middle;
+  /*&:hover{
+                background-position: -88px -189px;
+              }*/
+}
+.m-player .wrap .play-panel .hd .hdc .line {
+  position: absolute;
+  top: 15px;
+  left: 482px;
+  height: 15px;
+  border-left: 1px solid #000;
+  border-right: 1px solid #2c2c2c;
+}
+.m-player .wrap .play-panel .hd .hdc .clear-all {
+  left: 490px;
+  top: 15px;
+}
+.m-player .wrap .play-panel .hd .hdc .clear-all:hover .trush {
+  background-position: -51px -20px;
+}
+.m-player .wrap .play-panel .hd .hdc .clear-all .trush {
+  width: 13px;
+  height: 16px;
+  background-image: url('../../../../assets/images/playlist.png');
+  background-position: -51px 0;
+}
+.m-player .wrap .play-panel .hd .hdc .playing-name {
+  position: absolute;
+  left: 595px;
+  top: 0;
+  width: 346px;
+  text-align: center;
+  height: 39px;
+  line-height: 39px;
+  color: #fff;
+  font-size: 14px;
+}
+.m-player .wrap .play-panel .hd .hdc .close {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  background: url('../images/playlist.png') no-repeat;
+  cursor: pointer;
+  background-position: -195px 9px;
+}
+.m-player .wrap .play-panel .hd .hdc .close:hover {
+  background-position: -195px -20px;
+}
+.m-player .wrap .play-panel .bd {
+  position: relative;
+  display: inline-block;
+  width: 976px;
+  height: 260px;
+  background: url('../images/playlist_bg.png') no-repeat;
+  cursor: pointer;
+  background-position: -1014px 0;
+  background-repeat: repeat-y;
+}
+.m-player .wrap .play-panel .bd .imgbg {
+  position: absolute;
+  left: 2px;
+  top: 0;
+  width: 980px;
+  height: auto;
+  opacity: .2;
+}
+.m-player .wrap .play-panel .bd .msk {
+  position: absolute;
+  left: 2px;
+  top: 0;
+  z-index: 2;
+  width: 558px;
+  height: 260px;
+  background-color: #121212;
+  opacity: .5;
+}
+.m-player .wrap .play-panel .bd .list-wrap {
+  position: absolute;
+  left: 2px;
+  top: 0;
+  z-index: 3;
+  height: 260px;
+  width: 553px;
+  overflow: hidden;
+  color: #ccc;
+}
