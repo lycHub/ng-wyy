@@ -1,5 +1,10 @@
-import {AfterViewInit, Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges, ViewChild} from '@angular/core';
+import {
+  AfterViewInit, Component, ElementRef, Inject, Input, OnChanges, OnInit, SimpleChanges,
+  ViewChild
+} from '@angular/core';
 import {SongSheetList} from "../../../service/song/song.service";
+import {fromEvent, Observable, Subscription} from "rxjs/index";
+import {DOCUMENT} from "@angular/common";
 
 @Component({
   selector: 'app-wy-player',
@@ -45,9 +50,40 @@ export class WyPlayerComponent implements OnInit, OnChanges, AfterViewInit {
       return buffered.length ? (buffered.end(0) / this.duration) * 100 : 0;
     }
   }*/
+ 
+ // 当前音量
+  currentVol = 60;
+  
+  // 显示音量控件
+  showVolPanel = false;
+  
+  // 是否点击了音量控件
+  volClick = false;
   
   @ViewChild('audio') private audio: ElementRef;
   private audioEl: HTMLAudioElement;
+  
+  private winClick$: Subscription;
+  constructor(@Inject(DOCUMENT) private doc: Document) {
+    this.winClick$ = fromEvent(this.doc, 'click').subscribe((e: MouseEvent) => {
+      if (!this.volClick) {
+        this.showVolPanel = false;
+      }
+      this.volClick = false;
+    });
+  }
+  
+  // 点击音量面板
+  onVolClick() {
+    this.volClick = true;
+  }
+  
+  // 控制音量面板
+  toggleVolPanel() {
+    this.onVolClick();
+    this.showVolPanel = !this.showVolPanel;
+  }
+  
   ngOnInit() {}
   
   ngAfterViewInit(): void {
@@ -112,9 +148,14 @@ export class WyPlayerComponent implements OnInit, OnChanges, AfterViewInit {
     this.currentTime = e.target.currentTime;
     this.percent = (this.currentTime / this.duration) * 100;
     const buffered = this.audioEl.buffered;
-    if (buffered.length) {
+    if (buffered.length && this.bufferPercent < 100) {
       this.bufferPercent = (buffered.end(0) / this.duration) * 100;
     }
+  }
+  
+  // 改变音量
+  onVolChange(val: number) {
+    this.audioEl.volume = val / 100;
   }
   
   private formatTime(time: number): string {

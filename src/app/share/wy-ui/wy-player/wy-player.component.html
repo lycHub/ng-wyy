@@ -38,15 +38,15 @@
         <i class="share" title="分享"></i>
       </div>
       <div class="ctrl">
-        <i class="volume" title="音量"></i>
+        <i class="volume" title="音量" (click)="toggleVolPanel()"></i>
         <i class="mode" title="模式"></i>
         <p class="open">
           <span></span>
         </p>
 
         <!--音量-->
-        <div class="control-vol">
-          <app-wy-slider [nzVertical]="true"></app-wy-slider>
+        <div class="control-vol" [hidden]="!showVolPanel" (click)="onVolClick()">
+          <app-wy-slider [nzVertical]="true" [(ngModel)]="currentVol" (ngModelChange)="onVolChange($event)"></app-wy-slider>
         </div>
       </div>
 
