@@ -39,7 +39,7 @@
                       <i nz-icon [nzIconfont]="'icon-erji'" style="color:#fff;"></i>
                       <span>{{item.playCount | PlayCount}}</span>
                     </div>
-                    <i nz-icon [nzIconfont]="'icon-play'" style="color:#fff;"></i>
+                    <i nz-icon [nzIconfont]="'icon-play'" style="color:#fff;" (click)="playSong(item.id)"></i>
                   </div>
                 </a>
                 <a href="#" class="dec">{{item.name}}</a>
@@ -56,4 +56,4 @@
   </div>
 </div>
 
-<app-wy-player></app-wy-player>
+<app-wy-player [songSheetList]="songSheetList"></app-wy-player>

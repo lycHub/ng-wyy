@@ -1,11 +1,10 @@
 import {Inject, Injectable} from '@angular/core';
 import {ServiceModule} from "../service.module";
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
-import {Banner, HotTag, SongItem} from "../data.models";
-import {forkJoin, Observable} from "rxjs/index";
+import {Banner, HotTag, Song} from "../data.models";
+import {Observable} from "rxjs/index";
 import {catchError, map} from "rxjs/internal/operators";
 import {API_CONFIG} from "../../core/inject-tokens";
-
 @Injectable({
   providedIn: ServiceModule
 })
@@ -15,7 +14,7 @@ export class HomeService {
   getBanners(): Observable<Banner[]> {// bgColor
     const bgColor = ['#f1f0ee', '#5e786b', '#040404', '#eff1fd', '#202441', '#f1eee9', '#c17335', '#f1f1e7', '#5a5a5a'];
     return this.http.get(this.config + 'banner')
-      .pipe(map((res: {banners: Banner[]; code: number;}) => {
+      .pipe(map((res: { banners: Banner[] }) => {
         res.banners.forEach((item, key) => {
           item.bgColor = bgColor[key]
         });
@@ -35,19 +34,10 @@ export class HomeService {
   
   
   // 推荐歌单
-  getPersonalSongList(): Observable<SongItem[]> {
+  getPersonalSongList(): Observable<Song[]> {
     return this.http.get(this.config + 'personalized').pipe(
-      map((res: {result: SongItem[]}) => res.result.slice(0, 8)),
+      map((res: {result: Song[]}) => res.result.slice(0, 8)),
       catchError(this.handleError));
-  }
-  
-  
-  getHomeDatas(): Observable<any> {
-    return forkJoin([
-      this.getBanners(),
-      this.getHotTags(),
-      this.getPersonalSongList()
-    ]);
   }
   
   private handleError(error: HttpErrorResponse): never {

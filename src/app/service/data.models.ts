@@ -17,9 +17,28 @@ export type HotTag = {
   position: number;
 }
 
-export type SongItem = {
+export type Song = {
   id: number;
   name: string;
   picUrl: string;
   playCount: number;
+}
+
+
+
+export interface SongSheet {
+  id: number;
+  name: string;
+  ar: Singer[];
+}
+
+export type Singer = {
+  id: number;
+  name: string;
+}
+
+
+export type SongUrl = {
+  id: number;
+  url: string;
 }
