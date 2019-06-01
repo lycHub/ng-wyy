@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges, ViewChild} from '@angular/core';
 import {SongSheetList} from "../../../pages/home/home.component";
 
 @Component({
@@ -9,12 +9,39 @@ import {SongSheetList} from "../../../pages/home/home.component";
 export class WyPlayerComponent implements OnInit, OnChanges {
   arr = Array(100).fill(3);
   @Input() songSheetList: SongSheetList[];
+  
+  // 是否可以播放
+  private songReady = false;
+  
+  // 正在播放
+  currentSong: SongSheetList;
+  
+  @ViewChild('audio') private audio: ElementRef;
   constructor() { }
   ngOnInit() {}
   
   ngOnChanges(changes: SimpleChanges): void {
-    console.log('change');
-    console.log('currentValue', changes.songSheetList.currentValue);
-    // console.log('currentValue', changes);
+    const songSheetList = changes.songSheetList;
+    if (songSheetList && songSheetList.currentValue.length) {
+      this.currentSong = songSheetList.currentValue[0];
+    }
+  }
+  
+  
+  play() {
+    this.songReady = true;
+  }
+  
+  
+  updateTime(e) {
+    // console.log('currentTime', e);
+  }
+  
+  error() {
+    this.songReady = false;
+  }
+  
+  end() {
+    console.log('end');
   }
 }

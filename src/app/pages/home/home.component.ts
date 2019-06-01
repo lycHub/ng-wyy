@@ -85,7 +85,11 @@ export class HomeComponent implements OnInit {
           url
         });
       })).subscribe(
-        res => result.push(res),
+        res => {
+          if (res.url) {
+            result.push(res);
+          }
+        },
         error => console.error(error),
         () => this.songSheetList = result
      );

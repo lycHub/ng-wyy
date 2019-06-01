@@ -81,4 +81,6 @@
       </div>
     </div>
   </div>
+
+  <audio autoplay #audio src="{{currentSong?.url}}" (play)="play()" (error)="error()" (timeupdate)="updateTime($event)" (ended)="end()"></audio>
 </div>
