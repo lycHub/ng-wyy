@@ -1,12 +1,12 @@
+@import "../../../../assets/styles/mixins";
 .wy-slider{
   /* margin: 14px 6px 10px;
   padding: 4px 0; */
-  height: 4px;
-  background-color: #ccc;
-  border-radius: 2px;
+  height: 9px;
   color: rgba(0,0,0,.65);
   font-size: 14px;
   position: relative;
+  background: url('../../../../assets/images/statbar.png') right 0;
   cursor: pointer;
 /* 
   .wy-slider-rail{
@@ -23,23 +23,20 @@
     position: absolute;
     left: 0;
     width: 0;
-    height: 4px;
-    background-color: #40a9ff;
-    border-radius: 4px;
+    height: 100%;
+    background: url('../../../../assets/images/statbar.png') left -66px;
+    &.buffer{
+      background-position: right -30px;
+    }
   }
 
 
   .wy-slider-handle{
     position: absolute;
-    width: 14px;
-    height: 14px;
-    margin-top: -5px;
-    margin-left: -7px;
-    background-color: #fff;
-    border: 2px solid #40a9ff;
-    border-radius: 50%;
-    box-shadow: 0;
-    cursor: pointer;
+    margin-top: -7px;
+    margin-left: -12px;
+    .icon('../images/iconall.png', 22px, 24px);
+    background-position: 0 -250px;
   }
 
 
@@ -47,21 +44,26 @@
   &.wy-slider-vertical{
     width: 4px;
     height: 100%;
+    background-color: #000000a6;
+    background-image: none;
 
 
     .wy-slider-track{
       position: absolute;
       left: 0;
       bottom: 0;
-      width: 4px;
+      width: 100%;
       height: 0;
+      background: url('../../../../assets/images/playbar.png') -40px bottom;
     }
 
 
     .wy-slider-handle{
-      margin-bottom: -7px;
-      margin-left: -5px;
+      margin-bottom: -10px;
+      margin-left: -7px;
       bottom: 0;
+      .icon('../images/iconall.png', 18px, 20px);
+      background-position: -40px -280px;
     }
   }
 }

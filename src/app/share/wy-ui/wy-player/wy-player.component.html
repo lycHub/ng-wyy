@@ -6,79 +6,79 @@
   </div>
   <div class="hand"></div>
 
-  <div class="wrap">
-    <div class="btns">
-      <i class="last"></i>
-      <i class="toggle"></i>
-      <i class="next"></i>
-    </div>
-    <div class="head">
-      <img src="http://s4.music.126.net/style/web2/img/default/default_album.jpg" />
-      <i class="mask"></i>
-    </div>
-    <div class="play">
-      <div class="words">
-        <span>dsadasdas</span>
-        <span>dsadasdas</span>
-        <i></i>
+  <div class="container">
+    <div class="wrap">
+      <div class="btns">
+        <i class="last"></i>
+        <i class="toggle"></i>
+        <i class="next"></i>
       </div>
-      <div class="bar">
-        <div class="slider-wrap">
-          <app-wy-slider></app-wy-slider>
+      <div class="head">
+        <img src="http://s4.music.126.net/style/web2/img/default/default_album.jpg" />
+        <i class="mask"></i>
+      </div>
+      <div class="play">
+        <div class="words">
+          <span>dsadasdas</span>
+          <span>dsadasdas</span>
+          <i></i>
         </div>
-        <span class="time">
+        <div class="bar">
+          <div class="slider-wrap">
+            <app-wy-slider></app-wy-slider>
+          </div>
+          <span class="time">
           <em>04:13</em> / 05:33
         </span>
-      </div>
-    </div>
-
-    <div class="oper">
-      <i class="like" title="收藏"></i>
-      <i class="share" title="分享"></i>
-    </div>
-    <div class="ctrl">
-      <i class="volume" title="音量"></i>
-      <i class="mode" title="模式"></i>
-      <p class="open">
-        <span></span>
-      </p>
-
-      <!--音量-->
-      <div class="control-vol">
-        <app-wy-slider [nzVertical]="true"></app-wy-slider>
-      </div>
-    </div>
-
-    <!--面板-->
-    <div class="play-panel none">
-      <div class="hd">
-        <div class="hdc">
-          <h4>播放列表(<span>0</span>)</h4>
-          <div class="add-all">
-            <i class="icon" title="收藏全部"></i>
-            收藏全部
-          </div>
-          <span class="line"></span>
-          <div class="clear-all">
-            <i class="icon trush" title="清除"></i>
-            清除
-          </div>
-          <p class="playing-name">I won’t cry tonight</p>
-          <i class="icon close">关闭</i>
         </div>
       </div>
 
-      <div class="bd">
-        <img class="imgbg" src="//music.163.com/api/img/blur/109951163826278397" />
-        <div class="msk"></div>
-        <div class="list-wrap">
-          <ul>
-            <li *ngFor="let item of arr;">dasdasdasda</li>
-          </ul>
+      <div class="oper">
+        <i class="like" title="收藏"></i>
+        <i class="share" title="分享"></i>
+      </div>
+      <div class="ctrl">
+        <i class="volume" title="音量"></i>
+        <i class="mode" title="模式"></i>
+        <p class="open">
+          <span></span>
+        </p>
+
+        <!--音量-->
+        <div class="control-vol">
+          <app-wy-slider [nzVertical]="true"></app-wy-slider>
+        </div>
+      </div>
+
+      <!--面板-->
+      <div class="play-panel none">
+        <div class="hd">
+          <div class="hdc">
+            <h4>播放列表(<span>0</span>)</h4>
+            <div class="add-all">
+              <i class="icon" title="收藏全部"></i>
+              收藏全部
+            </div>
+            <span class="line"></span>
+            <div class="clear-all">
+              <i class="icon trush" title="清除"></i>
+              清除
+            </div>
+            <p class="playing-name">I won’t cry tonight</p>
+            <i class="icon close">关闭</i>
+          </div>
+        </div>
+
+        <div class="bd">
+          <img class="imgbg" src="//music.163.com/api/img/blur/109951163826278397" />
+          <div class="msk"></div>
+          <div class="list-wrap">
+            <ul>
+              <li *ngFor="let item of arr;">dasdasdasda</li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
   </div>
-
-
 </div>

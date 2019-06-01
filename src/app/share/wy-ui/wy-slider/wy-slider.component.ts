@@ -28,10 +28,12 @@ export class WySliderComponent implements OnInit, ControlValueAccessor, OnDestro
   @Input() nzDefaultValue: SliderValue = null;
   @Input() nzMax = 100;
   @Input() nzMin = 0;
+  
+  @Input() bufferOffset: SliderValue = null; // 缓冲条长度百分比
 
   value: SliderValue = null;
   sliderDOM: HTMLDivElement;
-
+  
   offset: SliderValue = null; // Track和btn的位置
 
   isDragging = false; // Current dragging state

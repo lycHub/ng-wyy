@@ -3,12 +3,12 @@ import { NzSliderTrackStyle } from './wy-slider-definitions';
 
 @Component({
   selector: 'app-wy-slider-track',
-  template: `<div class="wy-slider-track" [ngStyle]="style"></div>`,
+  template: `<div class="wy-slider-track" [class.buffer]="nzBuffer" [ngStyle]="style"></div>`,
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WySliderTrackComponent implements OnInit {
-  @Input() nzOffset: number;
+  @Input() nzBuffer = false;
   @Input() nzLength: number;
   @Input() nzVertical = false;
 
