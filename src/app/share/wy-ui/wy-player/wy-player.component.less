@@ -59,7 +59,7 @@
           border-radius: 50%;
           .icon('../images/playbar.png', 28px, 28px);
           cursor: pointer;
-          &.last{
+          &.prev{
             background-position: 0 -130px;
             &:hover{
               background-position: -30px -130px;
@@ -69,6 +69,9 @@
             width: 36px;
             height:36px;
             background-position: -40px -204px;
+            &.playing{
+              background-position: 0 -165px;
+            }
           }
           &.next{
             background-position: -80px -130px;
@@ -191,10 +194,11 @@
 
       .play-panel{
         position: absolute;
-        bottom: 47px;
+        bottom: 70px;
         width: 100%;
         height: 300px;
         background-color: @play-bg-color;
+        overflow: hidden;
         .hd{
           background: url(../../../../assets/images/playlist_bg.png) no-repeat;
           .hdc{

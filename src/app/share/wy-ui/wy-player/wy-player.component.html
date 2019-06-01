@@ -9,9 +9,9 @@
   <div class="container">
     <div class="wrap">
       <div class="btns">
-        <i class="last"></i>
-        <i class="toggle"></i>
-        <i class="next"></i>
+        <i class="prev" (click)="onPrev(currentIndex - 1)"></i>
+        <i class="toggle" [class.playing]="playing" (click)="onToggle()"></i>
+        <i class="next" (click)="onNext(currentIndex + 1)"></i>
       </div>
       <div class="head">
         <img src="http://s4.music.126.net/style/web2/img/default/default_album.jpg" />
@@ -25,10 +25,10 @@
         </div>
         <div class="bar">
           <div class="slider-wrap">
-            <app-wy-slider></app-wy-slider>
+            <app-wy-slider [(ngModel)]="percent" (nzOnAfterChange)="onChange($event)"></app-wy-slider>
           </div>
           <span class="time">
-          <em>04:13</em> / 05:33
+          <em>{{formatTime(currentTime)}}</em> / {{formatTime(duration)}}
         </span>
         </div>
       </div>
@@ -82,5 +82,12 @@
     </div>
   </div>
 
-  <audio autoplay #audio src="{{currentSong?.url}}" (play)="play()" (error)="error()" (timeupdate)="updateTime($event)" (ended)="end()"></audio>
+  <audio
+    #audio
+    src="{{currentSong?.url}}"
+    (canplay)="onCanPlay()"
+    (error)="onError()"
+    (timeupdate)="onTimeUpdate($event)"
+    (ended)="onEnded()">
+  </audio>
 </div>
