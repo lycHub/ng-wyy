@@ -32,9 +32,19 @@ export class WyPlayerComponent implements OnInit, OnChanges, AfterViewInit {
   duration: number;
   
   // 播放进度（百分比）
-  get percent(): number | null {
+  percent = 0;
+  /*get percent(): number | null {
     return (this.currentTime / this.duration) * 100;
-  }
+  }*/
+  
+  // 缓冲进度（百分比）
+  bufferPercent = 0;
+ /* get bufferPercent(): number | null {
+    if (this.audioEl) {
+      const buffered = this.audioEl.buffered;
+      return buffered.length ? (buffered.end(0) / this.duration) * 100 : 0;
+    }
+  }*/
   
   @ViewChild('audio') private audio: ElementRef;
   private audioEl: HTMLAudioElement;
@@ -44,8 +54,11 @@ export class WyPlayerComponent implements OnInit, OnChanges, AfterViewInit {
     this.audioEl = this.audio.nativeElement;
   }
   
-  onChange(e) {
-    console.log('e', e);
+  onPercentChange(per: number) {
+    this.audioEl.currentTime = this.duration * (per / 100);
+    if (!this.playing) {
+      this.onToggle();
+    }
   }
   
   ngOnChanges(changes: SimpleChanges): void {
@@ -59,7 +72,6 @@ export class WyPlayerComponent implements OnInit, OnChanges, AfterViewInit {
   onToggle() {
     console.log(this.songReady);
     if (this.songReady) {
-      console.log('aa');
       this.playing = !this.playing;
       if (this.playing) {
         this.audioEl.play();
@@ -95,8 +107,14 @@ export class WyPlayerComponent implements OnInit, OnChanges, AfterViewInit {
   }
   
   
+  
   onTimeUpdate(e) {
     this.currentTime = e.target.currentTime;
+    this.percent = (this.currentTime / this.duration) * 100;
+    const buffered = this.audioEl.buffered;
+    if (buffered.length) {
+      this.bufferPercent = (buffered.end(0) / this.duration) * 100;
+    }
   }
   
   private formatTime(time: number): string {

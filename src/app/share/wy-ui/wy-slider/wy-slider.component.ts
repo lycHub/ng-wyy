@@ -25,11 +25,11 @@ import { ensureNumberInRange, getPercent } from '../../../utils/number';
 export class WySliderComponent implements OnInit, ControlValueAccessor, OnDestroy {
   @ViewChild('slider') slider: ElementRef;
   @Input() nzVertical: boolean = false;
-  @Input() nzDefaultValue: SliderValue = null;
+  @Input() nzDefaultValue: SliderValue = 0;
   @Input() nzMax = 100;
   @Input() nzMin = 0;
   
-  @Input() bufferOffset: SliderValue = null; // 缓冲条长度百分比
+  @Input() bufferOffset: SliderValue = 0; // 缓冲条长度百分比
 
   value: SliderValue = null;
   sliderDOM: HTMLDivElement;
@@ -158,8 +158,10 @@ export class WySliderComponent implements OnInit, ControlValueAccessor, OnDestro
   }
 
   private onDragMove(value: number): void {
-    this.setActiveValue(value);
-    this.cdr.markForCheck();
+    if (this.isDragging) {
+      this.setActiveValue(value);
+      this.cdr.markForCheck();
+    }
   }
 
   private onDragEnd(): void {
@@ -224,7 +226,8 @@ export class WySliderComponent implements OnInit, ControlValueAccessor, OnDestro
 
   private setValue(value: SliderValue, isWriteValue: boolean = false): void {
     if (isWriteValue) {
-
+      if (this.isDragging) return;
+      
       // 赋值给this.value
       this.value = this.formatValue(value);
       this.updateTrackAndHandles();
