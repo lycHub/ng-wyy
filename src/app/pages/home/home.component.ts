@@ -1,16 +1,12 @@
 import {Component, OnInit, ViewChild, Inject} from '@angular/core';
-import {Banner, HotTag, Song, SongSheet, SongUrl} from "../../service/data.models";
+import {Banner, HotTag, Song, SongSheet} from "../../service/data.models";
 import {NzCarouselComponent} from "ng-zorro-antd";
 import {NzIconService} from "ng-zorro-antd/icon";
 import {ActivatedRoute} from "@angular/router";
-import {map, mergeMap} from "rxjs/internal/operators";
+import {map} from "rxjs/internal/operators";
 import {ICON_FONT} from "../../core/inject-tokens";
-import {SongService} from "../../service/song/song.service";
-import {from, of} from "rxjs/index";
+import {SongService, SongSheetList} from "../../service/song/song.service";
 
-export interface SongSheetList extends SongSheet {
-  url: string;
-}
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -51,48 +47,9 @@ export class HomeComponent implements OnInit {
     this.carouselActiveIndex = to;
   }
   
-  // 播放歌单
-  /*playSong(id: number) {
-    console.log('click', id);
-    this.SongServe.getSongSheetDetail(id).subscribe(res => {
-      const sheet = res;
-      this.getSongUrls(res.map(item => item.id).join(','))
-    })
-  }
-  
-  private getSongUrls(id: string) {
-    debugger;
-    this.SongServe.getSongUrl(id).subscribe(res => {
-      console.log(res);
-    })
-  }*/
-  
   
   playSong(id: number) {
-    this.SongServe.getSongList(id).subscribe(res => {
-      this.generateSongList(res);
-    })
-  }
-  
-  private generateSongList({ sheet, urls }) {
-     const result = [];
-     from(<SongSheet[]>sheet).pipe(mergeMap(item => {
-      const url = <string>urls.find(url => url.id === item.id).url;
-        return of({
-          id: item.id,
-          name: item.name,
-          ar: item.ar,
-          url
-        });
-      })).subscribe(
-        res => {
-          if (res.url) {
-            result.push(res);
-          }
-        },
-        error => console.error(error),
-        () => this.songSheetList = result
-     );
+    this.SongServe.getSongList(id).subscribe(res => this.songSheetList = res);
   }
   
   

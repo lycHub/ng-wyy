@@ -1,5 +1,5 @@
 import {Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges, ViewChild} from '@angular/core';
-import {SongSheetList} from "../../../pages/home/home.component";
+import {SongSheetList} from "../../../service/song/song.service";
 
 @Component({
   selector: 'app-wy-player',
