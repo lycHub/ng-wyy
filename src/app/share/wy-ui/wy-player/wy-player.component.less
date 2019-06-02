@@ -101,11 +101,15 @@
         .words{
           color: @white-color;
           text-shadow: 0 1px 0 @box-shadow-base;
+          &.hide{
+            visibility: hidden;
+          }
           span{
             display: inline-block;
             max-width: 300px;
             margin-right: 10px;
             .no-wrap;
+            cursor: pointer;
           }
           i{
             .icon('../images/playbar.png', 14px, 15px);
@@ -158,10 +162,22 @@
               background-position: -31px -248px;
             }
           }
-          &.mode{
+          &.random{
             background-position: -66px -248px;
             &:hover{
               background-position: -93px -248px;
+            }
+          }
+          &.loop{
+            background-position: -3px -344px;
+            &:hover{
+              background-position: -33px -344px;
+            }
+          }
+          &.single-loop{
+            background-position: -66px -344px;
+            &:hover{
+              background-position: -93px -344px;
             }
           }
         }

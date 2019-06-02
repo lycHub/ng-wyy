@@ -30,6 +30,7 @@ export interface SongSheet {
   id: number;
   name: string;
   ar: Singer[];
+  al: { picUrl: string; }
 }
 
 export type Singer = {

@@ -3,17 +3,25 @@ import {
   ViewChild
 } from '@angular/core';
 import {SongSheetList} from "../../../service/song/song.service";
-import {fromEvent, Observable, Subscription} from "rxjs/index";
+import {fromEvent, Subscription} from "rxjs/index";
 import {DOCUMENT} from "@angular/common";
+import {shuffle} from "../../../utils/array";
+import {Singer} from "../../../service/data.models";
 
 @Component({
   selector: 'app-wy-player',
   templateUrl: './wy-player.component.html',
   styleUrls: ['./wy-player.component.less']
 })
-export class WyPlayerComponent implements OnInit, OnChanges, AfterViewInit {
+export class WyPlayerComponent implements OnChanges, AfterViewInit {
   arr = Array(100).fill(3);
+  
+  // 原始列表的副本
+  private sequenceList: SongSheetList[];
+  private playList: SongSheetList[];
+  
   @Input() songSheetList: SongSheetList[];
+  
   
   // 是否可以播放
   private songReady = false;
@@ -24,11 +32,9 @@ export class WyPlayerComponent implements OnInit, OnChanges, AfterViewInit {
   // 当前播放的索引vuex
   currentIndex: number;
   
-  
   // 正在播放vuex
-  get currentSong(): SongSheetList | null {
-    return this.songSheetList[this.currentIndex];
-  }
+  currentSong: SongSheetList;
+  
   
   // 播放时间
   currentTime: number;
@@ -38,18 +44,9 @@ export class WyPlayerComponent implements OnInit, OnChanges, AfterViewInit {
   
   // 播放进度（百分比）
   percent = 0;
-  /*get percent(): number | null {
-    return (this.currentTime / this.duration) * 100;
-  }*/
   
   // 缓冲进度（百分比）
   bufferPercent = 0;
- /* get bufferPercent(): number | null {
-    if (this.audioEl) {
-      const buffered = this.audioEl.buffered;
-      return buffered.length ? (buffered.end(0) / this.duration) * 100 : 0;
-    }
-  }*/
  
  // 当前音量
   currentVol = 60;
@@ -59,6 +56,21 @@ export class WyPlayerComponent implements OnInit, OnChanges, AfterViewInit {
   
   // 是否点击了音量控件
   volClick = false;
+  
+  modeCount = 0;
+  modeTypes = [ {
+    type: 'loop',
+    label: '循环'
+  }, {
+    type: 'random',
+    label: '随机'
+  }, {
+    type: 'single-loop',
+    label: '单曲循环'
+  }];
+  
+  // 当前模式vuex
+  currentMode = this.modeTypes[0];
   
   @ViewChild('audio') private audio: ElementRef;
   private audioEl: HTMLAudioElement;
@@ -84,7 +96,41 @@ export class WyPlayerComponent implements OnInit, OnChanges, AfterViewInit {
     this.showVolPanel = !this.showVolPanel;
   }
   
-  ngOnInit() {}
+  changeMode() {
+    this.currentMode = this.modeTypes[++this.modeCount % 3];
+    if (this.currentMode.type === 'random') {
+      console.log('random');
+      const randomList = this.getPlayList();
+      this.updateCurrentIndex(randomList);
+      this.playList = randomList;
+    }else {
+      this.updateCurrentIndex(this.songSheetList);
+      this.playList = this.songSheetList;
+    }
+    this.updateCurrentSong();
+  }
+  
+  // 随机列表
+  private getPlayList(): SongSheetList[] {
+    return shuffle(this.songSheetList || []);
+  }
+  
+  private updateCurrentSong() {
+    this.currentSong = this.playList[this.currentIndex];
+    this.arStr(this.currentSong.ar);
+  }
+  private updateCurrentIndex(list: SongSheetList[]) {
+    this.currentIndex = list.findIndex(item => item.id === this.currentSong.id);
+  }
+  
+  arStr(ar: Singer[]): string {
+    let result = '';
+    if (ar && ar.length) {
+      result = ar.map(item => item.name).join(' ');
+    }
+    return result;
+  }
+  
   
   ngAfterViewInit(): void {
     this.audioEl = this.audio.nativeElement;
@@ -97,16 +143,8 @@ export class WyPlayerComponent implements OnInit, OnChanges, AfterViewInit {
     }
   }
   
-  ngOnChanges(changes: SimpleChanges): void {
-    const songSheetList = changes.songSheetList;
-    if (songSheetList && songSheetList.currentValue.length) {
-      this.currentIndex = 0;
-    }
-  }
-  
   
   onToggle() {
-    console.log(this.songReady);
     if (this.songReady) {
       this.playing = !this.playing;
       if (this.playing) {
@@ -120,12 +158,14 @@ export class WyPlayerComponent implements OnInit, OnChanges, AfterViewInit {
   onPrev(index: number) {
     if (this.songReady) {
       this.currentIndex = index < 0 ? this.songSheetList.length - 1 : index;
+      this.updateCurrentSong();
       this.songReady = false;
     }
   }
   onNext(index: number) {
     if (this.songReady) {
       this.currentIndex = index >= this.songSheetList.length ? 0 : index;
+      this.updateCurrentSong();
       this.songReady = false;
     }
   }
@@ -170,12 +210,34 @@ export class WyPlayerComponent implements OnInit, OnChanges, AfterViewInit {
   }
   
   onError() {
+    this.playing = false;
     if (this.currentSong) {
       this.songReady = true;
     }
   }
   
   onEnded() {
-    console.log('end');
+    this.playing = false;
+    if (this.currentMode.type !== 'single-loop') {
+      this.onNext(this.currentIndex + 1);
+    }else {
+      this.loop();
+    }
+  }
+  
+  // 单曲循环
+  private loop() {
+    this.audioEl.currentTime = 0;
+    this.play();
+  }
+  
+  
+  ngOnChanges(changes: SimpleChanges): void {
+    const songSheetList = changes.songSheetList;
+    if (songSheetList && songSheetList.currentValue.length) {
+      this.currentIndex = 0;
+      this.playList = this.getPlayList();
+      this.updateCurrentSong();
+    }
   }
 }

@@ -33,6 +33,7 @@ export class SongService {
         id: item.id,
         name: item.name,
         ar: item.ar,
+        al: item.al,
         url
       });
     })).subscribe(

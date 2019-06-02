@@ -14,13 +14,16 @@
         <i class="next" (click)="onNext(currentIndex + 1)"></i>
       </div>
       <div class="head">
-        <img src="http://s4.music.126.net/style/web2/img/default/default_album.jpg" />
+        <img [hidden]="currentSong" src="http://s4.music.126.net/style/web2/img/default/default_album.jpg" />
+        <img [hidden]="!currentSong" src="{{currentSong?.al.picUrl}}" alt="{{currentSong?.name}}" />
         <i class="mask"></i>
       </div>
       <div class="play">
-        <div class="words">
-          <span>dsadasdas</span>
-          <span>dsadasdas</span>
+        <div class="words" [class.hide]="!currentSong">
+          <span>{{currentSong?.name}}</span>
+          <ng-container>
+            <span *ngFor="let item of currentSong?.ar">{{item.name}}</span>
+          </ng-container>
           <i></i>
         </div>
         <div class="bar">
@@ -39,7 +42,7 @@
       </div>
       <div class="ctrl">
         <i class="volume" title="音量" (click)="toggleVolPanel()"></i>
-        <i class="mode" title="模式"></i>
+        <i [ngClass]="currentMode.type" [title]="currentMode.label" (click)="changeMode()"></i>
         <p class="open">
           <span></span>
         </p>
