@@ -34,6 +34,7 @@ export class SongService {
         name: item.name,
         ar: item.ar,
         al: item.al,
+        dt: item.dt,
         url
       });
     })).subscribe(

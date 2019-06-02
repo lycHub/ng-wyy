@@ -1,7 +1,4 @@
-import {
-  AfterViewInit, Component, ElementRef, Inject, Input, OnChanges, OnInit, SimpleChanges,
-  ViewChild
-} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, Inject, Input, OnChanges, SimpleChanges, ViewChild} from '@angular/core';
 import {SongSheetList} from "../../../service/song/song.service";
 import {fromEvent, Subscription} from "rxjs/index";
 import {DOCUMENT} from "@angular/common";
@@ -14,10 +11,6 @@ import {Singer} from "../../../service/data.models";
   styleUrls: ['./wy-player.component.less']
 })
 export class WyPlayerComponent implements OnChanges, AfterViewInit {
-  arr = Array(100).fill(3);
-  
-  // 原始列表的副本
-  private sequenceList: SongSheetList[];
   private playList: SongSheetList[];
   
   @Input() songSheetList: SongSheetList[];
@@ -117,6 +110,7 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit {
   
   private updateCurrentSong() {
     this.currentSong = this.playList[this.currentIndex];
+    this.duration = this.currentSong.dt / 1000;
     this.arStr(this.currentSong.ar);
   }
   private updateCurrentIndex(list: SongSheetList[]) {
@@ -172,7 +166,6 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit {
   
   private play() {
     this.audioEl.play();
-    this.duration = this.audioEl.duration;
     this.playing = true;
   }
   
