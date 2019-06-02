@@ -31,7 +31,7 @@
             <app-wy-slider [bufferOffset]="bufferPercent" [(ngModel)]="percent" (nzOnAfterChange)="onPercentChange($event)"></app-wy-slider>
           </div>
           <span class="time">
-          <em>{{formatTime(currentTime)}}</em> / {{formatTime(duration)}}
+          <em>{{currentTime | FormatTime}}</em> / {{duration | FormatTime}}
         </span>
         </div>
       </div>
@@ -41,20 +41,26 @@
         <i class="share" title="分享"></i>
       </div>
       <div class="ctrl">
-        <i class="volume" title="音量" (click)="toggleVolPanel()"></i>
+        <i class="volume" title="音量" (click)="toggleVolPanel($event)"></i>
         <i [ngClass]="currentMode.type" [title]="currentMode.label" (click)="changeMode()"></i>
-        <p class="open">
+        <p class="open" (click)="openPanel()">
           <span></span>
         </p>
 
         <!--音量-->
-        <div class="control-vol" [hidden]="!showVolPanel" (click)="onVolClick()">
+        <div class="control-vol" [hidden]="!showVolPanel" (click)="onVolClick($event)">
           <app-wy-slider [nzVertical]="true" [(ngModel)]="currentVol" (ngModelChange)="onVolChange($event)"></app-wy-slider>
         </div>
       </div>
 
       <!--面板-->
-      <app-wy-player-panel></app-wy-player-panel>
+      <app-wy-player-panel
+        *ngIf="showPanel"
+        [songList]="songSheetList"
+        [currentSong]="currentSong"
+        (onClose)="showPanel = false"
+        (onChangeSong)="onChangeSong($event)">
+      </app-wy-player-panel>
     </div>
   </div>
 

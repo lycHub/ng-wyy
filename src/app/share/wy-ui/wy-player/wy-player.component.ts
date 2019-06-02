@@ -1,4 +1,7 @@
-import {AfterViewInit, Component, ElementRef, Inject, Input, OnChanges, SimpleChanges, ViewChild} from '@angular/core';
+import {
+  AfterViewInit, Component, ElementRef, Inject, Input, OnChanges, OnDestroy, SimpleChanges,
+  ViewChild
+} from '@angular/core';
 import {SongSheetList} from "../../../service/song/song.service";
 import {fromEvent, Subscription} from "rxjs/index";
 import {DOCUMENT} from "@angular/common";
@@ -10,11 +13,10 @@ import {Singer} from "../../../service/data.models";
   templateUrl: './wy-player.component.html',
   styleUrls: ['./wy-player.component.less']
 })
-export class WyPlayerComponent implements OnChanges, AfterViewInit {
+export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
+  @Input() songSheetList: SongSheetList[] = [];
+  
   private playList: SongSheetList[];
-  
-  @Input() songSheetList: SongSheetList[];
-  
   
   // 是否可以播放
   private songReady = false;
@@ -69,24 +71,31 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit {
   private audioEl: HTMLAudioElement;
   
   private winClick$: Subscription;
+  
+  showPanel = false;
+  
   constructor(@Inject(DOCUMENT) private doc: Document) {
-    this.winClick$ = fromEvent(this.doc, 'click').subscribe((e: MouseEvent) => {
-      if (!this.volClick) {
-        this.showVolPanel = false;
-      }
-      this.volClick = false;
-    });
+  
   }
   
-  // 点击音量面板
-  onVolClick() {
-    this.volClick = true;
+  onVolClick(e) {
+    e.stopPropagation();
   }
+  
   
   // 控制音量面板
-  toggleVolPanel() {
-    this.onVolClick();
+  toggleVolPanel(e) {
+    e.stopPropagation();
     this.showVolPanel = !this.showVolPanel;
+    if (this.showVolPanel) {
+      this.winClick$ = fromEvent(this.doc, 'click').subscribe(() => {
+        console.log('aa');
+        this.showVolPanel = false;
+        this.winClick$.unsubscribe();
+      });
+    }else {
+      this.winClick$.unsubscribe();
+    }
   }
   
   changeMode() {
@@ -131,9 +140,16 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit {
   }
   
   onPercentChange(per: number) {
+    if (!this.currentSong) return;
     this.audioEl.currentTime = this.duration * (per / 100);
     if (!this.playing) {
       this.onToggle();
+    }
+  }
+  
+  openPanel() {
+    if (this.songSheetList.length) {
+      this.showPanel = !this.showPanel;
     }
   }
   
@@ -191,16 +207,6 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit {
     this.audioEl.volume = val / 100;
   }
   
-  private formatTime(time: number): string {
-    if (time) {
-      const temp = time | 0;
-      const minute = temp / 60 | 0;
-      const second = (temp % 60).toString().padStart(2, '0');
-      return `${minute}:${second}`;
-    }else {
-      return '00:00';
-    }
-  }
   
   onError() {
     this.playing = false;
@@ -225,12 +231,24 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit {
   }
   
   
+  // 面板切歌
+  onChangeSong(song: SongSheetList) {
+    this.currentIndex = this.playList.findIndex(item => item.id === song.id);
+    this.updateCurrentSong();
+  }
+  
+  
   ngOnChanges(changes: SimpleChanges): void {
     const songSheetList = changes.songSheetList;
+    // console.log('songSheetList', songSheetList);
     if (songSheetList && songSheetList.currentValue.length) {
       this.currentIndex = 0;
-      this.playList = this.getPlayList();
+      this.playList = songSheetList.currentValue;
       this.updateCurrentSong();
     }
+  }
+  
+  ngOnDestroy(): void {
+    this.winClick$ && this.winClick$.unsubscribe();
   }
 }

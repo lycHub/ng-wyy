@@ -4,6 +4,7 @@ import { WyPlayerComponent } from './wy-player.component';
 import { WySliderModule } from '../wy-slider/wy-slider.module';
 import {FormsModule} from "@angular/forms";
 import { WyPlayerPanelComponent } from './wy-player-panel/wy-player-panel.component';
+import {FormatTimePipe} from "../../pipes/format-time.pipe";
 
 @NgModule({
   imports: [
@@ -11,7 +12,7 @@ import { WyPlayerPanelComponent } from './wy-player-panel/wy-player-panel.compon
     FormsModule,
     WySliderModule
   ],
-  declarations: [WyPlayerComponent, WyPlayerPanelComponent],
+  declarations: [WyPlayerComponent, WyPlayerPanelComponent, FormatTimePipe],
   exports: [WyPlayerComponent]
 })
 export class WyPlayerModule { }
