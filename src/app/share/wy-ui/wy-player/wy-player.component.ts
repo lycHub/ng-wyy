@@ -101,7 +101,6 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
   changeMode() {
     this.currentMode = this.modeTypes[++this.modeCount % 3];
     if (this.currentMode.type === 'random') {
-      console.log('random');
       const randomList = this.getPlayList();
       this.updateCurrentIndex(randomList);
       this.playList = randomList;
@@ -243,7 +242,7 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
     // console.log('songSheetList', songSheetList);
     if (songSheetList && songSheetList.currentValue.length) {
       this.currentIndex = 0;
-      this.playList = songSheetList.currentValue;
+      this.playList = this.currentMode.type === 'random' ? this.getPlayList() : songSheetList.currentValue;
       this.updateCurrentSong();
     }
   }
