@@ -7,6 +7,9 @@ import {SongSheetList} from "../../../../service/song/song.service";
   styleUrls: ['./wy-player-panel.component.less']
 })
 export class WyPlayerPanelComponent implements OnInit, OnChanges {
+  config = {
+    // minScrollbarLength: 50
+  }
   arr = Array(100).fill(3);
   @Input() songList: SongSheetList[];
   @Input() currentSong: SongSheetList;

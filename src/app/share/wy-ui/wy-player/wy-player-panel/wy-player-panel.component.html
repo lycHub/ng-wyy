@@ -19,7 +19,7 @@
   <div class="bd">
     <img class="imgbg" src="//music.163.com/api/img/blur/109951163826278397" />
     <div class="msk"></div>
-    <div class="list-wrap">
+    <div class="list-wrap" [perfectScrollbar]="config">
       <ul>
         <li *ngFor="let item of songList; index as i" [class.current]="currentIndex === i" (click)="onChangeSong.emit(item)">
           <i class="col arrow"></i>
@@ -34,6 +34,21 @@
           <div class="col link"></div>
         </li>
       </ul>
+
+      <!-- <ul>
+        <li *ngFor="let item of arr; index as i">
+          <i class="col arrow"></i>
+          <div class="col name">tttttttttttt</div>
+          <div class="col icons">
+            <i class="ico like" title="收藏"></i>
+            <i class="ico share" title="分享"></i>
+            <i class="ico trush" title="删除"></i>
+          </div>
+          <a class="col singer">麦口而杰克逊</a>
+          <div class="col duration">05:44</div>
+          <div class="col link"></div>
+        </li>
+      </ul> -->
     </div>
   </div>
 </div>

@@ -6,6 +6,10 @@ import {ShareModule} from "../share/share.module";
 import {PagesModule} from "../pages/pages.module";
 import {ServiceModule} from "../service/service.module";
 
+
+
+
+
 @NgModule({
   imports: [
     HttpClientModule,
@@ -13,7 +17,7 @@ import {ServiceModule} from "../service/service.module";
     ShareModule,
     PagesModule,
     ServiceModule,
-    AppRoutingModule,
+    AppRoutingModule
   ],
   exports: [
     AppRoutingModule,
