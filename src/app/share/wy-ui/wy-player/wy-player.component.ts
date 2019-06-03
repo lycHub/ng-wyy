@@ -2,7 +2,7 @@ import {
   AfterViewInit, Component, ElementRef, Inject, Input, OnChanges, OnDestroy, SimpleChanges,
   ViewChild
 } from '@angular/core';
-import {SongSheetList} from "../../../service/song/song.service";
+import {SongList} from "../../../service/song/song.service";
 import {fromEvent, Subscription} from "rxjs/index";
 import {DOCUMENT} from "@angular/common";
 import {shuffle} from "../../../utils/array";
@@ -14,9 +14,9 @@ import {Singer} from "../../../service/data.models";
   styleUrls: ['./wy-player.component.less']
 })
 export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
-  @Input() songList: SongSheetList[] = [];
+  @Input() songList: SongList[] = [];
   
-  private playList: SongSheetList[];
+  private playList: SongList[];
   
   // 是否可以播放
   private songReady = false;
@@ -28,7 +28,7 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
   currentIndex: number;
   
   // 正在播放vuex
-  currentSong: SongSheetList;
+  currentSong: SongList;
   
   
   // 播放时间
@@ -112,7 +112,7 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
   }
   
   // 随机列表
-  private getPlayList(): SongSheetList[] {
+  private getPlayList(): SongList[] {
     return shuffle(this.songList || []);
   }
   
@@ -121,7 +121,7 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
     this.duration = this.currentSong.dt / 1000;
     this.arStr(this.currentSong.ar);
   }
-  private updateCurrentIndex(list: SongSheetList[]) {
+  private updateCurrentIndex(list: SongList[]) {
     this.currentIndex = list.findIndex(item => item.id === this.currentSong.id);
   }
   
@@ -231,7 +231,7 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
   
   
   // 面板切歌
-  onChangeSong(song: SongSheetList) {
+  onChangeSong(song: SongList) {
     this.currentIndex = this.playList.findIndex(item => item.id === song.id);
     this.updateCurrentSong();
   }

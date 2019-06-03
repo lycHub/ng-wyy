@@ -1,9 +1,9 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {Banner, HotTag, Song} from "../../service/data.models";
+import {Banner, HotTag, Song, SongSheet} from "../../service/data.models";
 import {NzCarouselComponent} from "ng-zorro-antd";
 import {ActivatedRoute} from "@angular/router";
 import {map} from "rxjs/internal/operators";
-import {SongService, SongSheetList} from "../../service/song/song.service";
+import {SongService, SongList} from "../../service/song/song.service";
 
 @Component({
   selector: 'app-home',
@@ -14,7 +14,7 @@ export class HomeComponent implements OnInit {
   // arr = Array(100).fill(3);
   banners: Banner[];
   hotTags: HotTag[];
-  songSheetList: Song[];
+  songSheetList: SongSheet[];
   
   // 轮播当前索引
   carouselActiveIndex = 0;
@@ -23,7 +23,7 @@ export class HomeComponent implements OnInit {
   }
   
   
-  songList: SongSheetList[] = [];
+  songList: SongList[] = [];
   
   
   @ViewChild(NzCarouselComponent) private nzCarousel: NzCarouselComponent;

@@ -1,7 +1,7 @@
 import {Inject, Injectable} from '@angular/core';
 import {ServiceModule} from "../service.module";
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
-import {Banner, HotTag, Song} from "../data.models";
+import {Banner, HotTag, SongSheet} from "../data.models";
 import {Observable} from "rxjs/index";
 import {catchError, map} from "rxjs/internal/operators";
 import {API_CONFIG} from "../../core/inject-tokens";
@@ -34,9 +34,9 @@ export class HomeService {
   
   
   // 推荐歌单
-  getPersonalSongList(): Observable<Song[]> {
+  getPersonalSongList(): Observable<SongSheet[]> {
     return this.http.get(this.config + 'personalized').pipe(
-      map((res: {result: Song[]}) => res.result.slice(0, 8)),
+      map((res: {result: SongSheet[]}) => res.result.slice(0, 8)),
       catchError(this.handleError));
   }
   

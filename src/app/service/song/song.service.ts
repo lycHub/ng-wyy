@@ -1,13 +1,13 @@
 import {Inject, Injectable} from '@angular/core';
 import {ServiceModule} from "../service.module";
 import {HttpClient, HttpErrorResponse, HttpParams} from "@angular/common/http";
-import {SongSheet, SongUrl} from "../data.models";
+import {Song, SongSheet, SongUrl} from "../data.models";
 import {from, Observable, of} from "rxjs/index";
 import {catchError, concatMap, map, mergeMap} from "rxjs/internal/operators";
 import {API_CONFIG} from "../../core/inject-tokens";
 
 
-export interface SongSheetList extends SongSheet {
+export interface SongList extends Song {
   url: string;
 }
 
@@ -16,18 +16,18 @@ export interface SongSheetList extends SongSheet {
 })
 export class SongService {
   constructor(private http: HttpClient, @Inject(API_CONFIG) private config: string) { }
-  getSongList(id: number): Observable<SongSheetList[]> {
+  getSongList(id: number): Observable<SongList[]> {
     return Observable.create((observer) => {
       this.concatSongList(id).subscribe(res => {
-        this.generateSongList(res, (list: SongSheetList[]) => observer.next(list));
+        this.generateSongList(res, (list: SongList[]) => observer.next(list));
       })
     });
   }
   
   
-  private generateSongList({ sheet, urls }, cb: (res: SongSheetList[]) => void) {
+  private generateSongList({ sheet, urls }, cb: (res: SongList[]) => void) {
     const result = [];
-    from(<SongSheet[]>sheet).pipe(mergeMap(item => {
+    from(<Song[]>sheet).pipe(mergeMap(item => {
       const url = <string>urls.find(url => url.id === item.id).url;
       return of({
         id: item.id,
@@ -48,7 +48,7 @@ export class SongService {
     );
   }
   
-  private concatSongList(id: number): Observable<{ sheet: SongSheet[]; urls: SongUrl[] }> {
+  private concatSongList(id: number): Observable<{ sheet: Song[]; urls: SongUrl[] }> {
     const detail$ =  this.getSongSheetDetail(id);
     return detail$.pipe(concatMap(sheet => {
       const ids = sheet.map(item => item.id).join(',');
@@ -60,11 +60,11 @@ export class SongService {
   
   
   // 歌单详情
-  private getSongSheetDetail(id: number): Observable<SongSheet[]> {
+  private getSongSheetDetail(id: number): Observable<Song[]> {
     const params = new HttpParams().set('id', id.toString());
     return this.http.get(this.config + 'playlist/detail', { params })
       .pipe(
-        map((res: {playlist: {tracks: SongSheet[]}}) => res.playlist.tracks),
+        map((res: {playlist: {tracks: Song[]}}) => res.playlist.tracks),
         catchError(this.handleError)
       );
   }
