@@ -31,15 +31,15 @@
 
           <div class="down">
             <div class="down-wrap">
-              <div class="sheet-item" *ngFor="let item of songList;trackBy: trackBySongList">
+              <div class="sheet-item" *ngFor="let item of songSheetList;trackBy: trackBySongList">
                 <a class="cover">
                   <img src="{{item.picUrl}}" alt="{{item.name}}">
                   <div class="bottom">
                     <div class="num">
-                      <i nz-icon [nzIconfont]="'icon-erji'" style="color:#fff;"></i>
+                      <i class="icon erji"></i>
                       <span>{{item.playCount | PlayCount}}</span>
                     </div>
-                    <i nz-icon [nzIconfont]="'icon-play'" style="color:#fff;" (click)="playSong(item.id)"></i>
+                    <i class="icon play" (click)="playSong(item.id)"></i>
                   </div>
                 </a>
                 <a href="#" class="dec">{{item.name}}</a>
@@ -56,4 +56,4 @@
   </div>
 </div>
 
-<app-wy-player [songSheetList]="songSheetList"></app-wy-player>
+<app-wy-player [songList]="songList"></app-wy-player>

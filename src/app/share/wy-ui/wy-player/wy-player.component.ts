@@ -14,7 +14,7 @@ import {Singer} from "../../../service/data.models";
   styleUrls: ['./wy-player.component.less']
 })
 export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
-  @Input() songSheetList: SongSheetList[] = [];
+  @Input() songList: SongSheetList[] = [];
   
   private playList: SongSheetList[];
   
@@ -105,15 +105,15 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
       this.updateCurrentIndex(randomList);
       this.playList = randomList;
     }else {
-      this.updateCurrentIndex(this.songSheetList);
-      this.playList = this.songSheetList;
+      this.updateCurrentIndex(this.songList);
+      this.playList = this.songList;
     }
     this.updateCurrentSong();
   }
   
   // 随机列表
   private getPlayList(): SongSheetList[] {
-    return shuffle(this.songSheetList || []);
+    return shuffle(this.songList || []);
   }
   
   private updateCurrentSong() {
@@ -147,7 +147,7 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
   }
   
   openPanel() {
-    if (this.songSheetList.length) {
+    if (this.songList.length) {
       this.showPanel = !this.showPanel;
     }
   }
@@ -166,14 +166,14 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
   
   onPrev(index: number) {
     if (this.songReady) {
-      this.currentIndex = index < 0 ? this.songSheetList.length - 1 : index;
+      this.currentIndex = index < 0 ? this.songList.length - 1 : index;
       this.updateCurrentSong();
       this.songReady = false;
     }
   }
   onNext(index: number) {
     if (this.songReady) {
-      this.currentIndex = index >= this.songSheetList.length ? 0 : index;
+      this.currentIndex = index >= this.songList.length ? 0 : index;
       this.updateCurrentSong();
       this.songReady = false;
     }
@@ -238,11 +238,11 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
   
   
   ngOnChanges(changes: SimpleChanges): void {
-    const songSheetList = changes.songSheetList;
+    const songList = changes.songList;
     // console.log('songSheetList', songSheetList);
-    if (songSheetList && songSheetList.currentValue.length) {
+    if (songList && songList.currentValue.length) {
       this.currentIndex = 0;
-      this.playList = this.currentMode.type === 'random' ? this.getPlayList() : songSheetList.currentValue;
+      this.playList = this.currentMode.type === 'random' ? this.getPlayList() : songList.currentValue;
       this.updateCurrentSong();
     }
   }

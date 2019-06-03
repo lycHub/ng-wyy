@@ -85,8 +85,19 @@
                         vertical-align: text-bottom;
                       }
                     }
-                    [nz-icon] {
-                      font-size: 18px;
+                    .icon {
+                      .icon('../images/iconall.png', 14px, 11px);
+                      &.erji{
+                        background-position: 0 -24px;
+                      }
+                      &.play{
+                        width: 16px;
+                        height:17px;
+                        background-position: 0 0;
+                        &:hover{
+                          background-position: 0 -60px;
+                        }
+                      }
                     }
                   }
                 }

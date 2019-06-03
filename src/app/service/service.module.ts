@@ -1,6 +1,6 @@
 import {NgModule, PLATFORM_ID} from '@angular/core';
 import {NzIconService} from "ng-zorro-antd/icon";
-import {API_CONFIG, ICON_FONT, WINDOW} from "../core/inject-tokens";
+import {API_CONFIG, WINDOW} from "../core/inject-tokens";
 import {isPlatformBrowser} from "@angular/common";
 
 @NgModule({
@@ -8,7 +8,7 @@ import {isPlatformBrowser} from "@angular/common";
     {
       provide: API_CONFIG, useValue: 'http://127.0.0.1:3000/'
     },
-    { provide: ICON_FONT,
+    /*{ provide: ICON_FONT,
       useFactory(_iconService: NzIconService) {
         _iconService.fetchFromIconfont({
           scriptUrl: '//at.alicdn.com/t/font_992681_o5991rd0i3i.js'
@@ -16,7 +16,7 @@ import {isPlatformBrowser} from "@angular/common";
         return _iconService;
       },
       deps: [NzIconService]
-    },
+    },*/
     {
       provide: WINDOW,
       useFactory(platformId: Object): Window | Object {
