@@ -11,7 +11,7 @@ import {SongService, SongList} from "../../service/song/song.service";
   styleUrls: ['./home.component.less']
 })
 export class HomeComponent implements OnInit {
-  // arr = Array(100).fill(3);
+  arr = Array(5).fill(3);
   banners: Banner[];
   hotTags: HotTag[];
   songSheetList: SongSheet[];
@@ -28,11 +28,11 @@ export class HomeComponent implements OnInit {
   
   @ViewChild(NzCarouselComponent) private nzCarousel: NzCarouselComponent;
   constructor(private SongServe: SongService, private route: ActivatedRoute) {
-     this.route.data.pipe(map(res => res.homeDatas)).subscribe(([banners, hotTags, songSheetList]) => {
-      this.banners = banners;
-      this.hotTags = hotTags;
-      this.songSheetList = songSheetList;
-    });
+    //  this.route.data.pipe(map(res => res.homeDatas)).subscribe(([banners, hotTags, songSheetList]) => {
+    //   this.banners = banners;
+    //   this.hotTags = hotTags;
+    //   this.songSheetList = songSheetList;
+    // });
   }
 
   ngOnInit() {

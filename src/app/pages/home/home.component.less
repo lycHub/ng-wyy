@@ -9,6 +9,7 @@
   .main{
     .wrap{
       display: flex;
+      justify-content: space-between;
       background-color: @white-color;
       .left{
         width: 726px;
@@ -112,6 +113,53 @@
       }
       .right{
         width: 250px;
+        .member{
+          .login{
+            padding: 15px;
+            background-color: @wy-bg-prev;
+            .btn{
+              display: block;
+              background-color: @wy-btn-red;
+              border-color: @wy-btn-red;
+              color: @white-color;
+              margin: 0 auto;
+            }
+          }
+        }
+
+        .settled-singer{
+          padding: 15px;
+          background-color: #ece9e38a;
+          .tit{
+            font-size: @font-size-sm;
+            overflow: hidden;
+            padding-bottom: 8px;
+            border-bottom: 1px solid @border-color-base;
+            b{
+              float: left;
+            }
+            span{
+              float: right;
+            }
+          }
+
+          .list{
+            overflow: hidden;
+            .card{
+              margin-top: 10px;
+              cursor: pointer;
+              .pic{
+                float: left;
+              }
+              .txt{
+                float: right;
+                b{
+                  display: block;
+                }
+              }
+            }
+          }
+        }
       }
     }
   }

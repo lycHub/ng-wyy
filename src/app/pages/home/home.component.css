@@ -1,0 +1,149 @@
+.home .banner-item {
+  display: block;
+  width: 100%;
+}
+.home .main .wrap {
+  display: flex;
+  justify-content: space-between;
+  background-color: #fff;
+}
+.home .main .wrap .left {
+  width: 726px;
+  padding: 20px 20px 40px;
+}
+.home .main .wrap .left .sec .up {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 0 10px 10px 10px;
+  border-bottom: 2px solid #c10d0c;
+  margin-bottom: 15px;
+}
+.home .main .wrap .left .sec .up .navs {
+  display: flex;
+  align-items: flex-end;
+}
+.home .main .wrap .left .sec .up .navs h2 {
+  font-size: 20px;
+}
+.home .main .wrap .left .sec .up .navs h2 a:hover {
+  text-decoration: inherit;
+}
+.home .main .wrap .left .sec .up .navs h2 i {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  background-color: #fff;
+  border: 3px solid #c10d0c;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+.home .main .wrap .left .sec .up .navs nav a {
+  display: inline-block;
+  padding: 0 12px;
+  border-right: 1px solid #d9d9d9;
+}
+.home .main .wrap .left .sec .up .navs nav a:last-child {
+  border-right: none;
+}
+.home .main .wrap .left .sec .down .down-wrap {
+  display: flex;
+  flex-wrap: wrap;
+}
+.home .main .wrap .left .sec .down .down-wrap .sheet-item {
+  width: 140px;
+  height: 204px;
+  margin-right: 42px;
+}
+.home .main .wrap .left .sec .down .down-wrap .sheet-item:nth-of-type(4n) {
+  margin-right: 0;
+}
+.home .main .wrap .left .sec .down .down-wrap .sheet-item .cover {
+  position: relative;
+  display: block;
+  height: 140px;
+}
+.home .main .wrap .left .sec .down .down-wrap .sheet-item .cover .bottom {
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  background-color: #000;
+  color: #fff;
+  opacity: .8;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 3px 8px;
+}
+.home .main .wrap .left .sec .down .down-wrap .sheet-item .cover .bottom .num span {
+  margin-left: 8px;
+  vertical-align: text-bottom;
+}
+.home .main .wrap .left .sec .down .down-wrap .sheet-item .cover .bottom .icon {
+  display: inline-block;
+  width: 14px;
+  height: 11px;
+  background: url('../images/iconall.png') no-repeat;
+  cursor: pointer;
+}
+.home .main .wrap .left .sec .down .down-wrap .sheet-item .cover .bottom .icon.erji {
+  background-position: 0 -24px;
+}
+.home .main .wrap .left .sec .down .down-wrap .sheet-item .cover .bottom .icon.play {
+  width: 16px;
+  height: 17px;
+  background-position: 0 0;
+}
+.home .main .wrap .left .sec .down .down-wrap .sheet-item .cover .bottom .icon.play:hover {
+  background-position: 0 -60px;
+}
+.home .main .wrap .left .sec .down .down-wrap .sheet-item .dec {
+  display: block;
+  margin-top: 8px;
+}
+.home .main .wrap .right {
+  width: 250px;
+}
+.home .main .wrap .right .member .login {
+  padding: 15px;
+  background-color: #c1c0c09e 9e;
+}
+.home .main .wrap .right .member .login .btn {
+  display: block;
+  background-color: #8a060b;
+  border-color: #8a060b;
+  color: #fff;
+  margin: 0 auto;
+}
+.home .main .wrap .right .settled-singer {
+  padding: 15px;
+  background-color: #ece9e38a;
+}
+.home .main .wrap .right .settled-singer .tit {
+  font-size: 12px;
+  overflow: hidden;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #d9d9d9;
+}
+.home .main .wrap .right .settled-singer .tit b {
+  float: left;
+}
+.home .main .wrap .right .settled-singer .tit span {
+  float: right;
+}
+.home .main .wrap .right .settled-singer .list {
+  overflow: hidden;
+}
+.home .main .wrap .right .settled-singer .list .card {
+  margin-top: 10px;
+  cursor: pointer;
+}
+.home .main .wrap .right .settled-singer .list .card .pic {
+  float: left;
+}
+.home .main .wrap .right .settled-singer .list .card .txt {
+  float: right;
+}
+.home .main .wrap .right .settled-singer .list .card .txt b {
+  display: block;
+}
