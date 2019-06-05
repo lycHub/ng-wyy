@@ -5,7 +5,7 @@ import {HomeResolverService} from "./home-resolver.service";
 
 const routes: Routes = [
   // resolve: { homeDatas: HomeResolverService }
-  { path: 'home', component: HomeComponent, data: { title: '发现音乐' } }
+  { path: 'home', component: HomeComponent, data: { title: '发现' } }
 ];
 
 

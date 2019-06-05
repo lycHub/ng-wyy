@@ -22,7 +22,7 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
   private songReady = false;
   
   // 播放状态vuex
-  private playing = false;
+  playing = false;
   
   // 当前播放的索引vuex
   currentIndex: number;
