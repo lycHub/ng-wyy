@@ -3,7 +3,10 @@ import { Routes, RouterModule } from '@angular/router';
 import { SheetComponent } from './sheet.component';
 
 const routes: Routes = [
-  { path: 'sheet', component: SheetComponent, data: { title: '歌单' } }
+  {
+    path: '', component: SheetComponent,
+    data: { title: '歌单', keywords: 'sheet, 歌单', description: '歌单页' }
+  }
 ];
 
 @NgModule({

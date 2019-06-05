@@ -23,7 +23,7 @@ import { ensureNumberInRange, getPercent } from '../../../utils/number';
   encapsulation: ViewEncapsulation.None
 })
 export class WySliderComponent implements OnInit, ControlValueAccessor, OnDestroy {
-  @ViewChild('slider') slider: ElementRef;
+  @ViewChild('slider', { static: true }) slider: ElementRef;
   @Input() nzVertical: boolean = false;
   @Input() nzDefaultValue: SliderValue = 0;
   @Input() nzMax = 100;

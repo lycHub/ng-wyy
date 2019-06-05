@@ -67,7 +67,7 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
   // 当前模式vuex
   currentMode = this.modeTypes[0];
   
-  @ViewChild('audio') private audio: ElementRef;
+  @ViewChild('audio', { static: true }) private audio: ElementRef;
   private audioEl: HTMLAudioElement;
   
   private winClick$: Subscription;

@@ -26,7 +26,7 @@ export class HomeComponent implements OnInit {
   songList: SongList[] = [];
   
   
-  @ViewChild(NzCarouselComponent) private nzCarousel: NzCarouselComponent;
+  @ViewChild(NzCarouselComponent, { static: true }) private nzCarousel: NzCarouselComponent;
   constructor(private SongServe: SongService, private route: ActivatedRoute) {
     //  this.route.data.pipe(map(res => res.homeDatas)).subscribe(([banners, hotTags, songSheetList]) => {
     //   this.banners = banners;

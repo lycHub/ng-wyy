@@ -7,7 +7,7 @@ import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output, Templat
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WyCarouselComponent {
-  @ViewChild('dot') dotRef: TemplateRef<any>;
+  @ViewChild('dot', { static: true }) dotRef: TemplateRef<any>;
   @Input() activeIndex: number;
   @Input() bgColor: string;
   @Output() changeSlide = new EventEmitter<string>();
