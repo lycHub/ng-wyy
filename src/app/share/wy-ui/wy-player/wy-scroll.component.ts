@@ -19,6 +19,10 @@ export class WyScrollComponent implements AfterViewInit, OnChanges {
   @Input() private readonly data: any[];
   @Input() private readonly refreshDelay = 50;
   @Input() private readonly clickable = true;
+  @Input() private readonly scrollbar: object | boolean = {
+    fade: false,
+    interactive: true
+  };
   
   private bs: BScroll;
   @ViewChild('wrap', { static: true }) private wrapRef: ElementRef;
@@ -29,10 +33,7 @@ export class WyScrollComponent implements AfterViewInit, OnChanges {
     const wrap = this.wrapRef.nativeElement;
     this.bs = new BScroll(wrap, {
       click: this.clickable,
-      scrollbar: {
-        fade: false,
-        interactive: true
-      },
+      scrollbar: this.scrollbar,
       mouseWheel: {}
     });
     
