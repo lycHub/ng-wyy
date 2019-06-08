@@ -118,8 +118,10 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
   
   private updateCurrentSong() {
     this.currentSong = this.playList[this.currentIndex];
-    this.duration = this.currentSong.dt / 1000;
-    this.arStr(this.currentSong.ar);
+    if (this.currentSong) {
+      this.duration = this.currentSong.dt / 1000;
+      this.arStr(this.currentSong.ar);
+    }
   }
   private updateCurrentIndex(list: SongList[]) {
     this.currentIndex = list.findIndex(item => item.id === this.currentSong.id);

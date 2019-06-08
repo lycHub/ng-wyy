@@ -19,7 +19,7 @@
   <div class="bd">
     <img class="imgbg" src="//music.163.com/api/img/blur/109951163826278397" />
     <div class="msk"></div>
-    <div class="list-wrap" [perfectScrollbar]="config">
+    <div class="list-wrap">
       <ul>
         <li *ngFor="let item of songList; index as i" [class.current]="currentIndex === i" (click)="onChangeSong.emit(item)">
           <i class="col arrow"></i>

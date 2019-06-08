@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {SongList} from "../../../../service/song/song.service";
 
 @Component({
@@ -6,10 +6,7 @@ import {SongList} from "../../../../service/song/song.service";
   templateUrl: './wy-player-panel.component.html',
   styleUrls: ['./wy-player-panel.component.less']
 })
-export class WyPlayerPanelComponent implements OnInit, OnChanges {
-  config = {
-    // minScrollbarLength: 50
-  }
+export class WyPlayerPanelComponent implements OnInit, OnChanges, AfterViewInit {
   arr = Array(100).fill(3);
   @Input() songList: SongList[];
   @Input() currentSong: SongList;
@@ -19,11 +16,15 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
   
   // 切歌
   @Output() readonly onChangeSong = new EventEmitter<SongList>();
-  
   private currentIndex: number;
   constructor() { }
 
   ngOnInit() {
+  }
+  
+  
+  ngAfterViewInit(): void {
+  
   }
   
   ngOnChanges(changes: SimpleChanges): void {

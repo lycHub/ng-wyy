@@ -6,10 +6,6 @@ import {ShareModule} from "../share/share.module";
 import {PagesModule} from "../pages/pages.module";
 import {ServiceModule} from "../service/service.module";
 
-
-
-
-
 @NgModule({
   imports: [
     HttpClientModule,

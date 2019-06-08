@@ -7,7 +7,8 @@ const routes: Routes = [
   // resolve: { homeDatas: HomeResolverService }
   {
     path: '', component: HomeComponent,
-    data: { title: '发现', keywords: 'home, 发现', description: '首页推荐音乐' }
+    data: { title: '发现', keywords: 'home, 发现', description: '首页推 荐音乐' },
+    resolve: { homeDatas: HomeResolverService }
   }
 ];
 
