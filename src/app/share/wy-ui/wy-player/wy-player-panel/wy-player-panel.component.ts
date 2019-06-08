@@ -46,6 +46,8 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges, AfterViewInit 
   
   // 当前滚动的位置
   scrollY = 0;
+
+  private isCnSong: boolean;
   
   constructor(private songServe: SongService, @Inject(WINDOW) private win: Window) {
     // console.log('constructor');
@@ -80,22 +82,27 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges, AfterViewInit 
   // 获取歌词
   updateLyric(songId: number) {
     this.songServe.getLyric(songId).subscribe(({ lyric, tlyric }) => {
+      this.currentLineIndex = 0;
+      this.wyScroll.last.scrollTo(0, 0);
       if (this.lyric) this.lyric.stop();
       this.lyric = new Lyric(lyric, this.handleLyric.bind(this));
+      
       if (tlyric) {
+        this.isCnSong = false;
         const currentTLyric = new Lyric(tlyric);
         this.currentLyric = this.concatLyric(this.lyric.lines, currentTLyric.lines);
       }else{
+        this.isCnSong = true;
         this.currentLyric = this.lyric.lines;
       }
+      // console.log('currentLyric', this.currentLyric);
+      // console.log('playing', this.playing);
       if (this.playing) {
         this.lyric.play();
       }
       
  
     this.win.setTimeout(() => {
-      this.currentLineIndex = 0;
-      this.wyScroll.last.scrollTo(0, 0);
       this.lyricRefs = this.wyScroll.last.el.nativeElement.querySelectorAll('ul li');
     }, 500);
       // console.log(this.currentLyric);
@@ -106,9 +113,11 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges, AfterViewInit 
   }
 
   private handleLyric({ lineNum }) {
+    console.log('handleLyric');
     this.currentLineIndex = lineNum;
-    if (lineNum > 3) {
-      const targetLine = this.lyricRefs[lineNum - 3];
+    const startLine = this.isCnSong ? 3 : 2;
+    if (lineNum > startLine) {
+      const targetLine = this.lyricRefs[lineNum - startLine];
       this.wyScroll.last.scrollToElement(targetLine, 300, false, false);
     }else{
       this.wyScroll.last.scrollTo(0, 0);

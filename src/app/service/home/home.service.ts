@@ -36,7 +36,7 @@ export class HomeService {
   // 推荐歌单
   getPersonalSongList(): Observable<SongSheet[]> {
     return this.http.get(this.config + 'personalized').pipe(
-      map((res: {result: SongSheet[]}) => res.result.slice(0, 8)),
+      map((res: {result: SongSheet[]}) => res.result.slice(0, 16)),
       catchError(this.handleError));
   }
   
