@@ -7,6 +7,7 @@ import {fromEvent, Subscription} from "rxjs/index";
 import {DOCUMENT} from "@angular/common";
 import {shuffle} from "../../../utils/array";
 import {Singer} from "../../../service/data.models";
+import { WyPlayerPanelComponent } from './wy-player-panel/wy-player-panel.component';
 
 @Component({
   selector: 'app-wy-player',
@@ -68,12 +69,14 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
   currentMode = this.modeTypes[0];
   
   @ViewChild('audio', { static: true }) private audio: ElementRef;
+
+  // WyPlayerPanelComponent不是静态的
+  @ViewChild(WyPlayerPanelComponent, { static: false }) private playPanel: WyPlayerPanelComponent;
   private audioEl: HTMLAudioElement;
   
   private winClick$: Subscription;
   
   showPanel = false;
-  
   constructor(@Inject(DOCUMENT) private doc: Document) {
   
   }
@@ -123,9 +126,11 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
       this.arStr(this.currentSong.ar);
     }
   }
+
   private updateCurrentIndex(list: SongList[]) {
     this.currentIndex = list.findIndex(item => item.id === this.currentSong.id);
   }
+
   
   arStr(ar: Singer[]): string {
     let result = '';
@@ -142,9 +147,13 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
   
   onPercentChange(per: number) {
     if (!this.currentSong) return;
-    this.audioEl.currentTime = this.duration * (per / 100);
+    const currentTime = this.duration * (per / 100);
+    this.audioEl.currentTime = currentTime;
     if (!this.playing) {
       this.onToggle();
+    }
+    if (this.playPanel.lyric) {
+      this.playPanel.lyric.seek(currentTime * 1000);
     }
   }
   
@@ -167,18 +176,26 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
   }
   
   onPrev(index: number) {
-    if (this.songReady) {
+    if (!this.songReady) return;
+    if (this.songList.length === 1) {
+      this.loop();
+    }else{
       this.currentIndex = index < 0 ? this.songList.length - 1 : index;
       this.updateCurrentSong();
       this.songReady = false;
     }
   }
+
   onNext(index: number) {
-    if (this.songReady) {
+    if (!this.songReady) return;
+    if (this.songList.length === 1) {
+      this.loop();
+    }else{
       this.currentIndex = index >= this.songList.length ? 0 : index;
       this.updateCurrentSong();
-      this.songReady = false;
     }
+    this.songReady = false;
+    
   }
   
   private play() {
@@ -221,6 +238,7 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
     if (this.currentMode.type !== 'single-loop') {
       this.onNext(this.currentIndex + 1);
     }else {
+      console.log('loop');
       this.loop();
     }
   }
@@ -228,6 +246,10 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
   // 单曲循环
   private loop() {
     this.audioEl.currentTime = 0;
+    if (this.playPanel.lyric) {
+      console.log('seek');
+      this.playPanel.lyric.seek(0);
+    }
     this.play();
   }
   

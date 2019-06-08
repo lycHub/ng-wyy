@@ -56,6 +56,7 @@
       <!--面板-->
       <app-wy-player-panel
         *ngIf="showPanel"
+        [playing]="playing"
         [songList]="songList"
         [currentSong]="currentSong"
         (onClose)="showPanel = false"

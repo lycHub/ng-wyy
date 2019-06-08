@@ -5,7 +5,7 @@ import {isPlatformBrowser} from "@angular/common";
 @NgModule({
   providers: [
     {
-      provide: API_CONFIG, useValue: 'http://127.0.0.1:9000/'
+      provide: API_CONFIG, useValue: 'http://127.0.0.1:3000/'
     },
     /*{ provide: ICON_FONT,
       useFactory(_iconService: NzIconService) {

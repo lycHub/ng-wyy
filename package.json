@@ -23,6 +23,7 @@
     "@better-scroll/mouse-wheel": "^2.0.0-alpha.12",
     "@better-scroll/scroll-bar": "^2.0.0-alpha.12",
     "core-js": "^2.5.4",
+    "lyric-parser": "^1.0.1",
     "minireset.css": "0.0.4",
     "ng-zorro-antd": "^7.3.3",
     "rxjs": "~6.5.2",

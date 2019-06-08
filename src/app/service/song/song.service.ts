@@ -1,7 +1,7 @@
 import {Inject, Injectable} from '@angular/core';
 import {ServiceModule} from "../service.module";
 import {HttpClient, HttpErrorResponse, HttpParams} from "@angular/common/http";
-import {Song, SongSheet, SongUrl} from "../data.models";
+import {Song, SongSheet, SongUrl, Lyric} from "../data.models";
 import {from, Observable, of} from "rxjs/index";
 import {catchError, concatMap, map, mergeMap} from "rxjs/internal/operators";
 import {API_CONFIG} from "../../core/inject-tokens";
@@ -53,7 +53,7 @@ export class SongService {
     return detail$.pipe(concatMap(sheet => {
       const ids = sheet.map(item => item.id).join(',');
       return this.getSongUrl(ids).pipe(map(urls => {
-        return { sheet, urls: urls };
+        return { sheet, urls };
       }));
     }))
   }
@@ -75,6 +75,22 @@ export class SongService {
     return this.http.get(this.config + 'song/url', { params })
       .pipe(
         map((res: {data: SongUrl[]}) => res.data),
+        catchError(this.handleError)
+      );
+  }
+
+
+    // 歌曲url列表
+ getLyric(id: number): Observable<Lyric> {
+    const params = new HttpParams().set('id', id.toString());
+    return this.http.get(this.config + 'lyric', { params })
+      .pipe(
+        map((res: { [type: string]: {lyric: string} }) => {
+          return {
+            lyric: res.lrc.lyric,
+            tlyric: res.tlyric.lyric
+          }
+        }),
         catchError(this.handleError)
       );
   }

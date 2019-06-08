@@ -37,12 +37,12 @@
     </app-wy-scroll>
 
     <!--歌词-->
-    <app-wy-scroll class="list-lyric" [data]="arr">
+    <app-wy-scroll class="list-lyric" [data]="currentLyric">
       <ul>
-        <li *ngFor="let item of arr">
-          Produced by John Hill
+        <li *ngFor="let item of currentLyric; index as i" [class.current]="currentLineIndex === i">
+          {{item.txt}}
           <br />
-          大撒大撒大撒大撒
+          {{item.txtCn}}
         </li>
       </ul>
     </app-wy-scroll>

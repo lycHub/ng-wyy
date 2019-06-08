@@ -1,11 +1,13 @@
 import {
   AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleChanges,
   ViewChild,
-  ViewEncapsulation
+  ViewEncapsulation,
+  Inject
 } from '@angular/core';
 import BScroll from '@better-scroll/core';
 import MouseWheel from '@better-scroll/mouse-wheel';
 import ScrollBar from '@better-scroll/scroll-bar';
+import { WINDOW } from 'src/app/core/inject-tokens';
 BScroll.use(MouseWheel);
 BScroll.use(ScrollBar);
 @Component({
@@ -19,21 +21,20 @@ export class WyScrollComponent implements AfterViewInit, OnChanges {
   @Input() private readonly data: any[];
   @Input() private readonly refreshDelay = 50;
   @Input() private readonly clickable = true;
-  @Input() private readonly scrollbar: object | boolean = {
-    fade: false,
-    interactive: true
-  };
   
   private bs: BScroll;
   @ViewChild('wrap', { static: true }) private wrapRef: ElementRef;
   
   @Output() private onScrollEnd = new EventEmitter<number>();
-  constructor(readonly el: ElementRef) {}
+  constructor(readonly el: ElementRef, @Inject(WINDOW) private win: Window) {}
   ngAfterViewInit(): void {
     const wrap = this.wrapRef.nativeElement;
     this.bs = new BScroll(wrap, {
       click: this.clickable,
-      scrollbar: this.scrollbar,
+      scrollbar: {
+        fade: false,
+        interactive: true
+      },
       mouseWheel: {}
     });
     
@@ -58,7 +59,7 @@ export class WyScrollComponent implements AfterViewInit, OnChanges {
   
   // 刷新
   private refreshScroll(): void {
-    setTimeout(() => {
+    this.win.setTimeout(() => {
       this.refresh();
     }, this.refreshDelay);
   }
