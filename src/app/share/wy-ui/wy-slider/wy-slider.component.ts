@@ -46,7 +46,7 @@ export class WySliderComponent implements OnInit, ControlValueAccessor, OnDestro
   private dragMove_: Subscription | null;
   private dragEnd_: Subscription | null;
 
-  @Output() readonly nzOnAfterChange = new EventEmitter<SliderValue>();
+  @Output() private nzOnAfterChange = new EventEmitter<SliderValue>();
   constructor(private cdr: ChangeDetectorRef, @Inject(PLATFORM_ID) private platformId: Object) { }
 
   ngOnInit() {
