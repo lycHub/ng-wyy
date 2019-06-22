@@ -8,6 +8,9 @@ import {DOCUMENT} from "@angular/common";
 import {shuffle} from "../../../utils/array";
 import {Singer} from "../../../service/data.models";
 import { WyPlayerPanelComponent } from './wy-player-panel/wy-player-panel.component';
+import { Store, select } from '@ngrx/store';
+import { AppStoreModule } from 'src/app/store';
+import { getSongList } from 'src/app/store/selectors/player.selector';
 
 // 播放模式
 export type PlayMode = { type: string, label: string };
@@ -18,7 +21,8 @@ export type PlayMode = { type: string, label: string };
   styleUrls: ['./wy-player.component.less']
 })
 export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
-  @Input() songList: SongList[] = [];
+  // @Input() songList: SongList[] = [];
+  private songList: SongList[] = [];
   
   private playList: SongList[];
   
@@ -80,8 +84,15 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
   private winClick$: Subscription;
   
   showPanel = false;
-  constructor(@Inject(DOCUMENT) private doc: Document) {
-  
+  constructor(@Inject(DOCUMENT) private doc: Document, private store$: Store<AppStoreModule>) {
+    this.store$.pipe(select('player'), select(getSongList)).subscribe(res => {
+      this.songList = res;
+      if (res && res.length) {
+        this.currentIndex = 0;
+        this.playList = this.currentMode.type === 'random' ? this.getPlayList() : res;
+        this.updateCurrentSong();
+      }
+    });
   }
   
   onVolClick(e) {
@@ -266,13 +277,7 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
   
   
   ngOnChanges(changes: SimpleChanges): void {
-    const songList = changes.songList;
-    // console.log('songSheetList', songSheetList);
-    if (songList && songList.currentValue.length) {
-      this.currentIndex = 0;
-      this.playList = this.currentMode.type === 'random' ? this.getPlayList() : songList.currentValue;
-      this.updateCurrentSong();
-    }
+    
   }
   
   ngOnDestroy(): void {

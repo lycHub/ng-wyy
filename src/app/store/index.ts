@@ -6,7 +6,14 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 @NgModule({
   imports: [
-    StoreModule.forRoot({ player: playerReducer }),
+    StoreModule.forRoot({ player: playerReducer }, {
+      runtimeChecks: {
+        strictStateImmutability: true,
+        strictActionImmutability: true,
+        strictStateSerializability: true,
+        strictActionSerializability: true,
+      }
+    }),
     StoreDevtoolsModule.instrument({
       maxAge: 20, // Retains last 25 states
       logOnly: environment.production,
