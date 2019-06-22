@@ -86,6 +86,7 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
   showPanel = false;
   constructor(@Inject(DOCUMENT) private doc: Document, private store$: Store<AppStoreModule>) {
     this.store$.pipe(select('player'), select(getSongList)).subscribe(res => {
+      console.log('songlist');
       this.songList = res;
       if (res && res.length) {
         this.currentIndex = 0;
