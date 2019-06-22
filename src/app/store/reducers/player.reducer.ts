@@ -1,7 +1,6 @@
 import { SongList } from 'src/app/service/song/song.service';
 import { PlayMode } from 'src/app/share/wy-ui/wy-player/wy-player.component';
 import * as PlayActions from '../actions/player.actions';
-import { SetSongList } from '../actions/player.actions';
 import { createReducer, Action, on } from '@ngrx/store';
 
 export type PlayerState = {
@@ -39,7 +38,7 @@ const reducer = createReducer(
   on(PlayActions.SetPlaying, (state, { playing }) => ({ ...state, playing: playing })),
   on(PlayActions.SetSongList, (state, { list }) => ({ ...state, playList: list })),
   on(PlayActions.SetPlayMode, (state, { mode }) => ({ ...state, playMode: mode })),
-  on(PlayActions.SetCurrentIndex, (state, { index }) => ({ ...state, playList: index }))
+  on(PlayActions.SetCurrentIndex, (state, { index }) => ({ ...state, currentIndex: index }))
 );
 
 export function playerReducer(state: PlayerState | undefined, action: Action) {

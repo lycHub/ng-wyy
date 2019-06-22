@@ -4,6 +4,9 @@ import {Observable} from "rxjs/index";
 import {filter, map, mergeMap} from "rxjs/internal/operators";
 import {WINDOW} from "./core/inject-tokens";
 import { Title, Meta } from '@angular/platform-browser';
+import {select, Store} from "@ngrx/store";
+import { AppStoreModule } from './store';
+import { getPlaying, getPlayMode } from './store/selectors/player.selector';
 
 @Component({
   selector: 'app-root',
@@ -32,9 +35,14 @@ export class AppComponent {
     private router: Router,
     private titleService: Title,
     private meta: Meta,
-    @Inject(WINDOW) private win: Window) {
+    @Inject(WINDOW) private win: Window,
+    private store$: Store<AppStoreModule>) {
     this.setLoadingBar();
     this.setMT();
+
+    this.store$.pipe(select('player'), select(getPlayMode)).subscribe(res => {
+      console.log('res', res);
+    })
   }
 
   private setLoadingBar() {
