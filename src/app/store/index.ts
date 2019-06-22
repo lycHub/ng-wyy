@@ -13,7 +13,7 @@ import { PlayerEffect } from './effects/player.effect';
         strictStateImmutability: true,
         strictActionImmutability: true,
         strictStateSerializability: true,
-        strictActionSerializability: true,
+        strictActionSerializability: true
       }
     }),
     EffectsModule.forRoot([PlayerEffect]),
