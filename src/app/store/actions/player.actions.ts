@@ -2,6 +2,7 @@ import { createAction, props } from '@ngrx/store';
 import { SongList } from 'src/app/service/song/song.service';
 import { PlayMode } from 'src/app/share/wy-ui/wy-player/wy-player.component';
 
+export const RequestSongList = createAction('[Http] Request playList', props<{ id: number }>());
 export const SetPlayList = createAction('[Player] Set playList', props<{ list: SongList[] }>());
 export const SetPlaying = createAction('[Player] Set PlayIng', props<{ playing: boolean }>());
 export const SetSongList = createAction('[Player] Set SongList', props<{ list: SongList[] }>());

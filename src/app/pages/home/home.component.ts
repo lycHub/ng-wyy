@@ -6,7 +6,7 @@ import {map} from "rxjs/internal/operators";
 import {SongService} from "../../service/song/song.service";
 import { Store } from '@ngrx/store';
 import { AppStoreModule } from 'src/app/store';
-import { SetSongList } from 'src/app/store/actions/player.actions';
+import { RequestSongList } from 'src/app/store/actions/player.actions';
 
 @Component({
   selector: 'app-home',
@@ -47,7 +47,8 @@ export class HomeComponent implements OnInit {
   
   
   playSong(id: number) {
-    this.SongServe.getSongList(id).subscribe(res => this.store$.dispatch(SetSongList({ list: res })));
+    // this.SongServe.getSongList(id).subscribe(res => this.store$.dispatch(SetSongList({ list: res })));
+    this.store$.dispatch(RequestSongList({ id }));
   }
   
   

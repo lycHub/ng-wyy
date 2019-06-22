@@ -3,6 +3,8 @@ import { StoreModule } from '@ngrx/store';
 import { playerReducer } from './reducers/player.reducer';
 import { environment } from 'src/environments/environment';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { EffectsModule } from '@ngrx/effects';
+import { PlayerEffect } from './effects/player.effect';
 
 @NgModule({
   imports: [
@@ -14,6 +16,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
         strictActionSerializability: true,
       }
     }),
+    EffectsModule.forRoot([PlayerEffect]),
     StoreDevtoolsModule.instrument({
       maxAge: 20, // Retains last 25 states
       logOnly: environment.production,
