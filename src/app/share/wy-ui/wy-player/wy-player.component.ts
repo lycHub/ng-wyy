@@ -9,6 +9,9 @@ import {shuffle} from "../../../utils/array";
 import {Singer} from "../../../service/data.models";
 import { WyPlayerPanelComponent } from './wy-player-panel/wy-player-panel.component';
 
+// 播放模式
+export type PlayMode = { type: string, label: string };
+
 @Component({
   selector: 'app-wy-player',
   templateUrl: './wy-player.component.html',
@@ -54,7 +57,7 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
   volClick = false;
   
   modeCount = 0;
-  modeTypes = [ {
+  modeTypes: PlayMode[] = [{
     type: 'loop',
     label: '循环'
   }, {

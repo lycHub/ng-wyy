@@ -5,6 +5,7 @@ import {AppRoutingModule} from "../app-routing.module";
 import {ShareModule} from "../share/share.module";
 import {PagesModule} from "../pages/pages.module";
 import {ServiceModule} from "../service/service.module";
+import { AppStoreModule } from '../store';
 
 @NgModule({
   imports: [
@@ -13,6 +14,7 @@ import {ServiceModule} from "../service/service.module";
     ShareModule,
     PagesModule,
     ServiceModule,
+    AppStoreModule,
     AppRoutingModule
   ],
   exports: [
