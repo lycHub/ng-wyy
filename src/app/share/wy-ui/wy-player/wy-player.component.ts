@@ -155,7 +155,8 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
     if (!this.playing) {
       this.onToggle();
     }
-    if (this.playPanel.lyric) {
+    // console.log(this.playPanel);
+    if (this.playPanel && this.playPanel.lyric) {
       this.playPanel.lyric.seek(currentTime * 1000);
     }
   }

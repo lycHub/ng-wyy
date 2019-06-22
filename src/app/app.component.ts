@@ -6,7 +6,7 @@ import {WINDOW} from "./core/inject-tokens";
 import { Title, Meta } from '@angular/platform-browser';
 import {select, Store} from "@ngrx/store";
 import { AppStoreModule } from './store';
-import { getPlaying, getPlayMode } from './store/selectors/player.selector';
+import { getPlaying, getPlayMode, getSongList } from './store/selectors/player.selector';
 
 @Component({
   selector: 'app-root',
@@ -40,8 +40,8 @@ export class AppComponent {
     this.setLoadingBar();
     this.setMT();
 
-    this.store$.pipe(select('player'), select(getPlayMode)).subscribe(res => {
-      console.log('res', res);
+    this.store$.pipe(select('player'), select(getSongList)).subscribe(res => {
+      console.log('getSongList', res);
     })
   }
 

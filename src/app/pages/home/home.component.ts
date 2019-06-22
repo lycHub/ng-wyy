@@ -4,6 +4,9 @@ import {NzCarouselComponent} from "ng-zorro-antd";
 import {ActivatedRoute} from "@angular/router";
 import {map} from "rxjs/internal/operators";
 import {SongService, SongList} from "../../service/song/song.service";
+import { Store } from '@ngrx/store';
+import { AppStoreModule } from 'src/app/store';
+import { SetSongList } from 'src/app/store/actions/player.actions';
 
 @Component({
   selector: 'app-home',
@@ -27,7 +30,7 @@ export class HomeComponent implements OnInit {
   
   
   @ViewChild(NzCarouselComponent, { static: true }) private nzCarousel: NzCarouselComponent;
-  constructor(private SongServe: SongService, private route: ActivatedRoute) {
+  constructor(private SongServe: SongService, private route: ActivatedRoute, private store$: Store<AppStoreModule>) {
      this.route.data.pipe(map(res => res.homeDatas)).subscribe(([banners, hotTags, songSheetList]) => {
       this.banners = banners;
       this.hotTags = hotTags;
@@ -47,7 +50,10 @@ export class HomeComponent implements OnInit {
   
   
   playSong(id: number) {
-    this.SongServe.getSongList(id).subscribe(res => this.songList = res);
+    this.SongServe.getSongList(id).subscribe(res => {
+      this.songList = res;
+      this.store$.dispatch(SetSongList({ list: res }));
+    });
   }
   
   

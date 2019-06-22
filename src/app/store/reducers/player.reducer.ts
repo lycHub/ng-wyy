@@ -36,7 +36,7 @@ const reducer = createReducer(
   initialState,
   on(PlayActions.SetPlayList, (state, { list }) => ({ ...state, playList: list })),
   on(PlayActions.SetPlaying, (state, { playing }) => ({ ...state, playing: playing })),
-  on(PlayActions.SetSongList, (state, { list }) => ({ ...state, playList: list })),
+  on(PlayActions.SetSongList, (state, { list }) => ({ ...state, songList: list })),
   on(PlayActions.SetPlayMode, (state, { mode }) => ({ ...state, playMode: mode })),
   on(PlayActions.SetCurrentIndex, (state, { index }) => ({ ...state, currentIndex: index }))
 );
