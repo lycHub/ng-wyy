@@ -5,7 +5,7 @@ import {ActivatedRoute} from "@angular/router";
 import {map} from "rxjs/internal/operators";
 import { Store } from '@ngrx/store';
 import { AppStoreModule } from 'src/app/store';
-import { RequestSongList } from 'src/app/store/actions/player.actions';
+import { SelectPlay } from 'src/app/store/actions/player.effect.actions';
 
 @Component({
   selector: 'app-home',
@@ -43,10 +43,14 @@ export class HomeComponent implements OnInit {
   nzBeforeChange({ to }) {
     this.carouselActiveIndex = to;
   }
+
+  testMeta() {
+    // this.store$.dispatch(metaReducers[0](playerReducer));
+  }
   
   
   playSong(id: number) {
-    this.store$.dispatch(RequestSongList({ id }));
+    this.store$.dispatch(SelectPlay({ id }));
   }
   
   
