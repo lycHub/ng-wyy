@@ -278,8 +278,8 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
 
   // 面板删除歌曲
   onDeleteSong(id: number) {
-    this.currentIndex = this.playList.findIndex(item => item.id === song.id);
-    this.updateCurrentSong();
+    // this.currentIndex = this.playList.findIndex(item => item.id === song.id);
+    // this.updateCurrentSong();
   }
   
   
