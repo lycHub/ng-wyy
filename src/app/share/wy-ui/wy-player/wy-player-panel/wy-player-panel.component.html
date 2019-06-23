@@ -27,7 +27,7 @@
           <div class="col icons">
             <i class="ico like" title="收藏"></i>
             <i class="ico share" title="分享"></i>
-            <i class="ico trush" title="删除"></i>
+            <i class="ico trush" title="删除" (click)="onDelete(i)"></i>
           </div>
           <a class="col singer">{{item.ar[0].name}}</a>
           <div class="col duration">{{(item.dt / 1000) | FormatTime}}</div>

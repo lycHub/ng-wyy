@@ -35,11 +35,14 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges, AfterViewInit 
   currentLineIndex: number;
   
   // 关闭面板
-  @Output() readonly onClose = new EventEmitter<void>();
+  @Output() onClose = new EventEmitter<void>();
   
   // 切歌
-  @Output() readonly onChangeSong = new EventEmitter<SongList>();
-  // @ViewChild(WyScrollComponent, { static: true }) private wyScroll: WyScrollComponent;
+  @Output() onChangeSong = new EventEmitter<SongList>();
+
+  // 删除歌曲
+  @Output() onDeleteSong = new EventEmitter<number>();
+  
   @ViewChildren(WyScrollComponent) private wyScroll: QueryList<WyScrollComponent>;
   private songListRefs: NodeList;
   private lyricRefs: NodeList;
@@ -113,7 +116,7 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges, AfterViewInit 
   }
 
   private handleLyric({ lineNum }) {
-    console.log('handleLyric');
+    // console.log('handleLyric');
     this.currentLineIndex = lineNum;
     const startLine = this.isCnSong ? 3 : 2;
     if (lineNum > startLine) {
@@ -144,6 +147,12 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges, AfterViewInit 
         this.wyScroll.first.scrollToElement(dom, 300, false, false);
       }
     }
+  }
+
+
+  // 删除歌曲
+  onDelete(id: number) {
+    this.onDeleteSong.emit(id);
   }
 
 }
