@@ -1,15 +1,15 @@
 import {
-  AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges,
+  AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges,
   ViewChild,
   ViewChildren,
   QueryList,
-  AfterViewChecked,
   Inject
 } from '@angular/core';
 import {SongList, SongService} from "../../../../service/song/song.service";
 import {WyScrollComponent} from "../wy-scroll.component";
 import Lyric from 'lyric-parser';
 import { WINDOW } from 'src/app/core/inject-tokens';
+import { findIndex } from 'src/app/utils/array';
 
 export type LyricItem = {
   time: number;
@@ -41,7 +41,10 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges, AfterViewInit 
   @Output() onChangeSong = new EventEmitter<SongList>();
 
   // 删除歌曲
-  @Output() onDeleteSong = new EventEmitter<number>();
+  @Output() onDeleteSong = new EventEmitter<SongList>();
+
+  // 清空歌曲
+  @Output() onClearSong = new EventEmitter<void>();
   
   @ViewChildren(WyScrollComponent) private wyScroll: QueryList<WyScrollComponent>;
   private songListRefs: NodeList;
@@ -52,9 +55,7 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges, AfterViewInit 
 
   private isCnSong: boolean;
   
-  constructor(private songServe: SongService, @Inject(WINDOW) private win: Window) {
-    // console.log('constructor');
-  }
+  constructor(private songServe: SongService, @Inject(WINDOW) private win: Window) {}
 
   ngOnInit() {
     // console.log('init');
@@ -63,33 +64,44 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges, AfterViewInit 
   
   ngAfterViewInit(): void {
     this.songListRefs = this.wyScroll.first.el.nativeElement.querySelectorAll('ul li');
-    this.scrollToElement();
+    this.scrollTCurrent(0);
+    // this.updateLyric();
   }
+
+  
   
   ngOnChanges(changes: SimpleChanges): void {
-    // console.log('songList panel', changes['songList']);
+    // console.log('currentSong panel', changes['currentSong']);
     if (changes['currentSong']) {
-      const songId = changes['currentSong'].currentValue.id;
-      this.currentIndex = this.songList.findIndex(item => item.id === songId);
-      this.scrollToElement();
-      this.updateLyric(songId);
+      this.currentIndex = findIndex(this.songList, changes['currentSong'].currentValue);
+      this.updateLyric();
+      this.scrollTCurrent();
     }
 
     if (changes['playing']) {
+      if(!changes['playing'].firstChange) {
+        this.lyric.togglePlay();
+      }
+    }
+
+    if (changes['songList']) {
       if (this.lyric) this.lyric.togglePlay();
+      this.currentIndex = findIndex(changes['songList'].currentValue, this.currentSong);
     }
   }
 
 
   
   // 获取歌词
-  updateLyric(songId: number) {
-    this.songServe.getLyric(songId).subscribe(({ lyric, tlyric }) => {
-      this.currentLineIndex = 0;
-      this.wyScroll.last.scrollTo(0, 0);
-      if (this.lyric) this.lyric.stop();
-      this.lyric = new Lyric(lyric, this.handleLyric.bind(this));
+  updateLyric() {
+    if (this.lyric) {
+      this.lyric.stop();
+      this.lyric = null;
+    }
+    this.currentLineIndex = 0;
+    this.songServe.getLyric(this.currentSong.id).subscribe(({ lyric, tlyric }) => {
       
+      this.lyric = new Lyric(lyric, this.handleLyric.bind(this));
       if (tlyric) {
         this.isCnSong = false;
         const currentTLyric = new Lyric(tlyric);
@@ -98,8 +110,9 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges, AfterViewInit 
         this.isCnSong = true;
         this.currentLyric = this.lyric.lines;
       }
-      // console.log('currentLyric', this.currentLyric);
-      // console.log('playing', this.playing);
+
+      this.wyScroll.last.scrollTo(0, 0);
+
       if (this.playing) {
         this.lyric.play();
       }
@@ -109,14 +122,11 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges, AfterViewInit 
       this.lyricRefs = this.wyScroll.last.el.nativeElement.querySelectorAll('ul li');
     }, 500);
       // console.log(this.currentLyric);
-    }, error => {
-      if (this.lyric) this.lyric = null;
-      this.currentLineIndex = 0;
     });
   }
 
   private handleLyric({ lineNum }) {
-    // console.log('handleLyric');
+    if (!this.lyricRefs) return;
     this.currentLineIndex = lineNum;
     const startLine = this.isCnSong ? 3 : 2;
     if (lineNum > startLine) {
@@ -137,22 +147,23 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges, AfterViewInit 
     return result;
   }
   
-  private scrollToElement() {
-    // console.log('scrollY', this.scrollY);
+  private scrollTCurrent(speed = 300) {
     if (this.songListRefs) {
       const dom = <HTMLElement>this.songListRefs[this.currentIndex];
       const offsetTop = dom.offsetTop;
       const scrollY = this.scrollY;
+      // console.log(dom);
       if ((offsetTop < Math.abs(scrollY)) || (Math.abs(offsetTop - Math.abs(scrollY)) > 205)) {
-        this.wyScroll.first.scrollToElement(dom, 300, false, false);
+        this.wyScroll.first.scrollToElement(dom, speed, false, false);
       }
     }
   }
 
 
   // 删除歌曲
-  onDelete(id: number) {
-    this.onDeleteSong.emit(id);
+  onDelete(evt: MouseEvent, song: SongList) {
+    evt.stopPropagation();
+    this.onDeleteSong.emit(song);
   }
 
 }

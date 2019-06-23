@@ -7,7 +7,7 @@
         收藏全部
       </div>
       <span class="line"></span>
-      <div class="clear-all">
+      <div class="clear-all" (click)="onClearSong.emit()">
         <i class="icon trush" title="清除"></i>
         清除
       </div>
@@ -27,7 +27,7 @@
           <div class="col icons">
             <i class="ico like" title="收藏"></i>
             <i class="ico share" title="分享"></i>
-            <i class="ico trush" title="删除" (click)="onDelete(i)"></i>
+            <i class="ico trush" title="删除" (click)="onDelete($event, item)"></i>
           </div>
           <a class="col singer">{{item.ar[0].name}}</a>
           <div class="col duration">{{(item.dt / 1000) | FormatTime}}</div>

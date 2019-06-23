@@ -18,6 +18,8 @@ export type PlayerState = {
 
   // 当前正在播放的索引
   currentIndex: number;
+
+  currentSong?: SongList;
 }
 
 

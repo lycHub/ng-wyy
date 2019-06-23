@@ -1,19 +1,35 @@
-import {
-  AfterViewInit, Component, ElementRef, Inject, Input, OnChanges, OnDestroy, SimpleChanges,
-  ViewChild
-} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Inject, OnChanges, OnDestroy, SimpleChanges, ViewChild } from '@angular/core';
 import {SongList} from "../../../service/song/song.service";
-import {fromEvent, Subscription} from "rxjs/index";
+import {fromEvent, Subscription, Observable, Subject} from "rxjs/index";
 import {DOCUMENT} from "@angular/common";
 import {shuffle} from "../../../utils/array";
 import {Singer} from "../../../service/data.models";
 import { WyPlayerPanelComponent } from './wy-player-panel/wy-player-panel.component';
 import { Store, select } from '@ngrx/store';
 import { AppStoreModule } from 'src/app/store';
-import { getSongList } from 'src/app/store/selectors/player.selector';
+import { getSongList, getPlayList, getCurrentSong, getPlayMode, getCurrentIndex } from 'src/app/store/selectors/player.selector';
+import { SetCurrentIndex, SetPlayMode, SetPlayList } from '../../../store/actions/player.actions';
+import { MultipleReducersService } from 'src/app/store/multiple-reducers.service';
+import { NzModalService } from 'ng-zorro-antd';
+import { takeUntil } from 'rxjs/operators';
 
 // 播放模式
-export type PlayMode = { type: string, label: string };
+export type PlayMode = {
+  type: 'loop' | 'random' | 'singleLoop',
+  label: '循环' | '单曲循环' | '随机'
+};
+
+
+const modeTypes: PlayMode[] = [{
+  type: 'loop',
+  label: '循环'
+}, {
+  type: 'random',
+  label: '随机'
+}, {
+  type: 'singleLoop',
+  label: '单曲循环'
+}];
 
 @Component({
   selector: 'app-wy-player',
@@ -22,7 +38,7 @@ export type PlayMode = { type: string, label: string };
 })
 export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
   // @Input() songList: SongList[] = [];
-  private songList: SongList[] = [];
+  private songList: SongList[];
   
   private playList: SongList[];
   
@@ -61,19 +77,10 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
   volClick = false;
   
   modeCount = 0;
-  modeTypes: PlayMode[] = [{
-    type: 'loop',
-    label: '循环'
-  }, {
-    type: 'random',
-    label: '随机'
-  }, {
-    type: 'single-loop',
-    label: '单曲循环'
-  }];
+  
   
   // 当前模式vuex
-  currentMode = this.modeTypes[0];
+  currentMode: PlayMode;
   
   @ViewChild('audio', { static: true }) private audio: ElementRef;
 
@@ -84,16 +91,68 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
   private winClick$: Subscription;
   
   showPanel = false;
-  constructor(@Inject(DOCUMENT) private doc: Document, private store$: Store<AppStoreModule>) {
-    this.store$.pipe(select('player'), select(getSongList)).subscribe(res => {
-      // console.log('songlist');
-      this.songList = res;
-      if (res && res.length) {
-        this.currentIndex = 0;
-        this.playList = this.currentMode.type === 'random' ? this.getPlayList() : res;
-        this.updateCurrentSong();
-      }
+
+  private appStore$: Observable<AppStoreModule>;
+  private destroy$ = new Subject<void>();
+
+  constructor(@Inject(DOCUMENT) private doc: Document,
+  private store$: Store<AppStoreModule>,
+  private multipleReducerServe: MultipleReducersService,
+  private modalService: NzModalService) {
+    this.appStore$ = this.store$.pipe(select('player'), takeUntil(this.destroy$));
+    const arr = [{
+      type: getPlayMode,
+      cb: mode => this.watchMode(mode)
+    }, {
+      type: getSongList,
+      cb: list => this.watchList(list, 'songList')
+    }, {
+      type: getPlayList,
+      cb: list => this.watchList(list, 'playList')
+    }, {
+      type: getCurrentIndex,
+      cb: index => this.watchCurrentIndex(index)
+    }, {
+      type: getCurrentSong,
+      cb: song => this.watchCurrentSong(song)
+    }];
+    arr.forEach(item => {
+      this.appStore$.pipe(select(item.type)).subscribe(item.cb);
     });
+    // this.appStore$.pipe(select(getPlayMode)).subscribe(mode => this.watchMode(mode));
+    // this.appStore$.pipe(select(getSongList)).subscribe(list => this.watchList(list, 'songList'));
+    // this.appStore$.pipe(select(getPlayList)).subscribe(list => this.watchList(list, 'playList'));
+    // this.appStore$.pipe(select(getCurrentIndex)).subscribe(index => this.watchCurrentIndex(index));
+    // this.appStore$.pipe(select(getCurrentSong)).subscribe(song => this.watchCurrentSong(song));
+  }
+
+
+  private watchMode(mode: PlayMode) {
+    this.currentMode = mode;
+    if (this.songList) {
+      let list = this.songList.slice();
+      if (mode.type === 'random') {
+        list = shuffle(this.songList);
+      }
+      this.updateCurrentIndex(list, this.currentSong);
+      this.store$.dispatch(SetPlayList({ list }));
+    }
+  }
+
+  private watchList(list: SongList[], type: string) {
+    this[type] = list;
+  }
+
+  private watchCurrentIndex(index: number) {
+    this.currentIndex = index;
+  }
+  
+  private watchCurrentSong(song: SongList) {
+    this.currentSong = song;
+    if (song) {
+      this.duration = song.dt / 1000;
+      this.arStr(song.ar);
+    }
   }
   
   onVolClick(e) {
@@ -107,7 +166,7 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
     this.showVolPanel = !this.showVolPanel;
     if (this.showVolPanel) {
       this.winClick$ = fromEvent(this.doc, 'click').subscribe(() => {
-        console.log('aa');
+        console.log('click');
         this.showVolPanel = false;
         this.winClick$.unsubscribe();
       });
@@ -117,33 +176,37 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
   }
   
   changeMode() {
-    this.currentMode = this.modeTypes[++this.modeCount % 3];
-    if (this.currentMode.type === 'random') {
-      const randomList = this.getPlayList();
-      this.updateCurrentIndex(randomList);
-      this.playList = randomList;
-    }else {
-      this.updateCurrentIndex(this.songList);
-      this.playList = this.songList;
-    }
-    this.updateCurrentSong();
-  }
-  
-  // 随机列表
-  private getPlayList(): SongList[] {
-    return shuffle(this.songList || []);
-  }
-  
-  private updateCurrentSong() {
-    this.currentSong = this.playList[this.currentIndex];
-    if (this.currentSong) {
-      this.duration = this.currentSong.dt / 1000;
-      this.arStr(this.currentSong.ar);
-    }
+    this.store$.dispatch(SetPlayMode({ mode: modeTypes[++this.modeCount % 3] }));
   }
 
-  private updateCurrentIndex(list: SongList[]) {
-    this.currentIndex = list.findIndex(item => item.id === this.currentSong.id);
+
+   // 面板切歌
+   onChangeSong(song: SongList) {
+    this.updateCurrentIndex(this.playList, song);
+  }
+
+   // 面板删除歌曲
+   onDeleteSong(song: SongList) {
+    this.modalService.confirm({
+      nzTitle: '确认删除?',
+      nzOnOk: () => this.multipleReducerServe.deleteSong(song)
+    });
+  }
+   
+  // 面板删除歌曲
+  onClearSong() {
+    this.modalService.confirm({
+      nzTitle: '确认删除?',
+      nzOnOk: () => {
+        this.multipleReducerServe.clearSong();
+        this.showPanel = false;
+      }
+    });
+  }
+
+  private updateCurrentIndex(list: SongList[], song: SongList) {
+    const index = list.findIndex(item => item.id === song.id);
+    this.store$.dispatch(SetCurrentIndex({ index }));
   }
 
   
@@ -164,12 +227,18 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
     if (!this.currentSong) return;
     const currentTime = this.duration * (per / 100);
     this.audioEl.currentTime = currentTime;
-    if (!this.playing) {
-      this.onToggle();
-    }
-    // console.log(this.playPanel);
-    if (this.playPanel && this.playPanel.lyric) {
+
+    if (this.playPanel) {
       this.playPanel.lyric.seek(currentTime * 1000);
+    }
+
+
+    if (!this.playing) {
+      // console.log('per', this.playing);
+      this.onToggle();
+      if (this.playPanel) {
+        this.playPanel.lyric.togglePlay();
+      }
     }
   }
   
@@ -188,6 +257,7 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
       }else {
         this.audioEl.pause();
       }
+      // this.playPanel.lyric.togglePlay();
     }
   }
   
@@ -196,8 +266,9 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
     if (this.songList.length === 1) {
       this.loop();
     }else{
-      this.currentIndex = index < 0 ? this.songList.length - 1 : index;
-      this.updateCurrentSong();
+      const newIndex = index < 0 ? this.songList.length - 1 : index;
+      // this.updateCurrentSong();
+      this.store$.dispatch(SetCurrentIndex({ index: newIndex }));
       this.songReady = false;
     }
   }
@@ -207,8 +278,9 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
     if (this.songList.length === 1) {
       this.loop();
     }else{
-      this.currentIndex = index >= this.songList.length ? 0 : index;
-      this.updateCurrentSong();
+      const newIndex = index >= this.songList.length ? 0 : index;
+      // this.updateCurrentSong();
+      this.store$.dispatch(SetCurrentIndex({ index: newIndex }));
     }
     this.songReady = false;
     
@@ -217,6 +289,7 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
   private play() {
     this.audioEl.play();
     this.playing = true;
+    // this.playPanel.lyric.play();
   }
   
   // 缓存一定数据足以播放时触发
@@ -251,7 +324,7 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
   
   onEnded() {
     this.playing = false;
-    if (this.currentMode.type !== 'single-loop') {
+    if (this.currentMode.type !== 'singleLoop') {
       this.onNext(this.currentIndex + 1);
     }else {
       console.log('loop');
@@ -262,24 +335,11 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
   // 单曲循环
   private loop() {
     this.audioEl.currentTime = 0;
-    if (this.playPanel.lyric) {
+    if (this.playPanel) {
       console.log('seek');
       this.playPanel.lyric.seek(0);
     }
     this.play();
-  }
-  
-  
-  // 面板切歌
-  onChangeSong(song: SongList) {
-    this.currentIndex = this.playList.findIndex(item => item.id === song.id);
-    this.updateCurrentSong();
-  }
-
-  // 面板删除歌曲
-  onDeleteSong(id: number) {
-    // this.currentIndex = this.playList.findIndex(item => item.id === song.id);
-    // this.updateCurrentSong();
   }
   
   
@@ -289,5 +349,7 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
   
   ngOnDestroy(): void {
     this.winClick$ && this.winClick$.unsubscribe();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

@@ -5,7 +5,9 @@ import {ActivatedRoute} from "@angular/router";
 import {map} from "rxjs/internal/operators";
 import { Store } from '@ngrx/store';
 import { AppStoreModule } from 'src/app/store';
-import { SelectPlay } from 'src/app/store/actions/player.effect.actions';
+import { SongService } from 'src/app/service/song/song.service';
+import { SetPlayList, SetSongList, SetCurrentIndex } from 'src/app/store/actions/player.actions';
+import { MultipleReducersService } from 'src/app/store/multiple-reducers.service';
 
 @Component({
   selector: 'app-home',
@@ -26,7 +28,7 @@ export class HomeComponent implements OnInit {
   
   
   @ViewChild(NzCarouselComponent, { static: true }) private nzCarousel: NzCarouselComponent;
-  constructor(private route: ActivatedRoute, private store$: Store<AppStoreModule>) {
+  constructor(private route: ActivatedRoute, private SongServe: SongService, private multipleReducerServe: MultipleReducersService) {
      this.route.data.pipe(map(res => res.homeDatas)).subscribe(([banners, hotTags, songSheetList]) => {
       this.banners = banners;
       this.hotTags = hotTags;
@@ -50,7 +52,10 @@ export class HomeComponent implements OnInit {
   
   
   playSong(id: number) {
-    this.store$.dispatch(SelectPlay({ id }));
+    // this.store$.dispatch(SelectPlay({ id }));
+    this.SongServe.getSongList(id).subscribe(list => {
+      this.multipleReducerServe.selectPlay(({ list, index: 0 }));
+    });
   }
   
   
