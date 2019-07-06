@@ -15,7 +15,7 @@
         <section class="sec">
           <div class="up">
             <div class="navs">
-              <h2 (click)="testMeta()">
+              <h2>
                 <i></i>
                 <a href="#">热门推荐</a>
               </h2>
@@ -31,19 +31,12 @@
 
           <div class="down">
             <div class="down-wrap">
-              <div class="sheet-item" *ngFor="let item of songSheetList;trackBy: trackBySongList">
-                <a class="cover">
-                  <img src="{{item.picUrl}}" alt="{{item.name}}">
-                  <div class="bottom">
-                    <div class="num">
-                      <i class="icon erji"></i>
-                      <span>{{item.playCount | PlayCount}}</span>
-                    </div>
-                    <i class="icon play" (click)="playSong(item.id)"></i>
-                  </div>
-                </a>
-                <a href="#" class="dec">{{item.name}}</a>
-              </div>
+              <app-single-sheet
+                class="sheet-item"
+                *ngFor="let item of songSheetList;trackBy: trackBySongList"
+                [sheet]="item"
+                (onPlay)="playSong($event)">
+              </app-single-sheet>
             </div>
           </div>
         </section>

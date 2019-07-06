@@ -1,12 +1,13 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { WyPlayerModule } from './wy-player/wy-player.module';
+import { SingleSheetComponent } from './single-sheet/single-sheet.component';
+import { PlayCountPipe } from '../pipes/play-count.pipe';
 
 @NgModule({
   imports: [
-    CommonModule,
     WyPlayerModule
   ],
-  exports: [WyPlayerModule]
+  exports: [WyPlayerModule, SingleSheetComponent, PlayCountPipe],
+  declarations: [SingleSheetComponent, PlayCountPipe]
 })
 export class WyUiModule { }

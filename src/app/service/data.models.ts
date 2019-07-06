@@ -20,10 +20,18 @@ export type HotTag = {
 export type SongSheet = {
   id: number;
   name: string;
-  picUrl: string;
+  picUrl?: string;
+  coverImgUrl?: string;
   playCount: number;
 }
 
+
+export type playlistInfo = {
+  code: number;
+  more: boolean;
+  total: number;
+  playlists: SongSheet[];
+}
 
 
 export interface Song {

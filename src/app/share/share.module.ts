@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {NgZorroAntdModule} from "ng-zorro-antd";
 import { WyIconDirective } from './wy-icon.directive';
-import {PlayCountPipe} from "./pipes/play-count.pipe";
 import { WyUiModule } from './wy-ui/wy-ui.module';
 
 @NgModule({
@@ -20,9 +19,8 @@ import { WyUiModule } from './wy-ui/wy-ui.module';
     ReactiveFormsModule,
     NgZorroAntdModule,
     WyIconDirective,
-    PlayCountPipe,
     WyUiModule
   ],
-  declarations: [WyIconDirective, PlayCountPipe]
+  declarations: [WyIconDirective]
 })
 export class ShareModule { }
