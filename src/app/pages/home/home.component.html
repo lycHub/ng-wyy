@@ -17,13 +17,13 @@
             <div class="navs">
               <h2>
                 <i></i>
-                <a href="#">热门推荐</a>
+                <a routerLink="/sheet">热门推荐</a>
               </h2>
               <nav>
-                <a href="/html/" *ngFor="let item of hotTags;trackBy: trackByHotTags">{{item.name}}</a>
+                <a routerLink="/sheet" [queryParams]="{cat: item.name}" *ngFor="let item of hotTags;trackBy: trackByHotTags">{{item.name}}</a>
               </nav>
             </div>
-            <a href="#">
+            <a routerLink="/sheet">
               更多
               <i nz-icon type="arrow-right" theme="outline"></i>
             </a>

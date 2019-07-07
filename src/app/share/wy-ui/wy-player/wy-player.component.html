@@ -1,7 +1,12 @@
-<div class="m-player">
+<div class="m-player"
+[@showHide]="showPlayer"
+(mouseenter)="togglePlayer('show')"
+(mouseleave)="togglePlayer('hide')"
+(@showHide.start)="animating = true"
+(@showHide.done)="animating = false">
   <div class="lock">
-    <div class="left">
-      <i></i>
+    <div class="left" (click)="lockPlayer = !lockPlayer">
+      <i [class.locked]="lockPlayer"></i>
     </div>
   </div>
   <div class="hand"></div>

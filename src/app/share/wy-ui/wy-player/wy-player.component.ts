@@ -12,6 +12,7 @@ import { SetCurrentIndex, SetPlayMode, SetPlayList } from '../../../store/action
 import { MultipleReducersService } from 'src/app/store/multiple-reducers.service';
 import { NzModalService } from 'ng-zorro-antd';
 import { takeUntil } from 'rxjs/operators';
+import { trigger, state, style, transition, animate, AnimationEvent } from '@angular/animations';
 
 // 播放模式
 export type PlayMode = {
@@ -34,9 +35,20 @@ const modeTypes: PlayMode[] = [{
 @Component({
   selector: 'app-wy-player',
   templateUrl: './wy-player.component.html',
-  styleUrls: ['./wy-player.component.less']
+  styleUrls: ['./wy-player.component.less'],
+  animations: [trigger('showHide', [
+    state('show', style({ bottom: 0 })),
+    state('hide', style({ bottom: -71 })),
+    transition('show=>hide', [ animate('0.3s') ]),
+    transition('hide=>show', [ animate('0.1s') ])
+  ])]
 })
 export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
+  showPlayer = 'hide';
+  lockPlayer = false;
+
+  // 是否正在动画
+  private animating = false;
   // @Input() songList: SongList[] = [];
   private songList: SongList[];
   
@@ -340,6 +352,14 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
       this.playPanel.lyric.seek(0);
     }
     this.play();
+  }
+
+
+  // 播放器动画
+  togglePlayer(type: string) {
+    if (!this.lockPlayer && !this.animating) {
+      this.showPlayer = type;
+    }
   }
   
   

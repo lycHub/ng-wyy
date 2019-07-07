@@ -1,6 +1,17 @@
 <div class="sheet wrap">
   <div class="list-r">
     <div class="top">
+      <div class="cat">
+        <span>{{listParams.cat}}</span>
+        <!-- <a nz-dropdown [nzDropdownMenu]="menu">Hover me</a>
+        <nz-dropdown-menu #menu="nzDropdownMenu">
+          <ul nz-menu>
+            <li nz-menu-item>1st menu item</li>
+            <li nz-menu-item>2nd menu item</li>
+            <li nz-menu-item>3rd menu item</li>
+          </ul>
+        </nz-dropdown-menu> -->
+      </div>
       <nz-radio-group [(ngModel)]="radioValue" [nzButtonStyle]="'solid'" (ngModelChange)="orderChange($event)">
         <label nz-radio-button nzValue="hot">热门</label>
         <label nz-radio-button nzValue="new">最新</label>
