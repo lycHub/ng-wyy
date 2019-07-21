@@ -54,14 +54,12 @@ export class SongService {
   }
 
 
-  getSongList(id: number) {
+  getSongList(songs: Song[]) {
     return Observable.create(observer => {
-      this.getSongSheetDetail(id).subscribe(res => {
-        const ids = res.tracks.map(item => item.id).join(',');
+      const ids = songs.map(item => item.id).join(',');
         this.getSongUrl(ids).subscribe(urls => {
-          observer.next(this.generateSongList(res.tracks, urls));
+          observer.next(this.generateSongList(songs, urls));
         });
-      });
     });
   }
 

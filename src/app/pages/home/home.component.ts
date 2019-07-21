@@ -41,8 +41,10 @@ export class HomeComponent {
   }
 
   playSong(id: number) {
-    this.songServe.getSongList(id).subscribe(list => {
-      this.multipleReducerServe.selectPlay(({ list, index: 0 }));
+    this.songServe.getSongSheetDetail(id).subscribe(sheet => {
+      this.songServe.getSongList(sheet.tracks).subscribe(list => {
+        this.multipleReducerServe.selectPlay(({ list, index: 0 }));
+      });
     });
   }
 

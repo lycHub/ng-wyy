@@ -24,7 +24,7 @@
 
           <div class="btns">
             <nz-button-group class="btn">
-              <button nz-button nzType="primary" class="play">
+              <button nz-button nzType="primary" class="play" (click)="playSong(sheetInfo.id)">
                 <i nz-icon nzType="play-circle" nzTheme="outline"></i>播放
               </button>
               <button nz-button nzType="primary" class="add">+</button>
@@ -54,7 +54,7 @@
           <div class="intr f-brk" [class.f-hide]="!controlDesc.isExpand">
             <p [innerHTML]="description.long"></p>
           </div>
-          <div class="expand">
+          <div class="expand" *ngIf="sheetInfo.description.length > 99">
             <span (click)="toggleDesc()">{{controlDesc.label}}</span>
             <i nz-icon [nzType]="controlDesc.iconCls" nzTheme="outline"></i>
           </div>
