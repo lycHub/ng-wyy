@@ -35,7 +35,8 @@
                 class="sheet-item"
                 *ngFor="let item of songSheetList;trackBy: trackBySongList"
                 [sheet]="item"
-                (onPlay)="playSong($event)">
+                (onPlay)="playSong($event)"
+                (click)="toInfo(item.id)">
               </app-single-sheet>
             </div>
           </div>

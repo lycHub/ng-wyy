@@ -3,7 +3,7 @@ import { SheetService, SheetParams } from 'src/app/service/sheet/sheet.service';
 import { SongSheet, playlistInfo, Song } from '../../service/data.models';
 import { SongService } from 'src/app/service/song/song.service';
 import { MultipleReducersService } from 'src/app/store/multiple-reducers.service';
-import { ActivatedRoute } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-sheet',
@@ -22,7 +22,7 @@ export class SheetComponent implements OnInit {
   playlistInfo: playlistInfo;
   total = 0;
 
-  constructor(private route: ActivatedRoute, private sheetServe: SheetService, private SongServe: SongService, private multipleReducerServe: MultipleReducersService) {
+  constructor(private router: Router, private route: ActivatedRoute, private sheetServe: SheetService, private SongServe: SongService, private multipleReducerServe: MultipleReducersService) {
     this.listParams.cat = this.route.snapshot.queryParamMap.get('cat') || '全部';
     this.getList();
   }
@@ -49,6 +49,10 @@ export class SheetComponent implements OnInit {
 
   private getList() {
     this.sheetServe.getSheetList(this.listParams).subscribe(res => this.playlistInfo = res);
+  }
+  
+  toInfo(id: number) {
+    this.router.navigate(['/sheetInfo', id]);
   }
 
   trackBySongList(index: number, songSheet: SongSheet): number { return songSheet.id; }

@@ -35,3 +35,17 @@ h1, h2, h3, h4, h5, h6{
   white-space: nowrap;
   word-wrap: normal;
 }
+
+.clearfix:after{
+  clear: both;
+  content: '.';
+  display: block;
+  height: 0;
+  visibility: hidden;
+}
+
+.f-brk{
+  word-wrap: break-word;
+  word-break: break-all;
+  white-space: normal;
+}

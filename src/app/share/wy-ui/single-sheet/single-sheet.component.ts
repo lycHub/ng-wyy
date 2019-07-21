@@ -12,7 +12,7 @@ import { SongSheet } from 'src/app/service/data.models';
           <i class="icon erji"></i>
           <span>{{sheet.playCount | PlayCount}}</span>
         </div>
-        <i class="icon play" (click)="onPlay.emit(sheet.id)"></i>
+        <i class="icon play" (click)="play($event)"></i>
       </div>
     </a>
     <a href="#" class="dec">{{sheet.name}}</a>
@@ -24,4 +24,8 @@ export class SingleSheetComponent {
   @Input() sheet: SongSheet;
   @Output() onPlay = new EventEmitter<number>();
   constructor() { }
+  play(evt: MouseEvent) {
+    evt.stopPropagation();
+    this.onPlay.emit(this.sheet.id);
+  }
 }

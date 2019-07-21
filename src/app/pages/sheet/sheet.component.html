@@ -19,11 +19,12 @@
     </div>
 
     <div class="list">
-        <app-single-sheet
+      <app-single-sheet
         class="sheet-item"
         *ngFor="let item of playlistInfo?.playlists;trackBy: trackBySongList"
         [sheet]="item"
-        (onPlay)="playSong($event)">
+        (onPlay)="playSong($event)"
+        (click)="toInfo(item.id)">
       </app-single-sheet>
     </div>
     <nz-pagination
