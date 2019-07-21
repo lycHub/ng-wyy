@@ -1,9 +1,9 @@
 import {Inject, Injectable} from '@angular/core';
 import {ServiceModule} from "../service.module";
 import {HttpClient, HttpErrorResponse, HttpParams} from "@angular/common/http";
-import {Song, SongUrl, Lyric} from "../data.models";
-import {from, Observable, of} from "rxjs/index";
-import {catchError, concatMap, map, mergeMap} from "rxjs/internal/operators";
+import {Song, SongUrl, Lyric, SongSheet} from "../data.models";
+import {Observable} from "rxjs/index";
+import {catchError, map} from "rxjs/internal/operators";
 import {API_CONFIG} from "../../core/inject-tokens";
 
 
@@ -16,61 +16,19 @@ export interface SongList extends Song {
 })
 export class SongService {
   constructor(private http: HttpClient, @Inject(API_CONFIG) private config: string) { }
-  getSongList(id: number): Observable<SongList[]> {
-    return Observable.create((observer) => {
-      this.concatSongList(id).subscribe(res => {
-        this.generateSongList(res, (list: SongList[]) => observer.next(list));
-      })
-    });
-  }
-  
-  
-  private generateSongList({ sheet, urls }, cb: (res: SongList[]) => void) {
-    const result = [];
-    from(<Song[]>sheet).pipe(mergeMap(item => {
-      const url = <string>urls.find(url => url.id === item.id).url;
-      return of({
-        id: item.id,
-        name: item.name,
-        ar: item.ar,
-        al: item.al,
-        dt: item.dt,
-        url
-      });
-    })).subscribe(
-      res => {
-        if (res.url) {
-          result.push(res);
-        }
-      },
-      error => console.error(error),
-      () => cb(result)
-    );
-  }
-  
-  private concatSongList(id: number): Observable<{ sheet: Song[]; urls: SongUrl[] }> {
-    const detail$ =  this.getSongSheetDetail(id);
-    return detail$.pipe(concatMap(sheet => {
-      const ids = sheet.map(item => item.id).join(',');
-      return this.getSongUrl(ids).pipe(map(urls => {
-        return { sheet, urls };
-      }));
-    }))
-  }
-  
   
   // 歌单详情
-  private getSongSheetDetail(id: number): Observable<Song[]> {
+  getSongSheetDetail(id: number): Observable<SongSheet> {
     const params = new HttpParams().set('id', id.toString());
     return this.http.get(this.config + 'playlist/detail', { params })
       .pipe(
-        map((res: {playlist: {tracks: Song[]}}) => res.playlist.tracks),
+        map((res: {playlist: SongSheet}) => res.playlist),
         catchError(this.handleError)
       );
   }
   
   // 歌曲url列表
-  private getSongUrl(id: string): Observable<SongUrl[]> {
+  getSongUrl(id: string): Observable<SongUrl[]> {
     const params = new HttpParams().set('id', id);
     return this.http.get(this.config + 'song/url', { params })
       .pipe(
@@ -93,6 +51,35 @@ export class SongService {
         }),
         catchError(this.handleError)
       );
+  }
+
+
+  getSongList(id: number) {
+    return Observable.create(observer => {
+      this.getSongSheetDetail(id).subscribe(res => {
+        const ids = res.tracks.map(item => item.id).join(',');
+        this.getSongUrl(ids).subscribe(urls => {
+          observer.next(this.generateSongList(res.tracks, urls));
+        });
+      });
+    });
+  }
+
+
+  private generateSongList(songs: Song[], urls: SongUrl[]): SongList[] {
+    const result = [];
+    songs.forEach(song => {
+      const url = <string>urls.find(url => url.id === song.id).url;
+      result.push({
+        id: song.id,
+        name: song.name,
+        ar: song.ar,
+        al: song.al,
+        dt: song.dt,
+        url
+      });
+    });
+    return result;
   }
   
   private handleError(error: HttpErrorResponse): never {

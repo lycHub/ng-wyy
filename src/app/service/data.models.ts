@@ -17,12 +17,29 @@ export type HotTag = {
   position: number;
 }
 
+export interface Song {
+  id: number;
+  name: string;
+  ar: Singer[];
+  al: { id: number; name: string; picUrl: string; };    // 专辑信息
+  dt: number;
+}
+
 export type SongSheet = {
   id: number;
+  userId: number;
   name: string;
   picUrl?: string;
   coverImgUrl?: string;
   playCount: number;
+  tags: string[];
+  createTime: number;
+  creator: { nickname: string; avatarUrl: string; };
+  description: string;
+  subscribedCount: number;
+  shareCount: number;
+  commentCount: number;
+  tracks: Song[];
 }
 
 
@@ -34,13 +51,7 @@ export type playlistInfo = {
 }
 
 
-export interface Song {
-  id: number;
-  name: string;
-  ar: Singer[];
-  al: { picUrl: string; };
-  dt: number;
-}
+
 
 export type Singer = {
   id: number;

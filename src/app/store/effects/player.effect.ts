@@ -10,7 +10,7 @@ import { SelectPlay } from '../actions/player.effect.actions';
 
 @Injectable()
 export class PlayerEffect {
-  requestSongList$ = createEffect(() => this.actions$.pipe(
+  /* requestSongList$ = createEffect(() => this.actions$.pipe(
     ofType(SelectPlay),
     // tap((action, ...res) => {
     //   console.log('tap', action);
@@ -22,7 +22,7 @@ export class PlayerEffect {
         catchError(() => EMPTY)
       ))
     )
-  );
+  ); */
  
   constructor(private store$: Store<AppStoreModule>, private actions$: Actions, private SongServe: SongService) {}
 }

@@ -14,6 +14,6 @@ import { WyScrollComponent } from './wy-scroll.component';
     WySliderModule
   ],
   declarations: [WyPlayerComponent, WyPlayerPanelComponent, FormatTimePipe, WyScrollComponent],
-  exports: [WyPlayerComponent]
+  exports: [WyPlayerComponent, FormatTimePipe]
 })
 export class WyPlayerModule { }

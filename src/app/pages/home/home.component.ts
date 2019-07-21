@@ -25,7 +25,7 @@ export class HomeComponent {
   
   
   @ViewChild(NzCarouselComponent, { static: true }) private nzCarousel: NzCarouselComponent;
-  constructor(private route: ActivatedRoute, private router: Router, private SongServe: SongService, private multipleReducerServe: MultipleReducersService) {
+  constructor(private route: ActivatedRoute, private router: Router, private songServe: SongService, private multipleReducerServe: MultipleReducersService) {
      this.route.data.pipe(map(res => res.homeDatas)).subscribe(([banners, hotTags, songSheetList]) => {
       this.banners = banners;
       this.hotTags = hotTags;
@@ -41,10 +41,13 @@ export class HomeComponent {
   }
 
   playSong(id: number) {
-    this.SongServe.getSongList(id).subscribe(list => {
+    this.songServe.getSongList(id).subscribe(list => {
       this.multipleReducerServe.selectPlay(({ list, index: 0 }));
     });
   }
+
+
+  
   
   toInfo(id: number) {
     this.router.navigate(['/sheetInfo', id]);
