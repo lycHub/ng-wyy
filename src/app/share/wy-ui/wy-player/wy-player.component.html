@@ -1,5 +1,6 @@
 <div class="m-player"
 [@showHide]="showPlayer"
+(click)="selfClick = true"
 (mouseenter)="togglePlayer('show')"
 (mouseleave)="togglePlayer('hide')"
 (@showHide.start)="animating = true"
@@ -48,12 +49,12 @@
       <div class="ctrl">
         <i class="volume" title="音量" (click)="toggleVolPanel($event)"></i>
         <i [ngClass]="currentMode.type" [title]="currentMode.label" (click)="changeMode()"></i>
-        <p class="open" (click)="togglePanel($event)">
+        <p class="open" (click)="toggleListPanel($event)">
           <span></span>
         </p>
 
         <!--音量-->
-        <div class="control-vol" [hidden]="!showVolPanel" (click)="onPanelClick($event)">
+        <div class="control-vol" [hidden]="!showVolPanel">
           <app-wy-slider [nzVertical]="true" [(ngModel)]="currentVol" (ngModelChange)="onVolChange($event)"></app-wy-slider>
         </div>
       </div>
@@ -67,8 +68,7 @@
         (onClose)="showPanel = false"
         (onChangeSong)="onChangeSong($event)"
         (onDeleteSong)="onDeleteSong($event)"
-        (onClearSong)="onClearSong()"
-        (click)="onPanelClick($event)">
+        (onClearSong)="onClearSong()">
       </app-wy-player-panel>
     </div>
   </div>

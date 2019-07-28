@@ -84,7 +84,7 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
   showVolPanel = false;
   
   // 是否点击了音量控件
-  volClick = false;
+  selfClick = false;
   
   modeCount = 0;
   
@@ -166,23 +166,49 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
     }
   }
   
-  onPanelClick(e) {
+  
+  // 控制音量面板
+  toggleVolPanel(e: MouseEvent) {
     e.stopPropagation();
+    this.togglePanel('showVolPanel');
+  }
+  
+  // 控制列表面板
+  toggleListPanel(e: MouseEvent) {
+    e.stopPropagation();
+    if (this.songList.length) {
+      this.togglePanel('showPanel');
+    }
+  }
+  
+  private togglePanel(type: string) {
+    this[type] = !this[type];
+    if (this[type]) {
+      this.bindDocumentClickListener();
+    }else {
+      this.unbindDocumentClickListener();
+    }
   }
   
   
-  // 控制音量面板
-  toggleVolPanel(e) {
-    e.stopPropagation();
-    this.showVolPanel = !this.showVolPanel;
-    if (this.showVolPanel) {
+  private bindDocumentClickListener() {
+    if (!this.winClick$) {
       this.winClick$ = fromEvent(this.doc, 'click').subscribe(() => {
         console.log('click');
-        this.showVolPanel = false;
-        this.winClick$.unsubscribe();
+        if (!this.selfClick) {  // 说明点击了控件外的其它地方
+          this.showVolPanel = false;
+          this.showPanel = false;
+          this.unbindDocumentClickListener();
+        }
+        this.selfClick = false;
       });
-    }else {
+    }
+  }
+
+  unbindDocumentClickListener() {
+    if (this.winClick$) {
       this.winClick$.unsubscribe();
+      this.winClick$ = null;
     }
   }
   
@@ -249,21 +275,6 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
       this.onToggle();
       if (this.playPanel) {
         this.playPanel.lyric.togglePlay();
-      }
-    }
-  }
-  
-  togglePanel(e) {
-    e.stopPropagation();
-    if (this.songList.length) {
-      this.showPanel = !this.showPanel;
-      if (this.showPanel) {
-        this.winClick$ = fromEvent(this.doc, 'click').subscribe(() => {
-          this.showPanel = false;
-          this.winClick$.unsubscribe();
-        });
-      }else {
-        this.winClick$.unsubscribe();
       }
     }
   }
@@ -376,7 +387,7 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
   }
   
   ngOnDestroy(): void {
-    this.winClick$ && this.winClick$.unsubscribe();
+    this.unbindDocumentClickListener();
     this.destroy$.next();
     this.destroy$.complete();
   }
