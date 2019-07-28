@@ -1,16 +1,22 @@
-import { Component } from '@angular/core';
+import {Component, OnDestroy} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
-import { SongService } from 'src/app/service/song/song.service';
+import {SongList, SongService} from 'src/app/service/song/song.service';
 import { SongSheet } from 'src/app/service/data.models';
 import { map } from 'rxjs/operators';
 import { MultipleReducersService } from 'src/app/store/multiple-reducers.service';
+import {Observable, Subject} from "rxjs/index";
+import {AppStoreModule} from "../../store/index";
+import {select, Store} from "@ngrx/store";
+import {takeUntil} from "rxjs/internal/operators";
+import {getCurrentSong} from "../../store/selectors/player.selector";
+import {findIndex} from "../../utils/array";
 
 @Component({
   selector: 'app-sheet-info',
   templateUrl: './sheet-info.component.html',
   styleUrls: ['./sheet-info.component.less']
 })
-export class SheetInfoComponent {
+export class SheetInfoComponent implements OnDestroy{
   sheetInfo: SongSheet;
   description = {
     short: '',
@@ -23,11 +29,32 @@ export class SheetInfoComponent {
     iconCls: 'down'
   }
   
-  constructor(private route: ActivatedRoute, private songServe: SongService, private multipleReducerServe: MultipleReducersService) {
+  currentIndex = -1;
+  
+  private appStore$: Observable<AppStoreModule>;
+  private destroy$ = new Subject<void>();
+  
+  constructor(
+    private route: ActivatedRoute,
+    private songServe: SongService,
+    private multipleReducerServe: MultipleReducersService,
+    private store$: Store<AppStoreModule>,
+  ) {
     this.route.data.pipe(map(res => res.sheetInfo)).subscribe(res => {
       this.sheetInfo = res;
-      console.log('添加歌曲 vue-app 10-6');
       this.changeDesc(res.description);
+      this.listenCurrentSong();
+    });
+  
+    
+  }
+  
+  // 监听currentSong
+  private listenCurrentSong() {
+    this.appStore$ = this.store$.pipe(select('player'), takeUntil(this.destroy$));
+    this.appStore$.pipe(select(getCurrentSong)).subscribe(song => {
+      console.log('currentSOng', song);
+      // this.currentIndex = findIndex(this.sheetInfo.tracks, song);
     });
   }
 
@@ -38,6 +65,11 @@ export class SheetInfoComponent {
         this.multipleReducerServe.selectPlay(({ list, index: 0 }));
       });
     });
+  }
+  
+  // 添加一首歌曲
+  onAddSong(song: SongList, play = false) {
+    // this.multipleReducerServe.insertSong(song, play);
   }
 
   // 控制简介的展开和隐藏
@@ -61,5 +93,9 @@ export class SheetInfoComponent {
       this.description.long = str;
     }
   }
-
+  
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 }

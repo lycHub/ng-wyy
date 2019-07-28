@@ -27,6 +27,32 @@ export class MultipleReducersService {
     this.store$.dispatch(SetPlayList({ list: trueList }));
     this.store$.dispatch(SetCurrentIndex({ index: trueIndex }));
   }
+  
+  
+  // 删除列表中的一首歌
+  insertSong(song: SongList, play) {
+    const playlist = this.playState.playList.slice();
+    const songList = this.playState.songList.slice();
+    let currentIndex = this.playState.currentIndex;
+    const pIndex = findIndex(playlist, song);
+    if (pIndex > -1) {  // 如果有这首歌
+      if (play) {
+        currentIndex = pIndex;
+      }
+    }else {
+      if (play) {
+        currentIndex = pIndex + 1;
+      }
+      songList.push(song);
+      playlist.push(song);
+      this.store$.dispatch(SetSongList({ list: songList }));
+      this.store$.dispatch(SetPlayList({ list: playlist }));
+    }
+    
+    if (currentIndex !== this.playState.currentIndex) {
+      this.store$.dispatch(SetCurrentIndex({ index: currentIndex }));
+    }
+  }
 
 
   // 删除列表中的一首歌

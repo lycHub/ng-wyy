@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SheetService, SheetParams } from 'src/app/service/sheet/sheet.service';
-import { SongSheet, playlistInfo, Song } from '../../service/data.models';
+import { SongSheet, playlistInfo } from '../../service/data.models';
 import { SongService } from 'src/app/service/song/song.service';
 import { MultipleReducersService } from 'src/app/store/multiple-reducers.service';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -20,7 +20,6 @@ export class SheetComponent implements OnInit {
   }
 
   playlistInfo: playlistInfo;
-  total = 0;
 
   constructor(private router: Router, private route: ActivatedRoute, private sheetServe: SheetService, private songServe: SongService, private multipleReducerServe: MultipleReducersService) {
     this.listParams.cat = this.route.snapshot.queryParamMap.get('cat') || '全部';

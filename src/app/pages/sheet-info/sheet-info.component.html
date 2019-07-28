@@ -85,12 +85,12 @@
             <tr *ngFor="let item of sheetInfo.tracks; index as i">
               <td class="first-col">
                 <span>{{i + 1}}</span>
-                <i class="ico add" title="添加"></i>
+                <i class="ico play" title="播放" (click)="onAddSong(item, true)"></i>
                 <!-- <i nz-icon nzType="play-circle" nzTheme="outline"></i> -->
               </td>
               <td>{{item.name}}</td>
               <td class="time-col">
-                <!-- <span>{{item.dt / 1000 | FormatTime}}</span> -->
+                 <span>{{item.dt / 1000 | FormatTime}}</span>
                 <p class="icons">
                   <i class="ico add" title="添加"></i>
                   <i class="ico like" title="收藏"></i>
