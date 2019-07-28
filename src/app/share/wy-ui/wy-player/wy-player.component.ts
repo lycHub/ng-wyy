@@ -12,7 +12,7 @@ import { SetCurrentIndex, SetPlayMode, SetPlayList } from '../../../store/action
 import { MultipleReducersService } from 'src/app/store/multiple-reducers.service';
 import { NzModalService } from 'ng-zorro-antd';
 import { takeUntil } from 'rxjs/operators';
-import { trigger, state, style, transition, animate, AnimationEvent } from '@angular/animations';
+import { trigger, state, style, transition, animate } from '@angular/animations';
 
 // 播放模式
 export type PlayMode = {

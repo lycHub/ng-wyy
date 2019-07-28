@@ -35,7 +35,7 @@ export class MultipleReducersService {
     const songList = this.playState.songList.slice();
     let currentIndex = this.playState.currentIndex;
     const pIndex = findIndex(playlist, song);
-    playlist.splice(findIndex(playlist, song), 1);
+    playlist.splice(pIndex, 1);
     const sIndex = findIndex(songList, song);
     songList.splice(sIndex, 1);
     if (currentIndex > pIndex || currentIndex === playlist.length) {
