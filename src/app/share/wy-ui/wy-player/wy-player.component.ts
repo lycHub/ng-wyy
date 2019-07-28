@@ -1,9 +1,8 @@
 import { AfterViewInit, Component, ElementRef, Inject, OnChanges, OnDestroy, SimpleChanges, ViewChild } from '@angular/core';
-import {SongList} from "../../../service/song/song.service";
 import {fromEvent, Subscription, Observable, Subject} from "rxjs/index";
 import {DOCUMENT} from "@angular/common";
 import {shuffle} from "../../../utils/array";
-import {Singer} from "../../../service/data.models";
+import {Singer, Song} from "../../../service/data.models";
 import { WyPlayerPanelComponent } from './wy-player-panel/wy-player-panel.component';
 import { Store, select } from '@ngrx/store';
 import { AppStoreModule } from 'src/app/store';
@@ -49,10 +48,9 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
 
   // 是否正在动画
   private animating = false;
-  // @Input() songList: SongList[] = [];
-  private songList: SongList[];
+  private songList: Song[];
   
-  private playList: SongList[];
+  private playList: Song[];
   
   // 是否可以播放
   private songReady = false;
@@ -64,7 +62,7 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
   currentIndex: number;
   
   // 正在播放vuex
-  currentSong: SongList;
+  currentSong: Song;
   
   
   // 播放时间
@@ -151,7 +149,8 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
     }
   }
 
-  private watchList(list: SongList[], type: string) {
+  private watchList(list: Song[], type: string) {
+    // console.log('watchList', list);
     this[type] = list;
   }
 
@@ -159,7 +158,7 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
     this.currentIndex = index;
   }
   
-  private watchCurrentSong(song: SongList) {
+  private watchCurrentSong(song: Song) {
     this.currentSong = song;
     if (song) {
       this.duration = song.dt / 1000;
@@ -193,12 +192,12 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
 
 
    // 面板切歌
-   onChangeSong(song: SongList) {
+   onChangeSong(song: Song) {
     this.updateCurrentIndex(this.playList, song);
   }
 
    // 面板删除歌曲
-   onDeleteSong(song: SongList) {
+   onDeleteSong(song: Song) {
     this.modalService.confirm({
       nzTitle: '确认删除?',
       nzOnOk: () => this.multipleReducerServe.deleteSong(song)
@@ -216,7 +215,7 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
     });
   }
 
-  private updateCurrentIndex(list: SongList[], song: SongList) {
+  private updateCurrentIndex(list: Song[], song: Song) {
     const index = list.findIndex(item => item.id === song.id);
     this.store$.dispatch(SetCurrentIndex({ index }));
   }

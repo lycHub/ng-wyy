@@ -23,6 +23,7 @@ export interface Song {
   ar: Singer[];
   al: { id: number; name: string; picUrl: string; };    // 专辑信息
   dt: number;
+  url?: string;
 }
 
 export type SongSheet = {

@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { AppStoreModule } from '.';
 import { Store, select } from '@ngrx/store';
-import { SongList } from '../service/song/song.service';
 import { SetSongList, SetPlayList, SetCurrentIndex } from './actions/player.actions';
 import { shuffle, findIndex } from '../utils/array';
 import { PlayerState } from './reducers/player.reducer';
+import {Song} from "../service/data.models";
 
 @Injectable({
   providedIn: AppStoreModule
@@ -16,7 +16,7 @@ export class MultipleReducersService {
   }
 
   // 选择播放列表
-  selectPlay({ list, index }: {list: SongList[]; index: number}) {
+  selectPlay({ list, index }: {list: Song[]; index: number}) {
     this.store$.dispatch(SetSongList({ list }));
     let trueIndex = index;
     let trueList = list;
@@ -29,34 +29,51 @@ export class MultipleReducersService {
   }
   
   
-  // 删除列表中的一首歌
-  insertSong(song: SongList, play) {
+  // 添加一首歌
+  insertSong(song: Song, play) {
     const playlist = this.playState.playList.slice();
     const songList = this.playState.songList.slice();
-    let currentIndex = this.playState.currentIndex;
+    let insertIndex = this.playState.currentIndex;
     const pIndex = findIndex(playlist, song);
     if (pIndex > -1) {  // 如果有这首歌
       if (play) {
-        currentIndex = pIndex;
+        insertIndex = pIndex;
       }
     }else {
-      if (play) {
-        currentIndex = pIndex + 1;
-      }
       songList.push(song);
       playlist.push(song);
+      if (play) {
+        insertIndex = songList.length - 1;
+      }
       this.store$.dispatch(SetSongList({ list: songList }));
       this.store$.dispatch(SetPlayList({ list: playlist }));
     }
-    
-    if (currentIndex !== this.playState.currentIndex) {
-      this.store$.dispatch(SetCurrentIndex({ index: currentIndex }));
+    // console.log(currentIndex, this.playState.currentIndex);
+    if (insertIndex !== this.playState.currentIndex) {
+      console.log('SetCurrentIndex');
+      this.store$.dispatch(SetCurrentIndex({ index: insertIndex }));
     }
+  }
+  
+  
+  // 添加多首歌
+  insertSongs(songs: Song[]) {
+    const playlist = this.playState.playList.slice();
+    const songList = this.playState.songList.slice();
+    songs.forEach(item => {
+      const pIndex = findIndex(playlist, item);
+      if (pIndex === -1) {
+        songList.push(item);
+        playlist.push(item);
+      }
+    });
+    this.store$.dispatch(SetSongList({ list: songList }));
+    this.store$.dispatch(SetPlayList({ list: playlist }));
   }
 
 
   // 删除列表中的一首歌
-  deleteSong(song: SongList) {
+  deleteSong(song: Song) {
     const playlist = this.playState.playList.slice();
     const songList = this.playState.songList.slice();
     let currentIndex = this.playState.currentIndex;

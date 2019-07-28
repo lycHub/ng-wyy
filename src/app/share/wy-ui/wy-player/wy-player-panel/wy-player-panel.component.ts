@@ -1,15 +1,15 @@
 import {
   AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges,
-  ViewChild,
   ViewChildren,
   QueryList,
   Inject
 } from '@angular/core';
-import {SongList, SongService} from "../../../../service/song/song.service";
+import {SongService} from "../../../../service/song/song.service";
 import {WyScrollComponent} from "../wy-scroll.component";
 import Lyric from 'lyric-parser';
 import { WINDOW } from 'src/app/core/inject-tokens';
 import { findIndex } from 'src/app/utils/array';
+import {Song} from "../../../../service/data.models";
 
 export type LyricItem = {
   time: number;
@@ -23,10 +23,8 @@ export type LyricItem = {
   styleUrls: ['./wy-player-panel.component.less']
 })
 export class WyPlayerPanelComponent implements OnInit, OnChanges, AfterViewInit {
-  
-  arr = Array(100).fill(3);
-  @Input() songList: SongList[];
-  @Input() currentSong: SongList;
+  @Input() songList: Song[];
+  @Input() currentSong: Song;
   @Input() playing: boolean;
   
   private currentIndex: number;
@@ -38,10 +36,10 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges, AfterViewInit 
   @Output() onClose = new EventEmitter<void>();
   
   // 切歌
-  @Output() onChangeSong = new EventEmitter<SongList>();
+  @Output() onChangeSong = new EventEmitter<Song>();
 
   // 删除歌曲
-  @Output() onDeleteSong = new EventEmitter<SongList>();
+  @Output() onDeleteSong = new EventEmitter<Song>();
 
   // 清空歌曲
   @Output() onClearSong = new EventEmitter<void>();
@@ -72,21 +70,27 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges, AfterViewInit 
   
   ngOnChanges(changes: SimpleChanges): void {
     // console.log('currentSong panel', changes['currentSong']);
+    let currentSong = null;
     if (changes['currentSong']) {
-      this.currentIndex = findIndex(this.songList, changes['currentSong'].currentValue);
-      this.updateLyric();
-      this.scrollTCurrent();
+      currentSong = changes['currentSong'].currentValue;
+      if (currentSong) {
+        this.currentIndex = findIndex(this.songList, currentSong);
+        this.updateLyric();
+        this.scrollTCurrent();
+      }
     }
 
     if (changes['playing']) {
       if(!changes['playing'].firstChange) {
-        this.lyric.togglePlay();
+        this.lyric && this.lyric.togglePlay();
       }
     }
 
     if (changes['songList']) {
-      if (this.lyric) this.lyric.togglePlay();
-      this.currentIndex = findIndex(changes['songList'].currentValue, this.currentSong);
+      if (this.currentSong) {
+        if (this.lyric) this.lyric.togglePlay();
+        this.currentIndex = findIndex(changes['songList'].currentValue, this.currentSong);
+      }
     }
   }
 
@@ -149,7 +153,7 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges, AfterViewInit 
   
   private scrollTCurrent(speed = 300) {
     if (this.songListRefs) {
-      const dom = <HTMLElement>this.songListRefs[this.currentIndex];
+      const dom = <HTMLElement>this.songListRefs[this.currentIndex || 0];
       const offsetTop = dom.offsetTop;
       const scrollY = this.scrollY;
       // console.log(dom);
@@ -161,7 +165,7 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges, AfterViewInit 
 
 
   // 删除歌曲
-  onDelete(evt: MouseEvent, song: SongList) {
+  onDelete(evt: MouseEvent, song: Song) {
     evt.stopPropagation();
     this.onDeleteSong.emit(song);
   }

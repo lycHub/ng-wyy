@@ -1,17 +1,17 @@
-import { SongList } from 'src/app/service/song/song.service';
 import { PlayMode } from 'src/app/share/wy-ui/wy-player/wy-player.component';
 import * as PlayActions from '../actions/player.actions';
 import { createReducer, Action, on } from '@ngrx/store';
+import {Song} from "../../service/data.models";
 
 export type PlayerState = {
   // 播放状态
   playing: boolean;
 
   // 歌曲列表（原顺序）
-  songList: SongList[];
+  songList: Song[];
 
   // 歌曲列表（播放顺序）
-  playList: SongList[];
+  playList: Song[];
 
   // 模式
   playMode: PlayMode;
@@ -19,7 +19,7 @@ export type PlayerState = {
   // 当前正在播放的索引
   currentIndex: number;
 
-  currentSong?: SongList;
+  currentSong?: Song;
 }
 
 

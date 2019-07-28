@@ -1,7 +1,7 @@
 import {Component, OnDestroy} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
-import {SongList, SongService} from 'src/app/service/song/song.service';
-import { SongSheet } from 'src/app/service/data.models';
+import {SongService} from 'src/app/service/song/song.service';
+import {Song, SongSheet} from 'src/app/service/data.models';
 import { map } from 'rxjs/operators';
 import { MultipleReducersService } from 'src/app/store/multiple-reducers.service';
 import {Observable, Subject} from "rxjs/index";
@@ -45,16 +45,16 @@ export class SheetInfoComponent implements OnDestroy{
       this.changeDesc(res.description);
       this.listenCurrentSong();
     });
-  
-    
   }
   
   // 监听currentSong
   private listenCurrentSong() {
     this.appStore$ = this.store$.pipe(select('player'), takeUntil(this.destroy$));
     this.appStore$.pipe(select(getCurrentSong)).subscribe(song => {
-      console.log('currentSOng', song);
-      // this.currentIndex = findIndex(this.sheetInfo.tracks, song);
+      if (song) {
+        this.currentIndex = findIndex(this.sheetInfo.tracks, song);
+        // console.log('currentSOng', song, this.currentIndex);
+      }
     });
   }
 
@@ -68,8 +68,15 @@ export class SheetInfoComponent implements OnDestroy{
   }
   
   // 添加一首歌曲
-  onAddSong(song: SongList, play = false) {
-    // this.multipleReducerServe.insertSong(song, play);
+  onAddSong(song: Song, play = false) {
+    this.songServe.getSong(song).subscribe(item => this.multipleReducerServe.insertSong(item, play));
+  }
+  
+  // 添加歌单
+  onAddSongs(songs: Song[]) {
+    this.songServe.getSongList(songs).subscribe(list => {
+      this.multipleReducerServe.insertSongs(list);
+    });
   }
 
   // 控制简介的展开和隐藏

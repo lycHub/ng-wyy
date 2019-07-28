@@ -7,10 +7,6 @@ import {catchError, map} from "rxjs/internal/operators";
 import {API_CONFIG} from "../../core/inject-tokens";
 
 
-export interface SongList extends Song {
-  url: string;
-}
-
 @Injectable({
   providedIn: ServiceModule
 })
@@ -54,7 +50,7 @@ export class SongService {
   }
 
 
-  getSongList(songs: Song[]) {
+  getSongList(songs: Song[]): Observable<Song[]> {
     return Observable.create(observer => {
       const ids = songs.map(item => item.id).join(',');
         this.getSongUrl(ids).subscribe(urls => {
@@ -62,9 +58,26 @@ export class SongService {
         });
     });
   }
+  
+  
+  getSong(song: Song): Observable<Song> {
+    return Observable.create(observer => {
+      this.getSongUrl(song.id.toString()).subscribe(urls => {
+        const url = <string>urls.find(url => url.id === song.id).url;
+        observer.next({
+          id: song.id,
+          name: song.name,
+          ar: song.ar,
+          al: song.al,
+          dt: song.dt,
+          url
+        });
+      });
+    });
+  }
 
 
-  private generateSongList(songs: Song[], urls: SongUrl[]): SongList[] {
+  private generateSongList(songs: Song[], urls: SongUrl[]): Song[] {
     const result = [];
     songs.forEach(song => {
       const url = <string>urls.find(url => url.id === song.id).url;

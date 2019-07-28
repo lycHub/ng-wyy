@@ -1,7 +1,7 @@
 
 
 import {getRandomInt} from "./number";
-import { SongList } from '../service/song/song.service';
+import {Song} from "../service/data.models";
 export function shuffle<T>(arr: T[]): T[] {
   let _arr = arr.slice();
   for (let i = 0; i < _arr.length; i++) {
@@ -14,6 +14,6 @@ export function shuffle<T>(arr: T[]): T[] {
 }
 
 
-export function findIndex(list: SongList[], target: SongList): number {
+export function findIndex(list: Song[], target: Song): number {
   return list.findIndex(item => item.id === target.id);
 }
