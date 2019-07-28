@@ -166,7 +166,7 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
     }
   }
   
-  onVolClick(e) {
+  onPanelClick(e) {
     e.stopPropagation();
   }
   
@@ -253,9 +253,18 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
     }
   }
   
-  openPanel() {
+  togglePanel(e) {
+    e.stopPropagation();
     if (this.songList.length) {
       this.showPanel = !this.showPanel;
+      if (this.showPanel) {
+        this.winClick$ = fromEvent(this.doc, 'click').subscribe(() => {
+          this.showPanel = false;
+          this.winClick$.unsubscribe();
+        });
+      }else {
+        this.winClick$.unsubscribe();
+      }
     }
   }
   

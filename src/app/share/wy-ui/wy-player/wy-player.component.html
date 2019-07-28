@@ -48,12 +48,12 @@
       <div class="ctrl">
         <i class="volume" title="音量" (click)="toggleVolPanel($event)"></i>
         <i [ngClass]="currentMode.type" [title]="currentMode.label" (click)="changeMode()"></i>
-        <p class="open" (click)="openPanel()">
+        <p class="open" (click)="togglePanel($event)">
           <span></span>
         </p>
 
         <!--音量-->
-        <div class="control-vol" [hidden]="!showVolPanel" (click)="onVolClick($event)">
+        <div class="control-vol" [hidden]="!showVolPanel" (click)="onPanelClick($event)">
           <app-wy-slider [nzVertical]="true" [(ngModel)]="currentVol" (ngModelChange)="onVolChange($event)"></app-wy-slider>
         </div>
       </div>
@@ -67,7 +67,8 @@
         (onClose)="showPanel = false"
         (onChangeSong)="onChangeSong($event)"
         (onDeleteSong)="onDeleteSong($event)"
-        (onClearSong)="onClearSong()">
+        (onClearSong)="onClearSong()"
+        (click)="onPanelClick($event)">
       </app-wy-player-panel>
     </div>
   </div>
