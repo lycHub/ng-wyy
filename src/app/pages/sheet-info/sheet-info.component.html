@@ -88,7 +88,7 @@
                 <i class="ico play-song" [class.current]="currentIndex === i" title="播放" (click)="onAddSong(item, true)"></i>
                 <!-- <i nz-icon nzType="play-circle" nzTheme="outline"></i> -->
               </td>
-              <td>{{item.name}}</td>
+              <td class="song-name" (click)="toInfo(item.id)">{{item.name}}</td>
               <td class="time-col">
                  <span>{{item.dt / 1000 | FormatTime}}</span>
                 <p class="icons">

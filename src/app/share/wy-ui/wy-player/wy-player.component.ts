@@ -281,7 +281,7 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
   
   
   onToggle() {
-    if (this.songReady) {
+    if (this.songReady && this.currentSong) {
       this.playing = !this.playing;
       if (this.playing) {
         this.audioEl.play();

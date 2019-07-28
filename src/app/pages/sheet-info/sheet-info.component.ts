@@ -1,5 +1,5 @@
 import {Component, OnDestroy} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {SongService} from 'src/app/service/song/song.service';
 import {Song, SongSheet} from 'src/app/service/data.models';
 import { map } from 'rxjs/operators';
@@ -39,6 +39,7 @@ export class SheetInfoComponent implements OnDestroy{
     private songServe: SongService,
     private multipleReducerServe: MultipleReducersService,
     private store$: Store<AppStoreModule>,
+    private router: Router
   ) {
     this.route.data.pipe(map(res => res.sheetInfo)).subscribe(res => {
       this.sheetInfo = res;
@@ -99,6 +100,11 @@ export class SheetInfoComponent implements OnDestroy{
       this.description.short = str.slice(0, 99) + '...';
       this.description.long = str;
     }
+  }
+  
+  toInfo(id: number) {
+    console.log(id);
+    this.router.navigate(['/songInfo', id]);
   }
   
   ngOnDestroy(): void {
