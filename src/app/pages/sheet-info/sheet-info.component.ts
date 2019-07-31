@@ -70,7 +70,7 @@ export class SheetInfoComponent implements OnDestroy{
   
   // 添加一首歌曲
   onAddSong(song: Song, play = false) {
-    this.songServe.getSong(song).subscribe(item => this.multipleReducerServe.insertSong(item, play));
+    this.songServe.getSongList(song).subscribe(list => this.multipleReducerServe.insertSong(list[0], play));
   }
   
   // 添加歌单
