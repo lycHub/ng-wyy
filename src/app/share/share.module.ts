@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {NgZorroAntdModule} from "ng-zorro-antd";
-import { WyIconDirective } from './wy-icon.directive';
 import { WyUiModule } from './wy-ui/wy-ui.module';
 
 @NgModule({
@@ -18,9 +17,7 @@ import { WyUiModule } from './wy-ui/wy-ui.module';
     FormsModule,
     ReactiveFormsModule,
     NgZorroAntdModule,
-    WyIconDirective,
     WyUiModule
-  ],
-  declarations: [WyIconDirective]
+  ]
 })
 export class ShareModule { }
