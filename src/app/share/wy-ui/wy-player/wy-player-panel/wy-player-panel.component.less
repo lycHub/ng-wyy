@@ -1,6 +1,7 @@
 @import "../../../../../assets/styles/varibles";
 @import "../../../../../assets/styles/mixins";
 .play-panel{
+  display: none;
   position: absolute;
   left:0;
   bottom: 70px;
@@ -8,6 +9,9 @@
   height: 300px;
   background-color: @play-bg-color;
   overflow: hidden;
+  &.show{
+    display: block;
+  }
   .hd{
     background: url(../../../../../assets/images/playlist_bg.png) no-repeat;
     .hdc{

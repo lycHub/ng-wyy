@@ -61,7 +61,7 @@
 
       <!--面板-->
       <app-wy-player-panel
-        *ngIf="showPanel"
+        [show]="showPanel"
         [playing]="playing"
         [songList]="songList"
         [currentSong]="currentSong"

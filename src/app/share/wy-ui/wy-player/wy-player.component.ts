@@ -175,7 +175,7 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
   
   // 控制列表面板
   toggleListPanel(e: MouseEvent) {
-    e.stopPropagation();
+    // e.stopPropagation();
     if (this.songList.length) {
       this.togglePanel('showPanel');
     }
@@ -183,7 +183,7 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
   
   private togglePanel(type: string) {
     this[type] = !this[type];
-    if (this[type]) {
+    if (this['showPanel'] || this['showVolPanel']) {
       this.bindDocumentClickListener();
     }else {
       this.unbindDocumentClickListener();
@@ -194,7 +194,7 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
   private bindDocumentClickListener() {
     if (!this.winClick$) {
       this.winClick$ = fromEvent(this.doc, 'click').subscribe(() => {
-        console.log('click');
+        // console.log('click');
         if (!this.selfClick) {  // 说明点击了控件外的其它地方
           this.showVolPanel = false;
           this.showPanel = false;
@@ -264,18 +264,18 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
     if (!this.currentSong) return;
     const currentTime = this.duration * (per / 100);
     this.audioEl.currentTime = currentTime;
-
     if (this.playPanel) {
       this.playPanel.lyric.seek(currentTime * 1000);
+      // this.playPanel.lyric.updateLineNum(currentTime * 1000);
     }
 
 
     if (!this.playing) {
-      // console.log('per', this.playing);
-      this.onToggle();
-      if (this.playPanel) {
+      // console.log('onPercentChange');
+      // this.onToggle();
+      /*if (this.playPanel) {
         this.playPanel.lyric.togglePlay();
-      }
+      }*/
     }
   }
   

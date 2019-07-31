@@ -3,7 +3,7 @@ import {ActivatedRoute} from "@angular/router";
 import {map} from "rxjs/internal/operators";
 import {Lyric, Song} from "../../service/data.models";
 import {LyricItem} from "../../share/wy-ui/wy-player/wy-player-panel/wy-player-panel.component";
-import LyricParser from 'lyric-parser';
+import { LyricParser } from '../../share/wy-lyric.service';
 import {SongService} from "../../service/song/song.service";
 import {MultipleReducersService} from "../../store/multiple-reducers.service";
 
@@ -15,7 +15,7 @@ import {MultipleReducersService} from "../../store/multiple-reducers.service";
 export class SongInfoComponent implements OnInit {
   song: Song;
   
-  lyric: Lyric | null;
+  lyric: LyricParser;
   currentLyric: LyricItem[];
   
   controlLyric = {
@@ -29,7 +29,7 @@ export class SongInfoComponent implements OnInit {
     this.route.data.pipe(map(res => res.songInfo)).subscribe(([song, lyric]) => {
       this.song = song;
       this.updateLyric(lyric);
-      console.dir(this.lyric);
+      // console.dir(this.lyric);
     });
   }
 
@@ -63,7 +63,7 @@ export class SongInfoComponent implements OnInit {
     }else{
       this.currentLyric = this.lyric.lines;
     }
-    console.log(this.currentLyric);
+    // console.log(this.currentLyric);
   }
   
   

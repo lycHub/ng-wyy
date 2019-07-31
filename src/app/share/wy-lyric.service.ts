@@ -1,11 +1,4 @@
-import {ShareModule} from "./share.module";
-import {Injectable} from "@angular/core";
-
-
 const timeExp = /\[(\d{2,}):(\d{2})(?:\.(\d{2,3}))?]/g;
-
-const STATE_PAUSE = 0;
-const STATE_PLAYING = 1;
 
 const tagRegMap = {
   title: 'ti',
@@ -15,24 +8,19 @@ const tagRegMap = {
   by: 'by'
 };
 
+type Handler = (arg: { txt: string; lineNum: number }) => void;
 
-@Injectable({
-  providedIn: ShareModule
-})
-
-export class Lyric {
+export class LyricParser {
   private lrc: string;
   private tags = {};
-  private lines = [];
-  private handler: (arg: { txt: string; lineNum: number }) => void;
-  private state = STATE_PAUSE;
-  private curLine = 0;
-  
+  lines = [];
+  private handler: Handler;
+  private playing = false;
   private curNum: number;
   private startStamp: number;
   private pauseStamp: number;
   private timer: any;
-  constructor(lrc: string, handler) {
+  constructor(lrc: string, handler?: Handler) {
     this.lrc = lrc;
     this.handler = handler;
     this.init();
@@ -55,12 +43,18 @@ export class Lyric {
     const offset = parseInt(this.tags['offset']) || 0;
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
-      let result = timeExp.exec(line);
+      const result = timeExp.exec(line);
       if (result) {
         const txt = line.replace(timeExp, '').trim();
         if (txt) {
+          let tirdResult = result[3] || '0'; // 数字的 0 查询长度会变为 undefined，感觉不如直接指定 '0'
+          let length = tirdResult.length;
+          let _tirdResult = parseInt(tirdResult, 10);
+          _tirdResult = length > 2 ? Number(_tirdResult) : Number(_tirdResult) * 10;
+
           this.lines.push({
-            time: result[1] * 60 * 1000 + result[2] * 1000 + (result[3] || 0) * 10 + offset,
+            // time: result[1] * 60 * 1000 + result[2] * 1000 + (result[3] || 0) * 10 + offset,
+            time: Number(result[1]) * 60 * 1000 + Number(result[2]) * 1000 + _tirdResult,
             txt
           })
         }
@@ -72,7 +66,7 @@ export class Lyric {
     })
   }
   
-  private findCurNum(time) {
+  private findCurNum(time: number) {
     for (let i = 0; i < this.lines.length; i++) {
       if (time <= this.lines[i].time) {
         return i
@@ -97,7 +91,7 @@ export class Lyric {
     
     this.timer = setTimeout(() => {
       this.callHandler(this.curNum++);
-      if (this.curNum < this.lines.length && this.state === STATE_PLAYING) {
+      if (this.curNum < this.lines.length && this.playing) {
         this.playRest();
       }
     }, delay);
@@ -107,7 +101,11 @@ export class Lyric {
     if (!this.lines.length) {
       return;
     }
-    this.state = STATE_PLAYING;
+    
+    if (!this.playing) {
+      this.playing = true;
+    }
+    
     
     this.curNum = this.findCurNum(startTime);
     this.startStamp = +new Date() - startTime;
@@ -122,24 +120,34 @@ export class Lyric {
     }
   }
   
-  togglePlay() {
+  togglePlay(playing: boolean) {
     const now = +new Date();
-    if (this.state === STATE_PLAYING) {
-      this.stop();
-      this.pauseStamp = now;
-    } else {
-      this.state = STATE_PLAYING;
+    this.playing = playing;
+    if (this.playing) {
       this.play((this.pauseStamp || now) - (this.startStamp || now), true);
       this.pauseStamp = 0;
+    } else {
+      this.stop();
+      this.pauseStamp = now;
     }
   }
   
   stop() {
-    this.state = STATE_PAUSE;
+    if (this.playing) {
+      this.playing = false;
+    }
     clearTimeout(this.timer);
   }
   
   seek(offset) {
     this.play(offset);
   }
+  
+ /* updateLineNum(offset) {
+    this.curNum = this.findCurNum(offset);
+    this.handler({
+      txt: this.lines[this.curNum].txt,
+      lineNum: this.curNum
+    });
+  }*/
 }
