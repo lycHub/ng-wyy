@@ -2,13 +2,13 @@ import {from, zip} from "rxjs/index";
 import { map, skip } from 'rxjs/operators';
 const timeExp = /\[(\d{2,}):(\d{2})(?:\.(\d{2,3}))?]/;
 
-const tagRegMap = {
+/* const tagRegMap = {
   title: 'ti',
   artist: 'ar',
   album: 'al',
   offset: 'offset',
   by: 'by'
-};
+}; */
 
 type Handler = (arg: { txt: string; txtCn: string; lineNum: number }) => void;
 type LyricLine = { txt: string; txtCn: string; time: number; }
@@ -143,7 +143,7 @@ export class LyricParser {
         const txt = line.replace(timeExp, '').trim();
         const txtCn = tline ? tline.replace(timeExp, '').trim() : '';
         if (txt) {
-          let tirdResult = result[3] || '0'; // 数字的 0 查询长度会变为 undefined，感觉不如直接指定 '0'
+          let tirdResult = result[3] || '0';
           let length = tirdResult.length;
           let _tirdResult = parseInt(tirdResult, 10);
           _tirdResult = length > 2 ? Number(_tirdResult) : Number(_tirdResult) * 10;
@@ -234,12 +234,4 @@ export class LyricParser {
   seek(offset) {
     this.play(offset);
   }
-  
- /* updateLineNum(offset) {
-    this.curNum = this.findCurNum(offset);
-    this.handler({
-      txt: this.lines[this.curNum].txt,
-      lineNum: this.curNum
-    });
-  }*/
 }
