@@ -30,6 +30,7 @@ export class SheetInfoComponent implements OnDestroy{
   }
   
   currentIndex = -1;
+  private currentSong: Song;
   
   private appStore$: Observable<AppStoreModule>;
   private destroy$ = new Subject<void>();
@@ -52,9 +53,12 @@ export class SheetInfoComponent implements OnDestroy{
   private listenCurrentSong() {
     this.appStore$ = this.store$.pipe(select('player'), takeUntil(this.destroy$));
     this.appStore$.pipe(select(getCurrentSong)).subscribe(song => {
+      // console.log('listenCurrentSong :', song);
+      this.currentSong = song;
       if (song) {
         this.currentIndex = findIndex(this.sheetInfo.tracks, song);
-        // console.log('currentSOng', song, this.currentIndex);
+      }else{
+        this.currentIndex = -1;
       }
     });
   }
@@ -70,7 +74,12 @@ export class SheetInfoComponent implements OnDestroy{
   
   // 添加一首歌曲
   onAddSong(song: Song, play = false) {
-    this.songServe.getSongList(song).subscribe(list => this.multipleReducerServe.insertSong(list[0], play));
+    if (this.currentSong && this.currentSong.id === song.id) {
+      console.log('存在');
+    }else{
+      this.songServe.getSongList(song).subscribe(list => this.multipleReducerServe.insertSong(list[0], play));
+    }
+    
   }
   
   // 添加歌单

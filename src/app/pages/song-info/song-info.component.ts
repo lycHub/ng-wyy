@@ -28,6 +28,7 @@ export class SongInfoComponent implements OnInit {
               private multipleReducerServe: MultipleReducersService) {
     this.route.data.pipe(map(res => res.songInfo)).subscribe(([song, lyric]) => {
       this.song = song;
+      console.log('lyric :', lyric);
       this.updateLyric(lyric);
       // console.dir(this.lyric);
     });
@@ -56,14 +57,9 @@ export class SongInfoComponent implements OnInit {
   
   
   private updateLyric({ lyric, tlyric }: Lyric) {
-    this.lyric = new LyricParser(lyric);
-    if (tlyric) {
-      const currentTLyric = new LyricParser(tlyric);
-      this.currentLyric = this.concatLyric(this.lyric.lines, currentTLyric.lines);
-    }else{
-      this.currentLyric = this.lyric.lines;
-    }
-    // console.log(this.currentLyric);
+    this.lyric = new LyricParser({lyric, tlyric});
+    this.currentLyric = this.lyric.lines;
+    // console.log('currentLyric', this.currentLyric);
   }
   
   

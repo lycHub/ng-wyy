@@ -1,4 +1,6 @@
-const timeExp = /\[(\d{2,}):(\d{2})(?:\.(\d{2,3}))?]/g;
+import {from, zip} from "rxjs/index";
+import { map, skip } from 'rxjs/operators';
+const timeExp = /\[(\d{2,}):(\d{2})(?:\.(\d{2,3}))?]/;
 
 const tagRegMap = {
   title: 'ti',
@@ -8,40 +10,47 @@ const tagRegMap = {
   by: 'by'
 };
 
-type Handler = (arg: { txt: string; lineNum: number }) => void;
+type Handler = (arg: { txt: string; txtCn: string; lineNum: number }) => void;
+type LyricLine = { txt: string; txtCn: string; time: number; }
+
+type LyricParams = { lyric: string; tlyric: string; };
 
 export class LyricParser {
-  private lrc: string;
-  private tags = {};
-  lines = [];
+  private lrc: LyricParams;
+  // private tags = {};
+  lines: LyricLine[] = [];
   private handler: Handler;
   private playing = false;
   private curNum: number;
   private startStamp: number;
   private pauseStamp: number;
   private timer: any;
-  constructor(lrc: string, handler?: Handler) {
+  constructor(lrc: LyricParams, handler?: Handler) {
     this.lrc = lrc;
     this.handler = handler;
     this.init();
   }
   
   private init() {
-    this.initTag();
+    // this.initTag();
     this.initLines();
   }
   
-  private initTag() {
+  /* private initTag() {
     for (let tag in tagRegMap) {
       const matches = this.lrc.match(new RegExp(`\\[${tagRegMap[tag]}:([^\\]]*)]`, 'i'));
       this.tags[tag] = matches && matches[1] || '';
     }
-  }
+  } */
   
   private initLines() {
-    const lines = this.lrc.split('\n');
-    const offset = parseInt(this.tags['offset']) || 0;
-    for (let i = 0; i < lines.length; i++) {
+   if (this.lrc.tlyric) {
+     this.generTlyric();
+   }else{
+    this.generLyric();
+   }
+    
+    /* for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
       const result = timeExp.exec(line);
       if (result) {
@@ -63,7 +72,90 @@ export class LyricParser {
     
     this.lines.sort((a, b) => {
       return a.time - b.time
-    })
+    }) */
+  }
+
+
+  private generTlyric() {
+    const lines = this.lrc.lyric.split('\n');
+    const tlines = this.lrc.tlyric.split('\n').filter(item => {
+      return timeExp.exec(item) !== null;
+    });
+    const moreLine = lines.length - tlines.length;
+
+    // console.log('tlines :', tlines);
+
+    let tempArr = [];
+    let zipLines$; 
+    if (moreLine >= 0) {
+      console.log('line', moreLine);
+      tempArr = [lines, tlines];
+      
+    }else{
+      console.log('tline', moreLine);
+      tempArr = [tlines, lines];
+      
+    }
+   
+    let first = timeExp.exec(tempArr[1][0])[2];
+
+    const skipIndex = tempArr[0].findIndex(item => {
+      const exec = timeExp.exec(item);
+      if (exec) {
+        return exec[2] === first;
+      }
+    });
+    const _skip = skipIndex === -1 ? 0 : skipIndex;
+    // console.log('_skip :', _skip);
+    let skipItems = [];
+    if (moreLine > 0) {
+      zipLines$ = zip(from(lines).pipe(skip(_skip)), from(tlines));
+      skipItems = lines.slice(0, _skip);
+    }else{
+      zipLines$ = zip(from(lines), from(tlines).pipe(skip(_skip)));
+    }
+  
+    if (skipItems.length) {
+      skipItems.forEach(line => {
+        this.makeLine(line);
+      });
+    }
+    // console.log('lines :', this.lines);
+    zipLines$
+    .pipe(map(([line, tline]) => ({ line, tline })))
+    .subscribe(({ line, tline }) => this.makeLine(line, tline));
+  }
+
+
+  private generLyric() {
+    // console.log('generLyric', this.lrc.lyric);
+    const lines = this.lrc.lyric.split('\n');
+    lines.forEach(line => {
+      this.makeLine(line);
+    });
+    // console.log('this.lines :', this.lines);
+  }
+
+  private makeLine(line: string, tline = '') {
+    const result = timeExp.exec(line);
+	  // const tresult = timeExp.exec(tline);
+      if (result) {
+        const txt = line.replace(timeExp, '').trim();
+        const txtCn = tline ? tline.replace(timeExp, '').trim() : '';
+        if (txt) {
+          let tirdResult = result[3] || '0'; // 数字的 0 查询长度会变为 undefined，感觉不如直接指定 '0'
+          let length = tirdResult.length;
+          let _tirdResult = parseInt(tirdResult, 10);
+          _tirdResult = length > 2 ? Number(_tirdResult) : Number(_tirdResult) * 10;
+
+          this.lines.push({
+            // time: result[1] * 60 * 1000 + result[2] * 1000 + (result[3] || 0) * 10 + offset,
+            time: Number(result[1]) * 60 * 1000 + Number(result[2]) * 1000 + _tirdResult,
+            txt,
+            txtCn
+          });
+        }
+      }
   }
   
   private findCurNum(time: number) {
@@ -76,13 +168,13 @@ export class LyricParser {
   }
   
   private callHandler(i) {
-    if (i < 0) {
-      return;
+    if (i > 0) {
+      this.handler({
+        txt: this.lines[i].txt,
+        txtCn: this.lines[i].txtCn,
+        lineNum: i
+      });
     }
-    this.handler({
-      txt: this.lines[i].txt,
-      lineNum: i
-    });
   }
   
   private playRest() {

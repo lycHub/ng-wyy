@@ -15,7 +15,7 @@ import { SongSheet } from 'src/app/service/data.models';
         <i class="icon play" (click)="play($event)"></i>
       </div>
     </a>
-    <a href="#" class="dec">{{sheet.name}}</a>
+    <span class="dec">{{sheet.name}}</span>
   </ng-container>`,
   styleUrls: ['./single-sheet.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush

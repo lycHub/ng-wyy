@@ -54,12 +54,7 @@ export class WyPlayerPanelComponent implements OnChanges {
   private isCnSong: boolean;
   
   constructor(private songServe: SongService, @Inject(WINDOW) private win: Window) {}
-
-  
-  
   ngOnChanges(changes: SimpleChanges): void {
-    
-
     if (changes['playing']) {
       // console.log('changes playing', this.playing);
       if(!changes['playing'].firstChange) {
@@ -71,20 +66,21 @@ export class WyPlayerPanelComponent implements OnChanges {
       if (!changes['show'].firstChange && changes['show'].currentValue) {
         this.wyScroll.first.refreshScroll();
         this.wyScroll.last.refreshScroll();
-        setTimeout(() => {
-          
-          const targetLine = this.lyricRefs[this.currentLineIndex - this.startLine];
-          if (targetLine) {
-            this.wyScroll.last.scrollToElement(targetLine, 0, false, false);
+        this.win.setTimeout(() => {
+          if (this.lyricRefs) {
+            const targetLine = this.lyricRefs[this.currentLineIndex - this.startLine];
+            if (targetLine) {
+              this.wyScroll.last.scrollToElement(targetLine, 0, false, false);
+            }
           }
         }, 100);
       }
       
     }
 
+    // console.log('songList :', changes['songList']);
     if (changes['songList']) {
       if (this.currentSong) {
-        
         // if (this.lyric) this.lyric.togglePlay();
         this.currentIndex = findIndex(changes['songList'].currentValue, this.currentSong);
         
@@ -93,15 +89,17 @@ export class WyPlayerPanelComponent implements OnChanges {
   
   
     let currentSong = null;
+    // console.log('currentSong :', changes['currentSong']);
     if (changes['currentSong']) {
       currentSong = changes['currentSong'].currentValue;
-    
       if (currentSong) {
         this.currentIndex = findIndex(this.songList, currentSong);
         this.updateLyric();
-        
-        // this.scrollToCurrent(0);
-        this.scrollToCurrent();
+        if (this.show) {
+          this.scrollToCurrent();
+        }
+      }else{
+        this.resetLyric();
       }
     }
   }
@@ -110,25 +108,19 @@ export class WyPlayerPanelComponent implements OnChanges {
   
   // 获取歌词
   updateLyric() {
-    if (this.lyric) {
-      this.lyric.stop();
-      this.lyric = null;
-    }
+    this.resetLyric();
     this.currentLineIndex = 0;
     this.songServe.getLyric(this.currentSong.id).subscribe(({ lyric, tlyric }) => {
-      
-      this.lyric = new LyricParser(lyric, this.handleLyric.bind(this));
+      this.lyric = new LyricParser({ lyric, tlyric }, this.handleLyric.bind(this));
+      // console.log('lyric lines :', this.lyric.lines);
+      this.currentLyric = this.lyric.lines;
       if (tlyric) {
         this.isCnSong = false;
-        const currentTLyric = new LyricParser(tlyric);
-        this.currentLyric = this.concatLyric(this.lyric.lines, currentTLyric.lines);
       }else{
         this.isCnSong = true;
-        this.currentLyric = this.lyric.lines;
       }
 
       this.wyScroll.last.scrollTo(0, 0);
-
       if (this.playing) {
         this.lyric.play();
       }
@@ -153,7 +145,7 @@ export class WyPlayerPanelComponent implements OnChanges {
     }
   }
   
-  private concatLyric(lyric: LyricItem[], tlyric: LyricItem[]): LyricItem[] {
+  /* private concatLyric(lyric: LyricItem[], tlyric: LyricItem[]): LyricItem[] {
     const result = [];
     lyric.forEach(item => {
       const cnItem = tlyric.find(cnLyric => cnLyric.time === item.time);
@@ -161,12 +153,14 @@ export class WyPlayerPanelComponent implements OnChanges {
       result.push({ ...item, txtCn });
     });
     return result;
-  }
+  } */
   
   private scrollToCurrent(speed = 300) {
     const songListRefs = this.wyScroll.first.el.nativeElement.querySelectorAll('ul li');
     if (songListRefs.length) {
+      // console.log('currentIndex :', this.currentIndex);
       const dom = <HTMLElement>songListRefs[this.currentIndex || 0];
+      // console.log('dom :', dom);
       const offsetTop = dom.offsetTop;
       const scrollY = this.scrollY;
       // console.log(dom);
@@ -182,9 +176,19 @@ export class WyPlayerPanelComponent implements OnChanges {
     evt.stopPropagation();
     this.onDeleteSong.emit(song);
   }
+
+
+  // 重置歌词
+  private resetLyric() {
+    if (this.lyric) {
+      this.lyric.stop();
+      this.lyric = null;
+      this.currentLyric = [];
+    }
+  }
   
   // 开始滚动的行
   get startLine(): number {
-    return this.isCnSong ? 3 : 2;
+    return this.isCnSong ? 3 : 1;
   }
 }
