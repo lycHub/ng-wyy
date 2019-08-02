@@ -9,7 +9,7 @@ import {WyScrollComponent} from "../wy-scroll.component";
 import { WINDOW } from 'src/app/core/inject-tokens';
 import { findIndex } from 'src/app/utils/array';
 import {Song} from "../../../../service/data.models";
-import {LyricParser} from "../../../wy-lyric.service";
+import {LyricParser} from "../../../wy-lyric";
 
 export type LyricItem = {
   time: number;
@@ -111,7 +111,8 @@ export class WyPlayerPanelComponent implements OnChanges {
     this.resetLyric();
     this.currentLineIndex = 0;
     this.songServe.getLyric(this.currentSong.id).subscribe(({ lyric, tlyric }) => {
-      this.lyric = new LyricParser({ lyric, tlyric }, this.handleLyric.bind(this));
+      this.lyric = new LyricParser({ lyric, tlyric });
+      this.handleLyric();
       // console.log('lyric lines :', this.lyric.lines);
       this.currentLyric = this.lyric.lines;
       if (tlyric) {
@@ -133,16 +134,19 @@ export class WyPlayerPanelComponent implements OnChanges {
     });
   }
 
-  private handleLyric({ lineNum }) {
-    if (!this.lyricRefs) return;
-    this.currentLineIndex = lineNum;
-    // const startLine = this.isCnSong ? 3 : 2;
+  private handleLyric() {
+    this.lyric.handler.subscribe(({ lineNum }) => {
+      console.log('subscribe :', lineNum);
+      if (!this.lyricRefs) return;
+      this.currentLineIndex = lineNum;
     if (lineNum > this.startLine) {
       const targetLine = this.lyricRefs[lineNum - this.startLine];
       this.wyScroll.last.scrollToElement(targetLine, 300, false, false);
     }else{
       this.wyScroll.last.scrollTo(0, 0);
     }
+    });
+    
   }
   
   /* private concatLyric(lyric: LyricItem[], tlyric: LyricItem[]): LyricItem[] {

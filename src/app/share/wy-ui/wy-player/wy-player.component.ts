@@ -268,28 +268,26 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
       this.playPanel.lyric.seek(currentTime * 1000);
       // this.playPanel.lyric.updateLineNum(currentTime * 1000);
     }
-
-
-    if (!this.playing) {
-      // console.log('onPercentChange');
-      // this.onToggle();
-      /*if (this.playPanel) {
-        this.playPanel.lyric.togglePlay();
-      }*/
-    }
   }
   
   
   onToggle() {
-    if (this.songReady && this.currentSong) {
-      this.playing = !this.playing;
-      if (this.playing) {
-        this.audioEl.play();
-      }else {
-        this.audioEl.pause();
+    if (!this.currentSong) {
+      if (this.playList.length) {
+        this.store$.dispatch(SetCurrentIndex({ index: 0 }));
+      this.songReady = false;
       }
-      // this.playPanel.lyric.togglePlay();
+    }else{
+      if (this.songReady) {
+        this.playing = !this.playing;
+        if (this.playing) {
+          this.audioEl.play();
+        }else {
+          this.audioEl.pause();
+        }
+      }
     }
+    
   }
   
   onPrev(index: number) {
@@ -300,8 +298,8 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
       const newIndex = index < 0 ? this.songList.length - 1 : index;
       // this.updateCurrentSong();
       this.store$.dispatch(SetCurrentIndex({ index: newIndex }));
-      this.songReady = false;
     }
+    this.songReady = false;
   }
 
   onNext(index: number) {

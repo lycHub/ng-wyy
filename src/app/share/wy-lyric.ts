@@ -1,4 +1,4 @@
-import {from, zip} from "rxjs/index";
+import { from, zip, Subject } from 'rxjs/index';
 import { map, skip } from 'rxjs/operators';
 const timeExp = /\[(\d{2,}):(\d{2})(?:\.(\d{2,3}))?]/;
 
@@ -10,7 +10,8 @@ const timeExp = /\[(\d{2,}):(\d{2})(?:\.(\d{2,3}))?]/;
   by: 'by'
 }; */
 
-type Handler = (arg: { txt: string; txtCn: string; lineNum: number }) => void;
+// type Handler = (arg: { txt: string; txtCn: string; lineNum: number }) => void;
+type Handler = { txt: string; txtCn: string; lineNum: number };
 type LyricLine = { txt: string; txtCn: string; time: number; }
 
 type LyricParams = { lyric: string; tlyric: string; };
@@ -19,15 +20,14 @@ export class LyricParser {
   private lrc: LyricParams;
   // private tags = {};
   lines: LyricLine[] = [];
-  private handler: Handler;
+  handler = new Subject<Handler>();
   private playing = false;
   private curNum: number;
   private startStamp: number;
   private pauseStamp: number;
   private timer: any;
-  constructor(lrc: LyricParams, handler?: Handler) {
+  constructor(lrc: LyricParams) {
     this.lrc = lrc;
-    this.handler = handler;
     this.init();
   }
   
@@ -169,11 +169,16 @@ export class LyricParser {
   
   private callHandler(i) {
     if (i > 0) {
-      this.handler({
+      this.handler.next({
         txt: this.lines[i].txt,
         txtCn: this.lines[i].txtCn,
         lineNum: i
       });
+      /* this.handler({
+        txt: this.lines[i].txt,
+        txtCn: this.lines[i].txtCn,
+        lineNum: i
+      }); */
     }
   }
   

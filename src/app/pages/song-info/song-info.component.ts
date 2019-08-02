@@ -3,7 +3,7 @@ import {ActivatedRoute} from "@angular/router";
 import {map} from "rxjs/internal/operators";
 import {Lyric, Song} from "../../service/data.models";
 import {LyricItem} from "../../share/wy-ui/wy-player/wy-player-panel/wy-player-panel.component";
-import { LyricParser } from '../../share/wy-lyric.service';
+import { LyricParser } from '../../share/wy-lyric';
 import {SongService} from "../../service/song/song.service";
 import {MultipleReducersService} from "../../store/multiple-reducers.service";
 
@@ -63,7 +63,7 @@ export class SongInfoComponent implements OnInit {
   }
   
   
-  private concatLyric(lyric: LyricItem[], tlyric: LyricItem[]): LyricItem[] {
+  /* private concatLyric(lyric: LyricItem[], tlyric: LyricItem[]): LyricItem[] {
     const result = [];
     lyric.forEach(item => {
       const cnItem = tlyric.find(cnLyric => cnLyric.time === item.time);
@@ -71,5 +71,5 @@ export class SongInfoComponent implements OnInit {
       result.push({ ...item, txtCn });
     });
     return result;
-  }
+  } */
 }
