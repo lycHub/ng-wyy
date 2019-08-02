@@ -6,13 +6,14 @@ import {Singer, Song} from "../../../service/data.models";
 import { WyPlayerPanelComponent } from './wy-player-panel/wy-player-panel.component';
 import { Store, select } from '@ngrx/store';
 import { AppStoreModule } from 'src/app/store';
-import { getSongList, getPlayList, getCurrentSong, getPlayMode, getCurrentIndex } from 'src/app/store/selectors/player.selector';
-import { SetCurrentIndex, SetPlayMode, SetPlayList } from '../../../store/actions/player.actions';
+import { getSongList, getPlayList, getCurrentSong, getPlayMode, getCurrentIndex, getCurrentAction } from 'src/app/store/selectors/player.selector';
+import { SetCurrentIndex, SetPlayMode, SetPlayList, SetCurrentAction } from '../../../store/actions/player.actions';
 import { MultipleReducersService } from 'src/app/store/multiple-reducers.service';
 import { NzModalService } from 'ng-zorro-antd';
 import { takeUntil } from 'rxjs/operators';
-import { trigger, state, style, transition, animate } from '@angular/animations';
+import { trigger, state, style, transition, animate, AnimationEvent } from '@angular/animations';
 import { WINDOW } from '../../../core/inject-tokens';
+import { CurrentActions } from '../../../store/reducers/player.reducer';
 
 // 播放模式
 export type PlayMode = {
@@ -93,7 +94,12 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
   // 当前模式vuex
   currentMode: PlayMode;
 
+  controlToolTip = {
+    show: false,
+    title: ''
+  }
   showToolTip = false;
+  private toolTipTimer: any;
   
   @ViewChild('audio', { static: true }) private audio: ElementRef;
 
@@ -129,6 +135,9 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
       type: getCurrentIndex,
       cb: index => this.watchCurrentIndex(index)
     }, {
+      type: getCurrentAction,
+      cb: action => this.watchCurrentAction(action)
+    }, {
       type: getCurrentSong,
       cb: song => this.watchCurrentSong(song)
     }];
@@ -161,6 +170,30 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
 
   private watchCurrentIndex(index: number) {
     this.currentIndex = index;
+  }
+
+  private watchCurrentAction(action: CurrentActions) {
+    switch (CurrentActions[action]) {
+      case 'Add':
+        this.controlToolTip.title = '已添加到列表';
+        this.readyShowToolTip();
+        break;
+      case 'Play':
+        this.controlToolTip.title = '已开始播放';
+        this.readyShowToolTip();
+        break;
+    }
+    
+    this.store$.dispatch(SetCurrentAction({ action: CurrentActions.Other }));
+  }
+
+  private readyShowToolTip() {
+    if (this.showPlayer === 'hide') {
+      this.togglePlayer('show');
+      this.showToolTip = true;
+    }else{
+      this.controlToolTip.show = true;
+    }
   }
   
   private watchCurrentSong(song: Song) {
@@ -381,9 +414,28 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
 
 
   // 播放器动画
-  togglePlayer(type: string) {
+  togglePlayer(type: string, cb?: () => void) {
     if (!this.lockPlayer && !this.animating) {
       this.showPlayer = type;
+      if (cb) cb();
+    }
+  }
+
+  onAnimateDone(event: AnimationEvent) {
+    // console.log('event :', event.toState);
+    this.animating = false;
+    if (event.toState === 'show' && this.showToolTip) {
+      this.controlToolTip.show = true;
+      /* if (this.toolTipTimer) {
+        this.win.clearTimeout(this.toolTipTimer);
+        this.toolTipTimer = null;
+      } */
+      
+      this.toolTipTimer = this.win.setTimeout(() => {
+        this.showToolTip = false;
+        this.controlToolTip.show = false;
+        this.togglePlayer('hide');
+      }, 2000);
     }
   }
   

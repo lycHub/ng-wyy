@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { AppStoreModule } from '.';
 import { Store, select } from '@ngrx/store';
-import { SetSongList, SetPlayList, SetCurrentIndex } from './actions/player.actions';
+import { SetSongList, SetPlayList, SetCurrentIndex, SetCurrentAction } from './actions/player.actions';
 import { shuffle, findIndex } from '../utils/array';
-import { PlayerState } from './reducers/player.reducer';
+import { PlayerState, CurrentActions } from './reducers/player.reducer';
 import {Song} from "../service/data.models";
 
 @Injectable({
@@ -26,6 +26,7 @@ export class MultipleReducersService {
     }
     this.store$.dispatch(SetPlayList({ list: trueList }));
     this.store$.dispatch(SetCurrentIndex({ index: trueIndex }));
+    this.store$.dispatch(SetCurrentAction({ action: CurrentActions.Play }));
   }
   
   
@@ -50,8 +51,10 @@ export class MultipleReducersService {
     }
     // console.log(currentIndex, this.playState.currentIndex);
     if (insertIndex !== this.playState.currentIndex) {
-      console.log('SetCurrentIndex');
       this.store$.dispatch(SetCurrentIndex({ index: insertIndex }));
+      this.store$.dispatch(SetCurrentAction({ action: CurrentActions.Play }));
+    }else{
+      this.store$.dispatch(SetCurrentAction({ action: CurrentActions.Add }));
     }
   }
   
@@ -69,6 +72,7 @@ export class MultipleReducersService {
     });
     this.store$.dispatch(SetSongList({ list: songList }));
     this.store$.dispatch(SetPlayList({ list: playlist }));
+    this.store$.dispatch(SetCurrentAction({ action: CurrentActions.Add }));
   }
 
 
@@ -88,11 +92,13 @@ export class MultipleReducersService {
     this.store$.dispatch(SetSongList({ list: songList }));
     this.store$.dispatch(SetPlayList({ list: playlist }));
     this.store$.dispatch(SetCurrentIndex({ index: currentIndex }));
+    this.store$.dispatch(SetCurrentAction({ action: CurrentActions.Delete }));
   }
 
   clearSong() {
     this.store$.dispatch(SetSongList({ list: [] }));
     this.store$.dispatch(SetPlayList({ list: [] }));
     this.store$.dispatch(SetCurrentIndex({ index: -1 }));
+    this.store$.dispatch(SetCurrentAction({ action: CurrentActions.Clear }));
   }
 }
