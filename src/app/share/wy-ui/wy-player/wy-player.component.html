@@ -49,7 +49,7 @@
       <div class="ctrl">
         <i class="volume" title="音量" (click)="toggleVolPanel($event)"></i>
         <i [ngClass]="currentMode.type" [title]="currentMode.label" (click)="changeMode()"></i>
-        <p class="open" (click)="toggleListPanel($event)">
+        <p class="open" nz-tooltip nzTitle="已添加到播放列表" nzOverlayClassName="tip-bg" [nzVisible]="showToolTip" (click)="toggleListPanel($event)">
           <span></span>
         </p>
 

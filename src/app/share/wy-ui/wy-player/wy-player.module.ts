@@ -6,12 +6,14 @@ import {FormsModule} from "@angular/forms";
 import { WyPlayerPanelComponent } from './wy-player-panel/wy-player-panel.component';
 import {FormatTimePipe} from "../../pipes/format-time.pipe";
 import { WyScrollComponent } from './wy-scroll.component';
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
-    WySliderModule
+    WySliderModule,
+    NzToolTipModule
   ],
   declarations: [WyPlayerComponent, WyPlayerPanelComponent, FormatTimePipe, WyScrollComponent],
   exports: [WyPlayerComponent, FormatTimePipe]

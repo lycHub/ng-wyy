@@ -12,6 +12,7 @@ import { MultipleReducersService } from 'src/app/store/multiple-reducers.service
 import { NzModalService } from 'ng-zorro-antd';
 import { takeUntil } from 'rxjs/operators';
 import { trigger, state, style, transition, animate } from '@angular/animations';
+import { WINDOW } from '../../../core/inject-tokens';
 
 // 播放模式
 export type PlayMode = {
@@ -91,6 +92,8 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
   
   // 当前模式vuex
   currentMode: PlayMode;
+
+  showToolTip = false;
   
   @ViewChild('audio', { static: true }) private audio: ElementRef;
 
@@ -105,10 +108,13 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
   private appStore$: Observable<AppStoreModule>;
   private destroy$ = new Subject<void>();
 
-  constructor(@Inject(DOCUMENT) private doc: Document,
-  private store$: Store<AppStoreModule>,
-  private multipleReducerServe: MultipleReducersService,
-  private modalService: NzModalService) {
+  constructor(
+    @Inject(DOCUMENT) private doc: Document,
+    @Inject(WINDOW) private win: Window,
+    private store$: Store<AppStoreModule>,
+    private multipleReducerServe: MultipleReducersService,
+    private modalService: NzModalService
+  ) {
     this.appStore$ = this.store$.pipe(select('player'), takeUntil(this.destroy$));
     const arr = [{
       type: getPlayMode,
@@ -150,7 +156,6 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
   }
 
   private watchList(list: Song[], type: string) {
-    // console.log('watchList', list);
     this[type] = list;
   }
 
@@ -270,12 +275,15 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
     }
   }
   
+  visibleChange(bol: boolean) {
+    console.log('visibleChange :', bol);
+  }
   
   onToggle() {
     if (!this.currentSong) {
       if (this.playList.length) {
         this.store$.dispatch(SetCurrentIndex({ index: 0 }));
-      this.songReady = false;
+        this.songReady = false;
       }
     }else{
       if (this.songReady) {
