@@ -136,7 +136,6 @@ export class WyPlayerPanelComponent implements OnChanges {
 
   private handleLyric() {
     this.lyric.handler.subscribe(({ lineNum }) => {
-      console.log('subscribe :', lineNum);
       if (!this.lyricRefs) return;
       this.currentLineIndex = lineNum;
     if (lineNum > this.startLine) {
