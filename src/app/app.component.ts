@@ -27,6 +27,8 @@ export class AppComponent {
 
   routeTitle = '';
 
+  isVisible = false;
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,

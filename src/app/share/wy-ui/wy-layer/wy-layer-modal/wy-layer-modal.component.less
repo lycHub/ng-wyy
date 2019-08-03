@@ -1,0 +1,61 @@
+@import '~@angular/cdk/overlay-prebuilt.css';
+@import "../../../../../assets/styles/varibles.less";
+@import "../../../../../assets/styles/mixins.less";
+
+
+.m-layer{
+  position: absolute;
+  width: 530px;
+  border-radius: 4px;
+  box-shadow: 0 5px 16px @box-shadow-base;
+  background-color: @white-color;
+  top: 136px;
+  left: 674.5px;
+  user-select: none;
+  cursor: move;
+
+  .zbar{
+    position: relative;
+    height: 38px;
+    line-height: 38px;
+    border-bottom: 1px solid @play-bg-color;
+    border-radius: 4px 4px 0 0;
+    background-color: @play-bg-color;
+    text-indent: 20px;
+    font-weight: bold;
+    color: #fff;
+    // cursor: move;
+  }
+
+  .cnzt{
+    position: relative;
+    border: 1px solid @play-bg-color;
+    border-width: 0 1px 1px;
+    border-radius: 0 0 4px 4px;
+    background: @white-color;
+    .select-log{
+      padding: 40px 0 39px;
+      .mid-wrap{
+        width: 60%;
+        margin: 0 auto;
+        .pic{
+          margin-bottom: 20px;
+        }
+        .methods{
+          button{
+            display: block;
+            margin-top: 10px;
+          }
+        }
+      }
+    }
+  }
+
+  .zcls{
+    position: absolute;
+    top: 16px;
+    right: 20px;
+    .icon("../images/layer.png", 10px, 10px);
+    background-position: 0 -95px;
+  }
+}
