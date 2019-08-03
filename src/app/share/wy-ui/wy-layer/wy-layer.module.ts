@@ -6,7 +6,7 @@ import { OverlayModule } from '@angular/cdk/overlay';
 
 @NgModule({
   declarations: [WyLayerModalComponent],
-  entryComponents: [WyLayerModalComponent],
+  // entryComponents: [WyLayerMethodsComponent],
   imports: [
     CommonModule,
     NzButtonModule,

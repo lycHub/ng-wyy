@@ -9,10 +9,14 @@
   border-radius: 4px;
   box-shadow: 0 5px 16px @box-shadow-base;
   background-color: @white-color;
-  top: 136px;
-  left: 674.5px;
+  transform-origin: 50% 50%;
   user-select: none;
   cursor: move;
+  &.hide{
+    // visibility: hidden;
+    // pointer-events: none;
+    display: none;
+  }
 
   .zbar{
     position: relative;
@@ -59,3 +63,10 @@
     background-position: 0 -95px;
   }
 }
+
+
+
+
+
+
+

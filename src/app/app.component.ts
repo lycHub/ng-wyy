@@ -1,9 +1,10 @@
-import {Component, Inject} from '@angular/core';
+import {Component, Inject, ViewChild} from '@angular/core';
 import {NavigationEnd, Router, ActivatedRoute} from "@angular/router";
 import {Observable} from "rxjs/index";
 import {filter, map, mergeMap} from "rxjs/internal/operators";
 import {WINDOW} from "./core/inject-tokens";
 import { Title, Meta } from '@angular/platform-browser';
+import { WyLayerMethodsComponent } from './share/wy-ui/wy-layer/wy-layer-methods/wy-layer-methods.component';
 
 @Component({
   selector: 'app-root',
@@ -28,7 +29,6 @@ export class AppComponent {
   routeTitle = '';
 
   isVisible = false;
-
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
