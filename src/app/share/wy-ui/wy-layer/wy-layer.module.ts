@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { WyLayerModalComponent } from './wy-layer-modal/wy-layer-modal.component';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { OverlayModule } from '@angular/cdk/overlay';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [WyLayerModalComponent],
@@ -10,7 +11,8 @@ import { OverlayModule } from '@angular/cdk/overlay';
   imports: [
     CommonModule,
     NzButtonModule,
-    OverlayModule
+    OverlayModule,
+    DragDropModule
   ],
   exports: [WyLayerModalComponent]
 })

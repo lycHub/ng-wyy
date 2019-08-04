@@ -1,7 +1,9 @@
 <div class="m-layer"
-[class.hide]="hidden"
+[@showHide]="showModal"
 [ngClass]="modalAnimationClassMap"
-#modalContainer>
+#modalContainer
+cdkDrag
+(cdkDragMoved)="onDragMove($event)">
     <div class="zbar">
       <div class="zttl f-thide">登录</div>
     </div>
@@ -29,6 +31,6 @@
     
     
 
-    <div class="zcls" title="关闭弹窗"></div>
+    <div class="zcls" title="关闭弹窗" (mousedown)="hide()"></div>
   </div>
  
