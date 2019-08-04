@@ -2,9 +2,9 @@
 [@showHide]="showModal"
 [ngClass]="modalAnimationClassMap"
 #modalContainer
-cdkDrag
-(cdkDragMoved)="onDragMove($event)">
-    <div class="zbar">
+cdkDragBoundary=".cdk-overlay-container"
+cdkDrag>
+    <div class="zbar" cdkDragHandle>
       <div class="zttl f-thide">登录</div>
     </div>
     <ng-container #bodyContainer>

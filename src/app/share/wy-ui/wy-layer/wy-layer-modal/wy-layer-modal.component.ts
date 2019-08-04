@@ -8,7 +8,7 @@ import { takeUntil } from 'rxjs/operators';
 import { NzModalRef } from 'ng-zorro-antd';
 import { WINDOW } from '../../../../core/inject-tokens';
 import { trigger, transition, animate, style, state } from '@angular/animations';
-import { CdkDragMove } from '@angular/cdk/drag-drop';
+import { CdkDragMove, CdkDrag, CdkDragStart } from '@angular/cdk/drag-drop';
 
 type DomSize = { w: number; h: number };
 
@@ -33,13 +33,13 @@ export class WyLayerModalComponent<T = any> implements OnInit, OnChanges {
   modalAnimationClassMap: object | null;
 
   showModal: 'show' | 'hide';
-
-  private container: HTMLElement | OverlayRef;
   private overlayRef: OverlayRef;
   private scrollStrategy: BlockScrollStrategy;
   private unsubscribe$ = new Subject<void>();
   private contentComponentRef: ComponentRef<T>; 
   private resizeHandler: () => void;
+  private modalSize: DomSize;
+  disableDrag = false;
   @ViewChild('modalContainer', { static: true }) modalContainer: ElementRef;
   @ViewChild('bodyContainer', { static: false, read: ViewContainerRef }) bodyContainer: ViewContainerRef;
   constructor(
@@ -75,15 +75,11 @@ export class WyLayerModalComponent<T = any> implements OnInit, OnChanges {
     }
     
     const modal = this.modalContainer.nativeElement;
-    const modalSize = this.getHideDomSize(modal);
-    this.keepCenter(modal, modalSize);
+    this.modalSize = this.getHideDomSize(modal);
+    this.keepCenter(modal, this.modalSize);
     this.resizeHandler = this.rd.listen('window', 'resize', () => {
-      this.keepCenter(modal, modalSize);
+      this.keepCenter(modal, this.modalSize);
     });
-  }
-
-  onDragMove({ pointerPosition }: CdkDragMove) {
-    console.log('pointerPosition :', pointerPosition);
   }
 
 
@@ -150,7 +146,7 @@ export class WyLayerModalComponent<T = any> implements OnInit, OnChanges {
   }
 
 
-  private getHideDomSize(dom: HTMLElement) {
+  private getHideDomSize(dom: HTMLElement): DomSize {
     dom.style.visibility = 'hidden';
     dom.style.transform = 'scale(1)';
     const size = {
