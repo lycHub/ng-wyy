@@ -28,18 +28,18 @@ export enum ModalTypes {
   ])]
 })
 export class WyLayerModalComponent<T = any> implements OnInit, OnChanges {
-  @Input() @InputBoolean() isVisib = false;
+  @Input() @InputBoolean() isVisible = false;
   @Input() nzGetContainer: HTMLElement | OverlayRef; // [STATIC]
   @Input() nzContent: string | TemplateRef<{}> | Type<T>;
+  @Input() currentModal = ModalTypes.Default;
+
+
   @Output() readonly onAfterOpen = new EventEmitter<void>(); // Trigger when modal open(visible) after animations
   @Output() readonly onAfterClose = new EventEmitter(); // Trigger when modal leave-animation over
   @Output() readonly onVisibleChange = new EventEmitter<boolean>();
-  maskAnimationClassMap: object | null;
-  modalAnimationClassMap: object | null;
+  
 
   showModal: 'show' | 'hide';
-
-  currentModal = ModalTypes.Login;
 
   private overlayRef: OverlayRef;
   private scrollStrategy: BlockScrollStrategy;
@@ -55,7 +55,6 @@ export class WyLayerModalComponent<T = any> implements OnInit, OnChanges {
     private overlayKeyboardDispatcher: OverlayKeyboardDispatcher,
     private elementRef: ElementRef,
     private viewContainer: ViewContainerRef,
-    private cfr: ComponentFactoryResolver,
     private rd: Renderer2,
     @Inject(DOCUMENT) private doc: Document,
     @Inject(WINDOW) private win: Window
@@ -65,10 +64,6 @@ export class WyLayerModalComponent<T = any> implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    if (this.isComponent(this.nzContent)) {
-      this.createDynamicComponent(this.nzContent as Type<T>); // Create component along without View
-    }
-
     this.overlayRef.overlayElement.appendChild(this.elementRef.nativeElement);
     this.overlayRef
     .keydownEvents()
@@ -98,24 +93,10 @@ export class WyLayerModalComponent<T = any> implements OnInit, OnChanges {
     modal.style.top = top + 'px';
   }
 
-  private createDynamicComponent(component: Type<T>): void {
-    const factory = this.cfr.resolveComponentFactory(component);
-    this.contentComponentRef = factory.create(Injector.create({
-      providers: [{ provide: NzModalRef, useValue: this }],
-      parent: this.viewContainer.parentInjector
-    }));
-    // Do the first change detection immediately (or we do detection at ngAfterViewInit, multi-changes error will be thrown)
-    this.contentComponentRef.changeDetectorRef.detectChanges();
-  }
-
- /*  private setOverlayRef(overlayRef: OverlayRef): void {
-    this.overlayRef = overlayRef;
-  } */
-
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['isVisib']) {
-      this.handleVisibleStateChange(changes['isVisib'].currentValue);
+    if (changes['isVisible']) {
+      this.handleVisibleStateChange(changes['isVisible'].currentValue);
     }
   }
 

@@ -4,6 +4,7 @@ import {Observable} from "rxjs/index";
 import {filter, map, mergeMap} from "rxjs/internal/operators";
 import {WINDOW} from "./core/inject-tokens";
 import { Title, Meta } from '@angular/platform-browser';
+import { ModalTypes } from './share/wy-ui/wy-layer/wy-layer-modal/wy-layer-modal.component';
 
 @Component({
   selector: 'app-root',
@@ -12,7 +13,9 @@ import { Title, Meta } from '@angular/platform-browser';
 })
 export class AppComponent implements AfterViewInit {
   
-  // nowModalContent: TemplateRef<{}>;
+  currentModal = ModalTypes.Default;
+  isVisible = false;
+
   navEnd: Observable<NavigationEnd>;
   loadPercent = 0;
   
@@ -28,9 +31,6 @@ export class AppComponent implements AfterViewInit {
   }];
 
   routeTitle = '';
-
-  isVisible = false;
-
   @ViewChild('loginModal', { static: false }) private loginModalRef: TemplateRef<{}>;
   constructor(
     private activatedRoute: ActivatedRoute,
