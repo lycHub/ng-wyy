@@ -45,7 +45,10 @@
 <app-wy-player></app-wy-player>
 
 <button nz-button (click)="isVisib = !isVisib">toggle</button>
-<app-wy-layer-modal [isVisib]="isVisib" (onVisibleChange)="isVisib = $event"></app-wy-layer-modal>
+<app-wy-layer-modal [isVisib]="isVisib" [nzContent]="nowModalContent" (onVisibleChange)="isVisib = $event"></app-wy-layer-modal>
+<ng-template #nowModalContent>
+  <app-wy-layer-login></app-wy-layer-login>
+</ng-template>
 <!-- <ng-template #modalContent>
-    <app-wy-layer-methods #modalContent></app-wy-layer-methods>
-  </ng-template> -->
+  <app-wy-layer-login></app-wy-layer-login>
+</ng-template> -->

@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, TemplateRef, ViewChild, AfterViewInit } from '@angular/core';
 import {NavigationEnd, Router, ActivatedRoute} from "@angular/router";
 import {Observable} from "rxjs/index";
 import {filter, map, mergeMap} from "rxjs/internal/operators";
@@ -10,8 +10,9 @@ import { Title, Meta } from '@angular/platform-browser';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.less']
 })
-export class AppComponent {
+export class AppComponent implements AfterViewInit {
   
+  // nowModalContent: TemplateRef<{}>;
   navEnd: Observable<NavigationEnd>;
   loadPercent = 0;
   
@@ -29,15 +30,23 @@ export class AppComponent {
   routeTitle = '';
 
   isVisible = false;
+
+  @ViewChild('loginModal', { static: false }) private loginModalRef: TemplateRef<{}>;
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private titleService: Title,
     private meta: Meta,
     @Inject(WINDOW) private win: Window) {
+      // this.nowModalContent = this.loginModalRef;
     this.setLoadingBar();
     this.setMT();
   }
+
+  ngAfterViewInit(): void {
+    
+  }
+
 
   private setLoadingBar() {
     this.navEnd = this.router.events.pipe(filter(evt => evt instanceof NavigationEnd)) as Observable<NavigationEnd>;

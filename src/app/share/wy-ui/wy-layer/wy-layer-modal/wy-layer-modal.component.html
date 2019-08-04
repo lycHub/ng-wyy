@@ -8,8 +8,9 @@ cdkDrag>
       <div class="zttl f-thide">登录</div>
     </div>
     <ng-container #bodyContainer>
-      <ng-container *ngIf="!isComponent(nzContent)" [ngSwitch]="true">
-          <ng-container *ngSwitchCase="isTemplateRef(nzContent)" [ngTemplateOutlet]="nzContent"></ng-container>
+      <ng-container *ngIf="!isComponent(nzContent)" [ngSwitch]="currentModal">
+          <ng-container *ngSwitchCase="'login'" [ngTemplateOutlet]="nzContent"></ng-container>
+          <ng-container *ngSwitchCase="'register'" [ngTemplateOutlet]="nzContent"></ng-container>
           <ng-container *ngSwitchDefault>
             <div class="cnzt">
                 <div class="select-log">

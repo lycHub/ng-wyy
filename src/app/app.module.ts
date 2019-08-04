@@ -6,13 +6,12 @@ import zh from '@angular/common/locales/zh';
 import {CoreModule} from "./core/core.module";
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
-import { WyLayerMethodsComponent } from './share/wy-ui/wy-layer/wy-layer-methods/wy-layer-methods.component';
+
 registerLocaleData(zh);
 
 @NgModule({
   declarations: [
-    AppComponent,
-    WyLayerMethodsComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,

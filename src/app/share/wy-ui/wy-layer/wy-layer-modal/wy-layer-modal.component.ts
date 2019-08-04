@@ -8,9 +8,14 @@ import { takeUntil } from 'rxjs/operators';
 import { NzModalRef } from 'ng-zorro-antd';
 import { WINDOW } from '../../../../core/inject-tokens';
 import { trigger, transition, animate, style, state } from '@angular/animations';
-import { CdkDragMove, CdkDrag, CdkDragStart } from '@angular/cdk/drag-drop';
 
 type DomSize = { w: number; h: number };
+
+export enum ModalTypes {
+  Register = 'register',
+  Login = 'login',
+  Default = 'default'
+}
 
 @Component({
   selector: 'app-wy-layer-modal',
@@ -33,10 +38,13 @@ export class WyLayerModalComponent<T = any> implements OnInit, OnChanges {
   modalAnimationClassMap: object | null;
 
   showModal: 'show' | 'hide';
+
+  currentModal = ModalTypes.Login;
+
   private overlayRef: OverlayRef;
   private scrollStrategy: BlockScrollStrategy;
   private unsubscribe$ = new Subject<void>();
-  private contentComponentRef: ComponentRef<T>; 
+  private contentComponentRef: ComponentRef<T>;
   private resizeHandler: () => void;
   private modalSize: DomSize;
   disableDrag = false;
