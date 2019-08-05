@@ -2,14 +2,19 @@
   <div class="form-wrap">
     <form nz-form [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()">
       <nz-form-item>
-        <nz-form-control nzErrorTip="Please input your username!">
+        <nz-form-control nzHasFeedback [nzErrorTip]="phoneErrorTpl">
           <nz-input-group nzPrefixIcon="mobile">
             <input type="tel" nz-input formControlName="phone" placeholder="请输入手机号" />
+            <ng-template #phoneErrorTpl let-control>
+              <ng-container *ngIf="control.hasError('required')">
+                Please input your phone!
+              </ng-container>
+            </ng-template>
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
-        <nz-form-control nzErrorTip="Please input your Password!">
+        <nz-form-control nzHasFeedback nzErrorTip="password is required">
           <nz-input-group nzPrefixIcon="lock">
             <input type="password" nz-input formControlName="password" placeholder="请输入密码" />
           </nz-input-group>
@@ -23,7 +28,7 @@
             </label>
             <a class="forgot">忘记密码</a>
           </div>
-          <button nz-button class="login-form-button" [nzType]="'primary'" nzBlock>登陆</button>
+          <button nz-button class="login-form-button" [disabled]="!validateForm.valid" [nzType]="'primary'" nzBlock>登陆</button>
         </nz-form-control>
       </nz-form-item>
     </form>
