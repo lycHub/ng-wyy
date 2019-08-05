@@ -12,7 +12,7 @@ export type MemberState = {
 
 
 export const initialState: MemberState = {
-  modalVisible: false
+  modalVisible: true
 };
 
 

@@ -13,7 +13,7 @@ import { ModalTypes } from './share/wy-ui/wy-layer/wy-layer-modal/wy-layer-modal
 })
 export class AppComponent implements AfterViewInit {
   
-  currentModal = ModalTypes.Default;
+  currentModal = ModalTypes.LoginByPhone;
   isVisible = false;
 
   navEnd: Observable<NavigationEnd>;

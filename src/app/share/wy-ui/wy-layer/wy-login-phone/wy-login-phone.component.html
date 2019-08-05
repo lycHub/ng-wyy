@@ -1,0 +1,31 @@
+<div class="login-phone modal-content">
+  <div class="form-wrap">
+    <form nz-form [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()">
+      <nz-form-item>
+        <nz-form-control nzErrorTip="Please input your username!">
+          <nz-input-group nzPrefixIcon="mobile">
+            <input type="tel" nz-input formControlName="phone" placeholder="请输入手机号" />
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-control nzErrorTip="Please input your Password!">
+          <nz-input-group nzPrefixIcon="lock">
+            <input type="password" nz-input formControlName="password" placeholder="请输入密码" />
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-control>
+          <div class="tools clearfix">
+            <label nz-checkbox formControlName="remember" class="remember">
+              <span>自动登陆</span>
+            </label>
+            <a class="forgot">忘记密码</a>
+          </div>
+          <button nz-button class="login-form-button" [nzType]="'primary'" nzBlock>登陆</button>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </div>
+</div>
