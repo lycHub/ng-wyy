@@ -1,7 +1,7 @@
 import { PlayMode } from 'src/app/share/wy-ui/wy-player/wy-player.component';
 import * as PlayActions from '../actions/player.actions';
 import { createReducer, Action, on } from '@ngrx/store';
-import {Song} from "../../service/data.models";
+import {Song} from "../../service/data-modals/common.models";
 import { SetCurrentAction } from '../actions/player.actions';
 
 export enum CurrentActions {

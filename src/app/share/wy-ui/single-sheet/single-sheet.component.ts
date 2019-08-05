@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, Output, Input, EventEmitter } from '@angular/core';
-import { SongSheet } from 'src/app/service/data.models';
+import { SongSheet } from 'src/app/service/data-modals/common.models';
 
 @Component({
   selector: 'app-single-sheet',

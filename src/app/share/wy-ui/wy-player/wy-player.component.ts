@@ -2,7 +2,7 @@ import { AfterViewInit, Component, ElementRef, Inject, OnChanges, OnDestroy, Sim
 import {fromEvent, Subscription, Observable, Subject} from "rxjs/index";
 import {DOCUMENT} from "@angular/common";
 import {shuffle} from "../../../utils/array";
-import {Singer, Song} from "../../../service/data.models";
+import {Singer, Song} from "../../../service/data-modals/common.models";
 import { WyPlayerPanelComponent } from './wy-player-panel/wy-player-panel.component';
 import { Store, select } from '@ngrx/store';
 import { AppStoreModule } from 'src/app/store';
@@ -99,7 +99,7 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
     title: ''
   }
   showToolTip = false;
-  private toolTipTimer: any;
+  private toolTipTimer: number;
   
   @ViewChild('audio', { static: true }) private audio: ElementRef;
 

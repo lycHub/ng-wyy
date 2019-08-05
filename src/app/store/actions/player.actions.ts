@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import {Song} from "../../service/data.models";
+import {Song} from "../../service/data-modals/common.models";
 import { PlayMode } from 'src/app/share/wy-ui/wy-player/wy-player.component';
 import { CurrentActions } from '../reducers/player.reducer';
 

@@ -4,7 +4,7 @@ import {forkJoin, Observable} from "rxjs/index";
 import {HomeService} from "../../service/home/home.service";
 import {catchError, take} from "rxjs/internal/operators";
 import {HttpErrorResponse} from "@angular/common/http";
-import {Banner, HotTag, SongSheet} from "../../service/data.models";
+import {Banner, HotTag, SongSheet} from "../../service/data-modals/common.models";
 
 type HomeDataModel = [Banner[], HotTag[], SongSheet[]];
 

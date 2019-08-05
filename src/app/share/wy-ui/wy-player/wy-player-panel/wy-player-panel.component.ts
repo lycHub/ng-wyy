@@ -8,7 +8,7 @@ import {SongService} from "../../../../service/song/song.service";
 import {WyScrollComponent} from "../wy-scroll.component";
 import { WINDOW } from 'src/app/core/inject-tokens';
 import { findIndex } from 'src/app/utils/array';
-import {Song} from "../../../../service/data.models";
+import {Song} from "../../../../service/data-modals/common.models";
 import {LyricParser} from "../../../wy-lyric";
 
 export type LyricItem = {

@@ -2,7 +2,7 @@ import {Inject, Injectable} from '@angular/core';
 import {ServiceModule} from "../service.module";
 import {HttpClient, HttpErrorResponse, HttpParams} from "@angular/common/http";
 import {API_CONFIG} from "../../core/inject-tokens";
-import { playlistInfo } from '../data.models';
+import { playlistInfo } from '../data-modals/common.models';
 import { Observable } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import queryString from 'query-string';

@@ -1,7 +1,7 @@
 import {Component, OnDestroy} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {SongService} from 'src/app/service/song/song.service';
-import {Song, SongSheet} from 'src/app/service/data.models';
+import {Song, SongSheet} from 'src/app/service/data-modals/common.models';
 import { map } from 'rxjs/operators';
 import { MultipleReducersService } from 'src/app/store/multiple-reducers.service';
 import {Observable, Subject} from "rxjs/index";

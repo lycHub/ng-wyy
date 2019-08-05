@@ -1,13 +1,15 @@
-import { Component, EventEmitter, OnInit, Input, Output, OnChanges, SimpleChanges, ElementRef, ViewContainerRef, Inject, ViewChild, TemplateRef, Type, ComponentFactoryResolver, ComponentRef, Injector, Renderer2 } from '@angular/core';
-import { InputBoolean } from 'ng-zorro-antd/core';
+import { Component, EventEmitter, OnInit, Input, Output, ElementRef, ViewContainerRef, Inject, ViewChild, TemplateRef, Type, ComponentRef, Renderer2 } from '@angular/core';
 import { OverlayRef, Overlay, OverlayKeyboardDispatcher, BlockScrollStrategy, OverlayConfig } from '@angular/cdk/overlay';
 import { DOCUMENT } from '@angular/common';
 import { ESCAPE } from '@angular/cdk/keycodes';
-import { Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { NzModalRef } from 'ng-zorro-antd';
 import { WINDOW } from '../../../../core/inject-tokens';
-import { trigger, transition, animate, style, state } from '@angular/animations';
+import { trigger, transition, animate, style, state, AnimationEvent } from '@angular/animations';
+import { AppStoreModule } from 'src/app/store';
+import { Store, select } from '@ngrx/store';
+import { getModalVisible } from 'src/app/store/selectors/member.selector';
+import { SetModalVisible } from 'src/app/store/actions/member.actions';
 
 type DomSize = { w: number; h: number };
 
@@ -27,10 +29,9 @@ export enum ModalTypes {
     transition('show<=>hide', [animate('0.1s')])
   ])]
 })
-export class WyLayerModalComponent<T = any> implements OnInit, OnChanges {
-  @Input() @InputBoolean() isVisible = false;
+export class WyLayerModalComponent implements OnInit {
   @Input() nzGetContainer: HTMLElement | OverlayRef; // [STATIC]
-  @Input() nzContent: string | TemplateRef<{}> | Type<T>;
+  @Input() nzContent: TemplateRef<{}>;
   @Input() currentModal = ModalTypes.Default;
 
 
@@ -40,14 +41,16 @@ export class WyLayerModalComponent<T = any> implements OnInit, OnChanges {
   
 
   showModal: 'show' | 'hide';
-
+  private isVisible = false;
   private overlayRef: OverlayRef;
   private scrollStrategy: BlockScrollStrategy;
   private unsubscribe$ = new Subject<void>();
-  private contentComponentRef: ComponentRef<T>;
   private resizeHandler: () => void;
   private modalSize: DomSize;
-  disableDrag = false;
+
+  private appStore$: Observable<AppStoreModule>;
+  private destroy$ = new Subject<void>();
+
   @ViewChild('modalContainer', { static: true }) modalContainer: ElementRef;
   @ViewChild('bodyContainer', { static: false, read: ViewContainerRef }) bodyContainer: ViewContainerRef;
   constructor(
@@ -56,11 +59,14 @@ export class WyLayerModalComponent<T = any> implements OnInit, OnChanges {
     private elementRef: ElementRef,
     private viewContainer: ViewContainerRef,
     private rd: Renderer2,
+    private store$: Store<AppStoreModule>,
     @Inject(DOCUMENT) private doc: Document,
     @Inject(WINDOW) private win: Window
   ) {
     this.overlayRef = this.overlay.create();
     this.scrollStrategy = this.overlay.scrollStrategies.block();
+    this.appStore$ = this.store$.pipe(select('member'), takeUntil(this.destroy$));
+    this.appStore$.pipe(select(getModalVisible)).subscribe(visible => this.watchModalVisible(visible));
   }
 
   ngOnInit() {
@@ -73,10 +79,6 @@ export class WyLayerModalComponent<T = any> implements OnInit, OnChanges {
 
 
   ngAfterViewInit(): void {
-    if (this.contentComponentRef) {
-      this.bodyContainer.insert(this.contentComponentRef.hostView);
-    }
-    
     const modal = this.modalContainer.nativeElement;
     this.modalSize = this.getHideDomSize(modal);
     this.keepCenter(modal, this.modalSize);
@@ -85,19 +87,17 @@ export class WyLayerModalComponent<T = any> implements OnInit, OnChanges {
     });
   }
 
+  private watchModalVisible(visible: boolean) {
+    this.isVisible = visible;
+    this.handleVisibleStateChange(visible);
+  }
+
 
   private keepCenter(modal: HTMLElement, size: DomSize) {
     const left = (this.getWindowSize().w - size.w) / 2;
     const top = (this.getWindowSize().h - size.h) / 2;
     modal.style.left = left + 'px';
     modal.style.top = top + 'px';
-  }
-
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['isVisible']) {
-      this.handleVisibleStateChange(changes['isVisible'].currentValue);
-    }
   }
 
   private handleVisibleStateChange(visible: boolean) {
@@ -123,7 +123,13 @@ export class WyLayerModalComponent<T = any> implements OnInit, OnChanges {
   }
 
   private hide() {
-    this.onVisibleChange.emit(false);
+    this.store$.dispatch(SetModalVisible({ visible: false }));
+  }
+
+  onAnimateDone(event: AnimationEvent) {
+    if (event.toState === 'hide') {
+      this.currentModal = ModalTypes.Default;
+    }
   }
 
 
@@ -147,18 +153,6 @@ export class WyLayerModalComponent<T = any> implements OnInit, OnChanges {
     return size;
   }
 
-  isNonEmptyString(value: {}): boolean {
-    return typeof value === 'string' && value !== '';
-  }
-
-  isTemplateRef(value: {}): boolean {
-    return value instanceof TemplateRef;
-  }
-
-  isComponent(value: {}): boolean {
-    return value instanceof Type;
-  }
-
   
   ngOnDestroy(): void {
     this.overlayRef.dispose();
@@ -167,5 +161,7 @@ export class WyLayerModalComponent<T = any> implements OnInit, OnChanges {
     if (this.resizeHandler) {
       this.resizeHandler();
     }
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

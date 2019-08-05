@@ -6,6 +6,7 @@ import { OverlayModule } from '@angular/cdk/overlay';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { WyLayerLoginComponent } from './wy-layer-login/wy-layer-login.component';
 import { WyLayerRegisterComponent } from './wy-layer-register/wy-layer-register.component';
+import { NzFormModule } from 'ng-zorro-antd/form';
 
 @NgModule({
   declarations: [WyLayerModalComponent, WyLayerLoginComponent, WyLayerRegisterComponent],
@@ -13,7 +14,8 @@ import { WyLayerRegisterComponent } from './wy-layer-register/wy-layer-register.
     CommonModule,
     NzButtonModule,
     OverlayModule,
-    DragDropModule
+    DragDropModule,
+    NzFormModule
   ],
   exports: [WyLayerModalComponent, WyLayerLoginComponent, WyLayerRegisterComponent]
 })

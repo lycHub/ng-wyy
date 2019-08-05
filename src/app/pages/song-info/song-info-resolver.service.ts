@@ -3,7 +3,7 @@ import {ActivatedRouteSnapshot, Resolve} from '@angular/router';
 import {forkJoin, Observable} from "rxjs/index";
 import {catchError, take} from "rxjs/internal/operators";
 import {HttpErrorResponse} from "@angular/common/http";
-import {Lyric, Song} from "../../service/data.models";
+import {Lyric, Song} from "../../service/data-modals/common.models";
 import {SongService} from "../../service/song/song.service";
 
 type SongDataModel = [Song, Lyric];

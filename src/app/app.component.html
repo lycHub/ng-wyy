@@ -44,7 +44,7 @@
 </div>
 <app-wy-player></app-wy-player>
 
-<app-wy-layer-modal [isVisible]="isVisible" [currentModal]="currentModal" (onVisibleChange)="isVisible = $event">
+<app-wy-layer-modal [currentModal]="currentModal">
   <app-wy-layer-login name="login"></app-wy-layer-login>
   <app-wy-layer-register name="register"></app-wy-layer-register>
 </app-wy-layer-modal>

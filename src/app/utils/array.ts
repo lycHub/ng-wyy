@@ -1,7 +1,7 @@
 
 
 import {getRandomInt} from "./number";
-import {Song} from "../service/data.models";
+import {Song} from "../service/data-modals/common.models";
 export function shuffle<T>(arr: T[]): T[] {
   let _arr = arr.slice();
   for (let i = 0; i < _arr.length; i++) {

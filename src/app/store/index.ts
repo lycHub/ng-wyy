@@ -5,11 +5,11 @@ import { environment } from 'src/environments/environment';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
 import { PlayerEffect } from './effects/player.effect';
-import { metaReducers } from './meta-reducers/player.meta.reducer';
+import { memberReducer } from './reducers/member.reducer';
 
 @NgModule({
   imports: [
-    StoreModule.forRoot({ player: playerReducer }, {
+    StoreModule.forRoot({ player: playerReducer, member: memberReducer }, {
       // metaReducers,
       runtimeChecks: {
         strictStateImmutability: true,

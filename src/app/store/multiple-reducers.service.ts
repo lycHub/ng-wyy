@@ -4,7 +4,7 @@ import { Store, select } from '@ngrx/store';
 import { SetSongList, SetPlayList, SetCurrentIndex, SetCurrentAction } from './actions/player.actions';
 import { shuffle, findIndex } from '../utils/array';
 import { PlayerState, CurrentActions } from './reducers/player.reducer';
-import {Song} from "../service/data.models";
+import {Song} from "../service/data-modals/common.models";
 
 @Injectable({
   providedIn: AppStoreModule

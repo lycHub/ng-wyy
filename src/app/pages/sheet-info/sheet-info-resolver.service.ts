@@ -3,7 +3,7 @@ import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
 import {Observable} from "rxjs/index";
 import {catchError} from "rxjs/internal/operators";
 import {HttpErrorResponse} from "@angular/common/http";
-import { SongSheet } from 'src/app/service/data.models';
+import { SongSheet } from 'src/app/service/data-modals/common.models';
 import { SongService } from 'src/app/service/song/song.service';
 
 

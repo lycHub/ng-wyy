@@ -1,7 +1,7 @@
 import {Inject, Injectable} from '@angular/core';
 import {ServiceModule} from "../service.module";
 import {HttpClient, HttpErrorResponse, HttpParams} from "@angular/common/http";
-import {Song, SongUrl, Lyric, SongSheet} from "../data.models";
+import {Song, SongUrl, Lyric, SongSheet} from "../data-modals/common.models";
 import {Observable} from "rxjs/index";
 import {catchError, map} from "rxjs/internal/operators";
 import {API_CONFIG} from "../../core/inject-tokens";

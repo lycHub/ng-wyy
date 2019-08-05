@@ -1,5 +1,6 @@
 <div class="m-layer"
 [@showHide]="showModal"
+(@showHide.done)="onAnimateDone($event)"
 #modalContainer
 cdkDragBoundary=".cdk-overlay-container"
 cdkDrag>
@@ -21,9 +22,9 @@ cdkDrag>
                   <img src="../assets/images/platform.png" />
                 </div>
                 <div class="methods">
-                  <button nz-button nzType="primary" nzSize="large" nzBlock>手机号登陆</button>
-                  <button nz-button nzType="primary" nzSize="large" nzBlock>网易邮箱登陆</button>
-                  <button nz-button nzSize="large" nzBlock>注册</button>
+                  <button nz-button nzType="primary" nzSize="large" nzBlock (click)="currentModal = 'login'">手机号登陆</button>
+                  <button nz-button nzType="primary" nzSize="large" nzBlock (click)="currentModal = 'login'">网易邮箱登陆</button>
+                  <button nz-button nzSize="large" nzBlock (click)="currentModal = 'register'">注册</button>
                 </div>
               </div>
             </div>
