@@ -20,20 +20,16 @@
             </ng-template>
           </div>
           <div class="member">
-            <nz-dropdown>
-              <a nz-dropdown> 登陆 <i nz-icon type="down"></i> </a>
+            <div class="handle" nz-dropdown [nzDropdownMenu]="memberMenu">
+              <a>登陆</a>
+            </div>
+            <nz-dropdown-menu #memberMenu="nzDropdownMenu">
               <ul nz-menu nzSelectable>
-                <li nz-menu-item>
-                  <a>手机登陆</a>
-                </li>
-                <li nz-menu-item>
-                  <a>手机登陆</a>
-                </li>
-                <li nz-menu-item>
-                  <a>手机登陆</a>
-                </li>
+                <li nz-menu-item>1st menu item</li>
+                <li nz-menu-item>2nd menu item</li>
+                <li nz-menu-item>3rd menu item</li>
               </ul>
-            </nz-dropdown>
+            </nz-dropdown-menu>
           </div>
         </div>
       </div>

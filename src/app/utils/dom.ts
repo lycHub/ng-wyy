@@ -13,6 +13,8 @@ export interface MouseTouchObserverConfig {
 }
 
 
+
+
 /**
  * Silent an event by stopping and preventing it.
  */

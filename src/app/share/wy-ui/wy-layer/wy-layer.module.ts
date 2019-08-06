@@ -6,7 +6,7 @@ import { OverlayModule } from '@angular/cdk/overlay';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { WyLoginPhoneComponent } from './wy-login-phone/wy-login-phone.component';
 import { WyLayerRegisterComponent } from './wy-layer-register/wy-layer-register.component';
-import { NzFormModule } from 'ng-zorro-antd/form';
+import { NzFormModule } from 'ng-zorro-antd';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NzInputModule, NzCheckboxModule } from 'ng-zorro-antd';
 

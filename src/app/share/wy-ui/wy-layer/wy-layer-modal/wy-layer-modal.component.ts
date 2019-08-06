@@ -15,8 +15,7 @@ type DomSize = { w: number; h: number };
 
 export enum ModalTypes {
   Register = 'register',
-  LoginByPhone = 'loginByphone',
-  LoginByMail = 'loginByMail',
+  LoginByPhone = 'loginByPhone',
   Default = 'default'
 }
 

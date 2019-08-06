@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
@@ -6,23 +6,19 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
   templateUrl: './wy-login-phone.component.html',
   styleUrls: ['./wy-login-phone.component.less']
 })
-export class WyLoginPhoneComponent implements OnInit {
-  validateForm: FormGroup;
+export class WyLoginPhoneComponent {
+  formModel: FormGroup;
   constructor(private fb: FormBuilder) {
-    this.validateForm = this.fb.group({
-      phone: ['', [Validators.required]],
-      password: ['', [Validators.required]],
+    this.formModel = this.fb.group({
+      phone: ['', [Validators.required, Validators.pattern(/^1\d{10}$/)]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
       remember: [true]
     });
   }
-
-  ngOnInit() {
-  }
-
   submitForm(): void {
-    for (const i in this.validateForm.controls) {
-      this.validateForm.controls[i].markAsDirty();
-      this.validateForm.controls[i].updateValueAndValidity();
+    if (this.formModel.valid) {
+      console.log('phone', this.formModel.get('phone'));
+      console.log('password', this.formModel.get('password'));
     }
   }
 

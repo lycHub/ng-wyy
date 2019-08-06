@@ -1,22 +1,26 @@
 <div class="login-phone modal-content">
   <div class="form-wrap">
-    <form nz-form [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()">
+    <form nz-form [formGroup]="formModel" class="login-form" (ngSubmit)="submitForm()">
       <nz-form-item>
-        <nz-form-control nzHasFeedback [nzErrorTip]="phoneErrorTpl">
+        <nz-form-control nzHasFeedback nzErrorTip="请输入正确的手机号">
           <nz-input-group nzPrefixIcon="mobile">
             <input type="tel" nz-input formControlName="phone" placeholder="请输入手机号" />
-            <ng-template #phoneErrorTpl let-control>
-              <ng-container *ngIf="control.hasError('required')">
-                Please input your phone!
-              </ng-container>
-            </ng-template>
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
-        <nz-form-control nzHasFeedback nzErrorTip="password is required">
+        <nz-form-control nzHasFeedback [nzErrorTip]="passErrorTpl">
           <nz-input-group nzPrefixIcon="lock">
             <input type="password" nz-input formControlName="password" placeholder="请输入密码" />
+            
+            <ng-template #passErrorTpl let-control>
+                <ng-container *ngIf="control.hasError('minlength')">
+                  密码至少6位
+                </ng-container>
+                <ng-container *ngIf="control.hasError('required')">
+                  请输入密码
+                </ng-container>
+              </ng-template>
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
@@ -28,7 +32,7 @@
             </label>
             <a class="forgot">忘记密码</a>
           </div>
-          <button nz-button class="login-form-button" [disabled]="!validateForm.valid" [nzType]="'primary'" nzBlock>登陆</button>
+          <button nz-button class="login-form-button" [disabled]="!formModel.valid" [nzType]="'primary'" nzBlock>登陆</button>
         </nz-form-control>
       </nz-form-item>
     </form>

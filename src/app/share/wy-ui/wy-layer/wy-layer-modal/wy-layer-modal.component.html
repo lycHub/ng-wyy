@@ -8,7 +8,7 @@ cdkDrag>
       <div class="zttl f-thide">登录</div>
     </div>
     <ng-container [ngSwitch]="currentModal" #bodyContainer>
-      <ng-container *ngSwitchCase="'loginByphone'">
+      <ng-container *ngSwitchCase="'loginByPhone'">
         <ng-content select="[name=login]"></ng-content>
       </ng-container>
       <ng-container *ngSwitchCase="'register'">
@@ -22,8 +22,7 @@ cdkDrag>
                   <img src="../assets/images/platform.png" />
                 </div>
                 <div class="methods">
-                  <button nz-button nzType="primary" nzSize="large" nzBlock (click)="currentModal = 'loginByphone'">手机号登陆</button>
-                  <button nz-button nzType="primary" nzSize="large" nzBlock (click)="currentModal = 'loginByMail'">网易邮箱登陆</button>
+                  <button nz-button nzType="primary" nzSize="large" nzBlock (click)="currentModal = 'loginByPhone'">手机号登陆</button>
                   <button nz-button nzSize="large" nzBlock (click)="currentModal = 'register'">注册</button>
                 </div>
               </div>
@@ -38,7 +37,7 @@ cdkDrag>
 
     <div class="m-footer clearfix" [hidden]="currentModal === 'default'">
       <a (click)="currentModal = 'default'"><  其他登录方式</a>
-      <a (click)="currentModal = 'register'">没有帐号？免费注册  ></a>
+      <a (click)="currentModal = 'register'" [hidden]="currentModal === 'register'">没有帐号？免费注册  ></a>
     </div>
   </div>
  
