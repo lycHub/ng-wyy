@@ -1,5 +1,7 @@
 import { createReducer, Action, on } from '@ngrx/store';
 import * as MemberActions from '../actions/member.actions';
+import { User } from 'src/app/service/data-modals/member.models';
+import { SetUserInfo } from '../actions/member.actions';
 
 export type MemberState = {
 
@@ -7,12 +9,13 @@ export type MemberState = {
   modalVisible: boolean;
 
   // 会员信息
-  // memberInfo: Member;
+  userInfo: User;
 }
 
 
 export const initialState: MemberState = {
-  modalVisible: false
+  modalVisible: false,
+  userInfo: null
 };
 
 
@@ -21,6 +24,7 @@ export const initialState: MemberState = {
 const reducer = createReducer(
   initialState,
   on(MemberActions.SetModalVisible, (state, { visible }) => ({ ...state, modalVisible: visible })),
+  on(MemberActions.SetUserInfo, (state, { user }) => ({ ...state, userInfo: user })),
 );
 
 export function memberReducer(state: MemberState | undefined, action: Action) {

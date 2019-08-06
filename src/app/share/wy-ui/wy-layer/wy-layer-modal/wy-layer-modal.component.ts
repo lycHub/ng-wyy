@@ -33,6 +33,7 @@ export class WyLayerModalComponent implements OnInit {
   @Input() nzGetContainer: HTMLElement | OverlayRef; // [STATIC]
   @Input() nzContent: TemplateRef<{}>;
   @Input() currentModal = ModalTypes.Default;
+  @Input() showSpin = false;
 
 
   @Output() readonly onAfterOpen = new EventEmitter<void>(); // Trigger when modal open(visible) after animations
@@ -57,7 +58,6 @@ export class WyLayerModalComponent implements OnInit {
     private overlay: Overlay,
     private overlayKeyboardDispatcher: OverlayKeyboardDispatcher,
     private elementRef: ElementRef,
-    private viewContainer: ViewContainerRef,
     private rd: Renderer2,
     private store$: Store<AppStoreModule>,
     @Inject(DOCUMENT) private doc: Document,

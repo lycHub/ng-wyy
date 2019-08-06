@@ -1,38 +1,37 @@
 <div class="member">
-  <div class="login">
+  <div class="login" *ngIf="!user">
     <p>登录网易云音乐，可以享受无限收藏的乐趣，并且无限同步到手机</p>
     <button nz-button class="btn" (click)="openModal.emit()">用户登录</button>
   </div>
-  <div class="n-myinfo">
+  <div class="n-myinfo" *ngIf="user">
     <div class="f-cb clearfix">
       <a class="head">
-        <img src="//p1.music.126.net/WRj2C4DnsWkn_5nayBkaCw==/109951164269052628.jpg?param=80y80" />
+        <img [src]="user.profile.avatarUrl" [alt]="user.profile.nickname" />
       </a>
       <div class="info">
-        <h4><a class="nm ellipsis">Madao2020</a></h4>
+        <h4><a class="nm ellipsis">{{user.profile.nickname}}</a></h4>
         <p class="lv">
           <span class="u-lv u-icn2">
             3<i class="lvright u-icn2"></i>
           </span>
         </p>
         <div class="btnwrap f-pr">
-          <button nz-button nzType="primary" nzBlock disabled>签到</button>
+          <button nz-button nzType="primary" [disabled]="hasSignIn" nzBlock (click)="onSignIn()">签到</button>
         </div>
       </div>
     </div>
 
-
     <ul class="dny clearfix">
       <li class="fst">
-        <strong class="ellipsis">1000000</strong>
+        <strong class="ellipsis">{{user.profile.eventCount}}</strong>
         <span>动态</span>
       </li>
       <li>
-        <strong class="ellipsis">1000000</strong>
+        <strong class="ellipsis">{{user.profile.follows}}</strong>
         <span>关注</span>
       </li>
       <li class="lst">
-        <strong class="ellipsis">1000000</strong>
+        <strong class="ellipsis">{{user.profile.followeds}}</strong>
         <span>粉丝</span>
       </li>
     </ul>

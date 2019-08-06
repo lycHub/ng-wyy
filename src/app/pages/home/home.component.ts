@@ -2,12 +2,15 @@ import {Component, ViewChild} from '@angular/core';
 import {Banner, HotTag, SongSheet} from "../../service/data-modals/common.models";
 import {NzCarouselComponent} from "ng-zorro-antd";
 import {ActivatedRoute, Router} from "@angular/router";
-import {map} from "rxjs/internal/operators";
+import {map, takeUntil} from "rxjs/internal/operators";
 import { SongService } from 'src/app/service/song/song.service';
 import { MultipleReducersService } from 'src/app/store/multiple-reducers.service';
 import { AppStoreModule } from 'src/app/store';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { SetModalVisible } from 'src/app/store/actions/member.actions';
+import { Observable, Subject } from 'rxjs';
+import { getUserInfo } from '../../store/selectors/member.selector';
+import { User } from 'src/app/service/data-modals/member.models';
 
 @Component({
   selector: 'app-home',
@@ -19,6 +22,8 @@ export class HomeComponent {
   banners: Banner[];
   hotTags: HotTag[];
   songSheetList: SongSheet[];
+
+  user: User;
   
   // 轮播当前索引
   carouselActiveIndex = 0;
@@ -26,6 +31,8 @@ export class HomeComponent {
     return this.banners && this.banners[this.carouselActiveIndex].bgColor;
   }
   
+  private appStore$: Observable<AppStoreModule>;
+  private destroy$ = new Subject<void>();
   
   @ViewChild(NzCarouselComponent, { static: true }) private nzCarousel: NzCarouselComponent;
   constructor(private route: ActivatedRoute,
@@ -38,6 +45,9 @@ export class HomeComponent {
       this.hotTags = hotTags;
       this.songSheetList = songSheetList;
     });
+
+    this.appStore$ = this.store$.pipe(select('member'), takeUntil(this.destroy$));
+    this.appStore$.pipe(select(getUserInfo)).subscribe(user => this.user = user);
   }
 
   onChangeSlide(type) {

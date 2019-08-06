@@ -40,7 +40,7 @@
 </div>
 <app-wy-player></app-wy-player>
 
-<app-wy-layer-modal [currentModal]="currentModal">
+<app-wy-layer-modal [currentModal]="currentModal" [showSpin]="showSpin">
   <app-wy-login-phone name="login" (onLogin)="onLogin($event)"></app-wy-login-phone>
   <app-wy-layer-register name="register"></app-wy-layer-register>
 </app-wy-layer-modal>

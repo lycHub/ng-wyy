@@ -4,9 +4,13 @@ import {Observable} from "rxjs/index";
 import {filter, map, mergeMap} from "rxjs/internal/operators";
 import {WINDOW} from "./core/inject-tokens";
 import { Title, Meta } from '@angular/platform-browser';
-import { ModalTypes } from './share/wy-ui/wy-layer/wy-layer-modal/wy-layer-modal.component';
+import { ModalTypes, WyLayerModalComponent } from './share/wy-ui/wy-layer/wy-layer-modal/wy-layer-modal.component';
 import { LoginParams } from './share/wy-ui/wy-layer/wy-login-phone/wy-login-phone.component';
 import { MemberService } from './service/member/member.service';
+import { NzMessageService } from 'ng-zorro-antd';
+import { AppStoreModule } from './store';
+import { Store } from '@ngrx/store';
+import { SetModalVisible, SetUserInfo } from './store/actions/member.actions';
 
 @Component({
   selector: 'app-root',
@@ -16,7 +20,7 @@ import { MemberService } from './service/member/member.service';
 export class AppComponent implements AfterViewInit {
   
   currentModal = ModalTypes.LoginByPhone;
-  isVisible = false;
+  showSpin = false;
 
   navEnd: Observable<NavigationEnd>;
   loadPercent = 0;
@@ -33,15 +37,21 @@ export class AppComponent implements AfterViewInit {
   }];
 
   routeTitle = '';
-  @ViewChild('loginModal', { static: false }) private loginModalRef: TemplateRef<{}>;
+  
+  @ViewChild(WyLayerModalComponent, { static: true }) private memberModal: WyLayerModalComponent;
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private titleService: Title,
     private memberServe: MemberService,
     private meta: Meta,
+    private message: NzMessageService,
+    private store$: Store<AppStoreModule>,
     @Inject(WINDOW) private win: Window) {
-      // this.nowModalContent = this.loginModalRef;
+    const wyUserLogin = this.win.localStorage.getItem('wyUserLogin');
+    if (wyUserLogin) {
+      this.doLogin(JSON.parse(wyUserLogin));
+    }
     this.setLoadingBar();
     this.setMT();
   }
@@ -82,10 +92,24 @@ export class AppComponent implements AfterViewInit {
   // 登陆
   onLogin(params: LoginParams) {
     // console.log('onLogin :', params);
-    this.memberServe.login(params).subscribe(res => {
-      console.log('res :', res);
+    this.showSpin = true;
+    this.doLogin(params);
+  }
+
+  private doLogin(params: LoginParams) {
+    this.memberServe.login(params).subscribe(user => {
+      this.store$.dispatch(SetModalVisible({ visible: false }));
+      this.store$.dispatch(SetUserInfo({ user }));
+      if (params.remember) {
+        this.win.localStorage.setItem('wyUserLogin', JSON.stringify(params));
+      }
     }, error => {
-      console.error('login error', error);
+      this.alertMessage('error', error.message || '登陆失败');
     });
+  }
+
+  private alertMessage(type: string, msg: string) {
+    this.showSpin = false;
+    this.message.create(type, msg);
   }
 }
