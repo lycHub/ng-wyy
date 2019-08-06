@@ -81,7 +81,7 @@ export class AppComponent implements AfterViewInit {
 
   // 登陆
   onLogin(params: LoginParams) {
-    console.log('onLogin :', params);
+    // console.log('onLogin :', params);
     this.memberServe.login(params).subscribe(res => {
       console.log('res :', res);
     }, error => {
