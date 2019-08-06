@@ -1,5 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+
+
+export type LoginParams = {
+  phone: number;
+  password: string;
+  remember: boolean;
+}
+
 
 @Component({
   selector: 'app-wy-login-phone',
@@ -8,6 +16,8 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 })
 export class WyLoginPhoneComponent {
   formModel: FormGroup;
+  @Output() onLogin = new EventEmitter<LoginParams>();
+
   constructor(private fb: FormBuilder) {
     this.formModel = this.fb.group({
       phone: ['', [Validators.required, Validators.pattern(/^1\d{10}$/)]],
@@ -16,9 +26,13 @@ export class WyLoginPhoneComponent {
     });
   }
   submitForm(): void {
-    if (this.formModel.valid) {
-      console.log('phone', this.formModel.get('phone'));
-      console.log('password', this.formModel.get('password'));
+    const model = this.formModel;
+    if (model.valid) {
+      this.onLogin.emit({
+        phone: model.get('phone').value,
+        password: model.get('password').value,
+        remember: model.get('remember').value
+      });
     }
   }
 

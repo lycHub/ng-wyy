@@ -5,6 +5,8 @@ import {filter, map, mergeMap} from "rxjs/internal/operators";
 import {WINDOW} from "./core/inject-tokens";
 import { Title, Meta } from '@angular/platform-browser';
 import { ModalTypes } from './share/wy-ui/wy-layer/wy-layer-modal/wy-layer-modal.component';
+import { LoginParams } from './share/wy-ui/wy-layer/wy-login-phone/wy-login-phone.component';
+import { MemberService } from './service/member/member.service';
 
 @Component({
   selector: 'app-root',
@@ -36,6 +38,7 @@ export class AppComponent implements AfterViewInit {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private titleService: Title,
+    private memberServe: MemberService,
     private meta: Meta,
     @Inject(WINDOW) private win: Window) {
       // this.nowModalContent = this.loginModalRef;
@@ -72,6 +75,17 @@ export class AppComponent implements AfterViewInit {
       this.titleService.setTitle(this.routeTitle);
       this.meta.addTag({ keywords: event['keywords'], description: event['description'] });
       this.meta.updateTag({ keywords: event['keywords'], description: event['description'] });
+    });
+  }
+
+
+  // 登陆
+  onLogin(params: LoginParams) {
+    console.log('onLogin :', params);
+    this.memberServe.login(params).subscribe(res => {
+      console.log('res :', res);
+    }, error => {
+      console.error('login error', error);
     });
   }
 }

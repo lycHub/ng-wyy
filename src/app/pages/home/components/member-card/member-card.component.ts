@@ -6,7 +6,7 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./member-card.component.less']
 })
 export class MemberCardComponent implements OnInit {
-  @Output() onLogin = new EventEmitter<void>();
+  @Output() openModal = new EventEmitter<void>();
   constructor() { }
 
   ngOnInit() {

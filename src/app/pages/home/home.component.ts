@@ -55,7 +55,7 @@ export class HomeComponent {
     });
   }
 
-  onLogin() {
+  openModal() {
     this.store$.dispatch(SetModalVisible({ visible: true }));
   }
 
