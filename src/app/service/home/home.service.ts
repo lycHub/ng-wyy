@@ -1,9 +1,9 @@
 import {Inject, Injectable} from '@angular/core';
 import {ServiceModule} from "../service.module";
-import {HttpClient, HttpErrorResponse} from "@angular/common/http";
+import {HttpClient} from "@angular/common/http";
 import {Banner, HotTag, SongSheet} from "../data-modals/common.models";
 import {Observable} from "rxjs/index";
-import {catchError, map} from "rxjs/internal/operators";
+import {map} from "rxjs/internal/operators";
 import {API_CONFIG} from "../../core/inject-tokens";
 @Injectable({
   providedIn: ServiceModule
@@ -19,7 +19,7 @@ export class HomeService {
           item.bgColor = bgColor[key]
         });
         return res.banners;
-      }), catchError(this.handleError));
+      }));
   }
   
   
@@ -27,9 +27,7 @@ export class HomeService {
   getHotTags(): Observable<HotTag[]> {
     return this.http.get(this.config + 'playlist/hot')
       .pipe(
-        map((res: {tags: HotTag[]}) => res.tags.sort((x: HotTag, y: HotTag) => x.position - y.position).slice(0, 5)),
-        catchError(this.handleError)
-      );
+        map((res: {tags: HotTag[]}) => res.tags.sort((x: HotTag, y: HotTag) => x.position - y.position).slice(0, 5)));
   }
   
   
@@ -37,11 +35,6 @@ export class HomeService {
   getPersonalSongList(): Observable<SongSheet[]> {
     // const params = new HttpParams().set('id', id.toString());
     return this.http.get(this.config + 'personalized').pipe(
-      map((res: {result: SongSheet[]}) => res.result.slice(0, 16)),
-      catchError(this.handleError));
+      map((res: {result: SongSheet[]}) => res.result.slice(0, 16)));
   }
-  
-  private handleError(error: HttpErrorResponse): never {
-    throw new Error(error.error);
-  };
 }

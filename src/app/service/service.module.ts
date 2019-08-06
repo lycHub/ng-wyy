@@ -1,6 +1,7 @@
 import {NgModule, PLATFORM_ID} from '@angular/core';
 import {API_CONFIG, WINDOW} from "../core/inject-tokens";
 import {isPlatformBrowser} from "@angular/common";
+import { httpInterceptorProviders } from './http-interceptors';
 
 @NgModule({
   providers: [
@@ -22,7 +23,8 @@ import {isPlatformBrowser} from "@angular/common";
         return isPlatformBrowser(platformId) ? window : {};
       },
       deps: [PLATFORM_ID]
-    }
+    },
+    httpInterceptorProviders
   ]
 })
 export class ServiceModule { }

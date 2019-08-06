@@ -1,10 +1,10 @@
 import {Inject, Injectable} from '@angular/core';
 import {ServiceModule} from "../service.module";
-import {HttpClient, HttpErrorResponse, HttpParams} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {API_CONFIG} from "../../core/inject-tokens";
 import { playlistInfo } from '../data-modals/common.models';
 import { Observable } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import queryString from 'query-string';
 
 export type SheetParams = {
@@ -23,11 +23,6 @@ export class SheetService {
     
     const params = new HttpParams({fromString: queryString.stringify(obj)});
     return this.http.get(this.config + 'top/playlist', { params })
-    .pipe(map(res => res as playlistInfo), catchError(this.handleError));
+    .pipe(map(res => res as playlistInfo));
   }
-  
-  
-  private handleError(error: HttpErrorResponse): never {
-    throw new Error(error.error);
-  };
 }

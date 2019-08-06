@@ -1,6 +1,6 @@
 import {Inject, Injectable} from '@angular/core';
 import {ServiceModule} from "../service.module";
-import {HttpClient, HttpErrorResponse, HttpParams} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {API_CONFIG} from "../../core/inject-tokens";
 import { Observable } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
@@ -23,14 +23,6 @@ export class MemberService {
     
     const params = new HttpParams({fromString: queryString.stringify(values)});
     return this.http.get(this.config + 'login/cellphone', { params })
-    .pipe(map(res => {
-      console.log('res :', res);
-      return res as User;
-    }), catchError(this.handleError));
+    .pipe(map(res => res as User));
   }
-  
-  
-  private handleError(error: HttpErrorResponse): never {
-    throw error.error;
-  };
 }
