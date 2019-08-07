@@ -1,7 +1,6 @@
-import {Inject, Injectable} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {ServiceModule} from "../service.module";
 import {HttpClient, HttpParams} from "@angular/common/http";
-import {API_CONFIG} from "../../core/inject-tokens";
 import { playlistInfo } from '../data-modals/common.models';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -18,11 +17,11 @@ export type SheetParams = {
   providedIn: ServiceModule
 })
 export class SheetService {
-  constructor(private http: HttpClient, @Inject(API_CONFIG) private config: string) { }
+  constructor(private http: HttpClient) { }
   getSheetList(obj: SheetParams): Observable<playlistInfo> {
     
     const params = new HttpParams({fromString: queryString.stringify(obj)});
-    return this.http.get(this.config + 'top/playlist', { params })
+    return this.http.get('/api/top/playlist', { params })
     .pipe(map(res => res as playlistInfo));
   }
 }

@@ -1,23 +1,26 @@
-import { Component, Inject, TemplateRef, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import {NavigationEnd, Router, ActivatedRoute} from "@angular/router";
-import {Observable} from "rxjs/index";
+import { Observable, from } from 'rxjs/index';
 import {filter, map, mergeMap} from "rxjs/internal/operators";
 import {WINDOW} from "./core/inject-tokens";
 import { Title, Meta } from '@angular/platform-browser';
-import { ModalTypes, WyLayerModalComponent } from './share/wy-ui/wy-layer/wy-layer-modal/wy-layer-modal.component';
+import { ModalTypes } from './share/wy-ui/wy-layer/wy-layer-modal/wy-layer-modal.component';
 import { LoginParams } from './share/wy-ui/wy-layer/wy-login-phone/wy-login-phone.component';
 import { MemberService } from './service/member/member.service';
 import { NzMessageService } from 'ng-zorro-antd';
 import { AppStoreModule } from './store';
 import { Store } from '@ngrx/store';
 import { SetModalVisible, SetUserInfo } from './store/actions/member.actions';
+import Cookies from 'universal-cookie';
+import { codeJson } from './utils/base64';
+import { StorageService } from './service/storage.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.less']
 })
-export class AppComponent implements AfterViewInit {
+export class AppComponent {
   
   currentModal = ModalTypes.LoginByPhone;
   showSpin = false;
@@ -38,7 +41,6 @@ export class AppComponent implements AfterViewInit {
 
   routeTitle = '';
   
-  @ViewChild(WyLayerModalComponent, { static: true }) private memberModal: WyLayerModalComponent;
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
@@ -47,17 +49,16 @@ export class AppComponent implements AfterViewInit {
     private meta: Meta,
     private message: NzMessageService,
     private store$: Store<AppStoreModule>,
+    private storageServe: StorageService,
     @Inject(WINDOW) private win: Window) {
-    const wyUserLogin = this.win.localStorage.getItem('wyUserLogin');
-    if (wyUserLogin) {
-      this.doLogin(JSON.parse(wyUserLogin));
+    const cookies = new Cookies();
+    const MUSIC_U = cookies.get('MUSIC_U');
+    const userId = this.storageServe.getStorage('wyUserId');
+    if (MUSIC_U && userId) {
+      this.memberServe.refreshLogin(Number(userId)).subscribe(user => this.store$.dispatch(SetUserInfo({ user })));
     }
     this.setLoadingBar();
     this.setMT();
-  }
-
-  ngAfterViewInit(): void {
-    
   }
 
 
@@ -91,22 +92,28 @@ export class AppComponent implements AfterViewInit {
 
   // 登陆
   onLogin(params: LoginParams) {
-    // console.log('onLogin :', params);
     this.showSpin = true;
-    this.doLogin(params, true);
+    this.doLogin(params);
   }
 
-  private doLogin(params: LoginParams, showLog = false) {
+  private doLogin(params: LoginParams) {
     this.memberServe.login(params).subscribe(user => {
       this.store$.dispatch(SetModalVisible({ visible: false }));
       this.store$.dispatch(SetUserInfo({ user }));
-      if (params.remember) {
-        this.win.localStorage.setItem('wyUserLogin', JSON.stringify(params));
-      }
-      if (showLog) {
-        this.alertMessage('success', '登陆成功');
-      }
+      this.alertMessage('success', '登陆成功');
       
+      this.storageServe.setStroge({
+        key: 'wyUserId',
+        value: user.profile.userId
+      });
+      if (params.remember) {
+        this.storageServe.setStroge({
+          key: 'wyUserLogin',
+          value: JSON.stringify(codeJson(params))
+        });
+      }else{
+        this.storageServe.removeStroge('wyUserLogin');
+      }
     }, error => {
       this.alertMessage('error', error.message || '登陆失败');
     });

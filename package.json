@@ -25,10 +25,12 @@
     "@ngrx/effects": "^8.0.1",
     "@ngrx/store": "^8.0.1",
     "core-js": "^2.5.4",
+    "js-base64": "^2.5.1",
     "minireset.css": "0.0.4",
     "ng-zorro-antd": "^8.1.2",
     "rxjs": "~6.5.2",
     "tslib": "^1.9.0",
+    "universal-cookie": "^4.0.2",
     "zone.js": "~0.9.1"
   },
   "devDependencies": {
@@ -37,6 +39,7 @@
     "@angular/compiler-cli": "~8.2.0",
     "@angular/language-service": "~8.2.0",
     "@ngrx/store-devtools": "^8.0.1",
+    "@types/js-base64": "^2.3.1",
     "@types/node": "~8.9.4",
     "codelyzer": "^5.0.1",
     "ts-node": "~7.0.0",

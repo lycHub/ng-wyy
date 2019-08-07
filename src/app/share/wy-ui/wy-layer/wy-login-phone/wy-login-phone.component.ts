@@ -1,6 +1,7 @@
 import { Component, Output, EventEmitter, Inject } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { WINDOW } from 'src/app/core/inject-tokens';
+import { codeJson } from 'src/app/utils/base64';
 
 
 export type LoginParams = {
@@ -23,8 +24,10 @@ export class WyLoginPhoneComponent {
     let phone = '';
     let password = '';
     let remember = true;
-    const wyUserLogin = JSON.parse(this.win.localStorage.getItem('wyUserLogin'));
-    if (wyUserLogin) {
+    
+    const storage = JSON.parse(localStorage.getItem('wyUserLogin'));
+    if (storage) {
+      const wyUserLogin = codeJson(storage);
       phone = wyUserLogin.phone;
       password = wyUserLogin.password;
       remember = wyUserLogin.remember;

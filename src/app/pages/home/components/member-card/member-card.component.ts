@@ -2,6 +2,7 @@ import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { User } from 'src/app/service/data-modals/member.models';
 import { MemberService } from 'src/app/service/member/member.service';
 import { NzMessageService } from 'ng-zorro-antd';
+import Cookies from 'universal-cookie';
 
 @Component({
   selector: 'app-member-card',
@@ -13,15 +14,19 @@ export class MemberCardComponent implements OnInit {
   @Output() openModal = new EventEmitter<void>();
 
   hasSignIn = false;
-  constructor(private memberServe: MemberService, private message: NzMessageService,) { }
+  private cookieIns = new Cookies();
+  constructor(private memberServe: MemberService, private message: NzMessageService,) {
+    const cookIn = this.cookieIns.get('wySignIn');
+    this.hasSignIn = cookIn === 'true';
+  }
 
   ngOnInit() {
+   
   }
 
   onSignIn() {
-    this.memberServe.signIn().subscribe(res => {
-      console.log('signIn :', res);
-      this.hasSignIn = true;
+    this.memberServe.signIn().subscribe(() => {
+      this.cookieIns.set('wySignIn', true, { maxAge: 60*60*24 });
       this.alertMessage('success', '签到成功');
     }, error => {
       this.alertMessage('error', error.msg || '签到失败');
@@ -30,5 +35,6 @@ export class MemberCardComponent implements OnInit {
 
   private alertMessage(type: string, msg: string) {
     this.message.create(type, msg);
+    this.hasSignIn = true;
   }
 }

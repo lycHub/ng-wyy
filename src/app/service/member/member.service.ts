@@ -1,7 +1,6 @@
-import {Inject, Injectable} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {ServiceModule} from "../service.module";
 import {HttpClient, HttpParams} from "@angular/common/http";
-import {API_CONFIG} from "../../core/inject-tokens";
 import { Observable, throwError } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import queryString from 'query-string';
@@ -16,12 +15,12 @@ export type SignBack = {
   providedIn: ServiceModule
 })
 export class MemberService {
-  constructor(private http: HttpClient, @Inject(API_CONFIG) private config: string) {}
+  constructor(private http: HttpClient) {}
 
   // 签到/daily_signin
   signIn(): Observable<SignBack | Observable<never>> {
     const params = new HttpParams({fromString: queryString.stringify({ type: 1 })});
-    return this.http.get(this.config + 'daily_signin', { params })
+    return this.http.get('/api/daily_signin', { params })
     .pipe(map((res: { code: number; point?: number; msg?: string; }) => {
       if (res.code === 200) {
         return res as SignBack;
@@ -33,13 +32,19 @@ export class MemberService {
 
   login(values: LoginParams): Observable<User> {
     const params = new HttpParams({fromString: queryString.stringify(values)});
-    return this.http.get(this.config + 'login/cellphone', { params })
+    return this.http.get('/api/login/cellphone', { params })
     .pipe(switchMap((res: User) => this.userDetail(res.profile.userId)));
+  }
+  
+  
+  refreshLogin(id: number): Observable<User> {
+    return this.http.get('/api/login/refresh')
+    .pipe(switchMap(() => this.userDetail(id)));
   }
 
   userDetail(uid: number): Observable<User> {
     const params = new HttpParams({fromString: queryString.stringify({ uid })});
-    return this.http.get(this.config + 'user/detail', { params })
+    return this.http.get('/api/user/detail', { params })
     .pipe(map(res => res as User));
   }
 }

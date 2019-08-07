@@ -69,7 +69,6 @@ export class HomeComponent {
     this.store$.dispatch(SetModalVisible({ visible: true }));
   }
 
-
   
   
   toInfo(id: number) {
