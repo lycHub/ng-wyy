@@ -8,7 +8,10 @@ export class CatchErrorInterceptor implements HttpInterceptor {
   constructor() {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    return next.handle(req).pipe(catchError(this.handleError));
+    const secureReq = req.clone({
+      withCredentials: true
+    });
+    return next.handle(secureReq).pipe(catchError(this.handleError));
   }
 
   private handleError(error: HttpErrorResponse): never {

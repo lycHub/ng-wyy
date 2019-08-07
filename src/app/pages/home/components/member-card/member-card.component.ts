@@ -21,15 +21,14 @@ export class MemberCardComponent implements OnInit {
   onSignIn() {
     this.memberServe.signIn().subscribe(res => {
       console.log('signIn :', res);
+      this.hasSignIn = true;
       this.alertMessage('success', '签到成功');
     }, error => {
-      console.error('signIn error :', error);
-      this.alertMessage('error', '签到失败');
+      this.alertMessage('error', error.msg || '签到失败');
     });
   }
 
   private alertMessage(type: string, msg: string) {
     this.message.create(type, msg);
-    this.hasSignIn = true
   }
 }

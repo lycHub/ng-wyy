@@ -93,16 +93,20 @@ export class AppComponent implements AfterViewInit {
   onLogin(params: LoginParams) {
     // console.log('onLogin :', params);
     this.showSpin = true;
-    this.doLogin(params);
+    this.doLogin(params, true);
   }
 
-  private doLogin(params: LoginParams) {
+  private doLogin(params: LoginParams, showLog = false) {
     this.memberServe.login(params).subscribe(user => {
       this.store$.dispatch(SetModalVisible({ visible: false }));
       this.store$.dispatch(SetUserInfo({ user }));
       if (params.remember) {
         this.win.localStorage.setItem('wyUserLogin', JSON.stringify(params));
       }
+      if (showLog) {
+        this.alertMessage('success', '登陆成功');
+      }
+      
     }, error => {
       this.alertMessage('error', error.message || '登陆失败');
     });
