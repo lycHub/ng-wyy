@@ -22,7 +22,7 @@ import { StorageService } from './service/storage.service';
 })
 export class AppComponent {
   
-  currentModal = ModalTypes.LoginByPhone;
+  currentModal = ModalTypes.Default;
   showSpin = false;
 
   navEnd: Observable<NavigationEnd>;
@@ -87,6 +87,11 @@ export class AppComponent {
       this.meta.addTag({ keywords: event['keywords'], description: event['description'] });
       this.meta.updateTag({ keywords: event['keywords'], description: event['description'] });
     });
+  }
+
+  openModal(type: string) {
+    this.currentModal = ModalTypes[type];
+    this.store$.dispatch(SetModalVisible({ visible: true }));
   }
 
 

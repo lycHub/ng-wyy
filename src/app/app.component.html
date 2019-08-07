@@ -20,16 +20,30 @@
             </ng-template>
           </div>
           <div class="member">
-            <div class="handle" nz-dropdown [nzDropdownMenu]="memberMenu">
-              <a>登陆</a>
+            <div class="no-login">
+              <ul nz-menu nzMode="horizontal" nzTheme="dark">
+                  <li nz-submenu>
+                    <div title>
+                      <span>登陆</span>
+                      <i nz-icon nzType="down" nzTheme="outline"></i>
+                    </div>
+                    <ul>
+                      <li nz-menu-item (click)="openModal('LoginByPhone')">
+                        <i nz-icon nzType="mobile" nzTheme="outline"></i>
+                        手机登陆
+                      </li>
+                      <li nz-menu-item (click)="openModal('Register')">
+                        <i nz-icon nzType="user-add" nzTheme="outline"></i>
+                        注册
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
             </div>
-            <nz-dropdown-menu #memberMenu="nzDropdownMenu">
-              <ul nz-menu nzSelectable>
-                <li nz-menu-item>1st menu item</li>
-                <li nz-menu-item>2nd menu item</li>
-                <li nz-menu-item>3rd menu item</li>
-              </ul>
-            </nz-dropdown-menu>
+
+           <!--  <div class="login">
+              login
+            </div> -->
           </div>
         </div>
       </div>
