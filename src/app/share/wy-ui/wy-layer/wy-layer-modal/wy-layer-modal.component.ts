@@ -42,6 +42,11 @@ export class WyLayerModalComponent implements OnInit {
   
 
   showModal: 'show' | 'hide';
+  modalTitle = {
+    register: '注册',
+    loginByPhone: '手机登陆',
+    default: ''
+  }
   private isVisible = false;
   private overlayRef: OverlayRef;
   private scrollStrategy: BlockScrollStrategy;

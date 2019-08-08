@@ -11,9 +11,9 @@ import { NzMessageService } from 'ng-zorro-antd';
 import { AppStoreModule } from './store';
 import { Store } from '@ngrx/store';
 import { SetModalVisible, SetUserInfo } from './store/actions/member.actions';
-import Cookies from 'universal-cookie';
 import { codeJson } from './utils/base64';
 import { StorageService } from './service/storage.service';
+import { User } from './service/data-modals/member.models';
 
 @Component({
   selector: 'app-root',
@@ -27,6 +27,7 @@ export class AppComponent {
 
   navEnd: Observable<NavigationEnd>;
   loadPercent = 0;
+  user: User;
   
   menu = [{
     title: '发现',
@@ -51,11 +52,12 @@ export class AppComponent {
     private store$: Store<AppStoreModule>,
     private storageServe: StorageService,
     @Inject(WINDOW) private win: Window) {
-    const cookies = new Cookies();
-    const MUSIC_U = cookies.get('MUSIC_U');
     const userId = this.storageServe.getStorage('wyUserId');
-    if (MUSIC_U && userId) {
-      this.memberServe.refreshLogin(Number(userId)).subscribe(user => this.store$.dispatch(SetUserInfo({ user })));
+    if (userId) {
+      this.memberServe.refreshLogin(Number(userId)).subscribe(user => {
+        this.user = user;
+        this.store$.dispatch(SetUserInfo({ user }));
+      });
     }
     this.setLoadingBar();
     this.setMT();
@@ -93,6 +95,20 @@ export class AppComponent {
     this.currentModal = ModalTypes[type];
     this.store$.dispatch(SetModalVisible({ visible: true }));
   }
+  
+  // 退出
+  onLogOut() {
+    this.memberServe.logOut().subscribe(code => {
+      if (code === 200) {
+        this.storageServe.removeStroge('wyUserId');
+        this.store$.dispatch(SetUserInfo({ user: null }));
+        this.user = null;
+        this.alertMessage('success', '已退出');
+      }else {
+        this.alertMessage('error', '退出失败');
+      }
+    });
+  }
 
 
   // 登陆
@@ -103,6 +119,7 @@ export class AppComponent {
 
   private doLogin(params: LoginParams) {
     this.memberServe.login(params).subscribe(user => {
+      this.user = user;
       this.store$.dispatch(SetModalVisible({ visible: false }));
       this.store$.dispatch(SetUserInfo({ user }));
       this.alertMessage('success', '登陆成功');

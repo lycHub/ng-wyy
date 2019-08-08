@@ -35,6 +35,10 @@ export class MemberService {
     return this.http.get('/api/login/cellphone', { params })
     .pipe(switchMap((res: User) => this.userDetail(res.profile.userId)));
   }
+
+  logOut(): Observable<number> {
+    return this.http.get('/api/logout').pipe(map((res: { code: number; }) => res.code as number));
+  }
   
   
   refreshLogin(id: number): Observable<User> {

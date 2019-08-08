@@ -20,30 +20,49 @@
             </ng-template>
           </div>
           <div class="member">
-            <div class="no-login">
+            <div class="no-login" *ngIf="!user else logined">
               <ul nz-menu nzMode="horizontal" nzTheme="dark">
+                <li nz-submenu>
+                  <div title>
+                    <span>登陆</span>
+                    <i nz-icon nzType="down" nzTheme="outline"></i>
+                  </div>
+                  <ul>
+                    <li nz-menu-item (click)="openModal('LoginByPhone')">
+                      <i nz-icon nzType="mobile" nzTheme="outline"></i>
+                      手机登陆
+                    </li>
+                    <li nz-menu-item (click)="openModal('Register')">
+                      <i nz-icon nzType="user-add" nzTheme="outline"></i>
+                      注册
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+
+            <ng-template #logined>
+              <div class="login" *ngIf="user">
+                <ul nz-menu nzMode="horizontal" nzTheme="dark">
                   <li nz-submenu>
                     <div title>
-                      <span>登陆</span>
+                      <nz-avatar nzIcon="user" [nzSrc]="user.profile.avatarUrl"></nz-avatar>
                       <i nz-icon nzType="down" nzTheme="outline"></i>
                     </div>
                     <ul>
                       <li nz-menu-item (click)="openModal('LoginByPhone')">
-                        <i nz-icon nzType="mobile" nzTheme="outline"></i>
-                        手机登陆
+                        <i nz-icon nzType="user" nzTheme="outline"></i>
+                        我的主页
                       </li>
-                      <li nz-menu-item (click)="openModal('Register')">
-                        <i nz-icon nzType="user-add" nzTheme="outline"></i>
-                        注册
+                      <li nz-menu-item (click)="onLogOut()">
+                        <i nz-icon nzType="close-circle" nzTheme="outline"></i>
+                        退出
                       </li>
                     </ul>
                   </li>
                 </ul>
-            </div>
-
-           <!--  <div class="login">
-              login
-            </div> -->
+              </div>
+            </ng-template>
           </div>
         </div>
       </div>
