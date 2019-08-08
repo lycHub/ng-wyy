@@ -47,7 +47,10 @@ export class HomeComponent {
     });
 
     this.appStore$ = this.store$.pipe(select('member'), takeUntil(this.destroy$));
-    this.appStore$.pipe(select(getUserInfo)).subscribe(user => this.user = user);
+    this.appStore$.pipe(select(getUserInfo)).subscribe(user => {
+      console.log('user :', user);
+      this.user = user;
+    });
   }
 
   onChangeSlide(type) {

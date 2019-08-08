@@ -34,7 +34,7 @@ export class WyLoginPhoneComponent implements OnChanges {
       let password = '';
       let remember = true;
       if (newUserLoginParams.currentValue) {
-        const wyUserLogin = codeJson(newUserLoginParams.currentValue);
+        const wyUserLogin = codeJson(newUserLoginParams.currentValue, 'decode');
         phone = wyUserLogin.phone;
         password = wyUserLogin.password;
         remember = wyUserLogin.remember;
