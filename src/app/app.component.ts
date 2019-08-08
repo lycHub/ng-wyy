@@ -41,6 +41,8 @@ export class AppComponent {
   }];
 
   routeTitle = '';
+
+  wyUserLogin: LoginParams;
   
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -59,6 +61,10 @@ export class AppComponent {
         this.store$.dispatch(SetUserInfo({ user }));
       });
     }
+
+
+    const storage = JSON.parse(localStorage.getItem('wyUserLogin'));
+    this.wyUserLogin = storage;
     this.setLoadingBar();
     this.setMT();
   }

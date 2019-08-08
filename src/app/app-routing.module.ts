@@ -19,6 +19,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/song-info/song-info.module').then(mod => mod.SongInfoModule)
   },
   {
+    path: 'userCenter/:id',
+    loadChildren: () => import('./pages/user/user.module').then(mod => mod.UserModule)
+  },
+  {
     path: '',
     redirectTo: '/home',
     pathMatch: 'full'

@@ -50,11 +50,11 @@
                       <i nz-icon nzType="down" nzTheme="outline"></i>
                     </div>
                     <ul>
-                      <li nz-menu-item (click)="openModal('LoginByPhone')">
+                      <li nz-menu-item [routerLink]="['/userCenter', user.profile.userId]">
                         <i nz-icon nzType="user" nzTheme="outline"></i>
                         我的主页
                       </li>
-                      <li nz-menu-item (click)="onLogOut()">
+                      <li nz-menu-item>
                         <i nz-icon nzType="close-circle" nzTheme="outline"></i>
                         退出
                       </li>
@@ -74,6 +74,6 @@
 <app-wy-player></app-wy-player>
 
 <app-wy-layer-modal [currentModal]="currentModal" [showSpin]="showSpin">
-  <app-wy-login-phone name="login" (onLogin)="onLogin($event)"></app-wy-login-phone>
+  <app-wy-login-phone name="login" [wyUserLogin]="wyUserLogin" (onLogin)="onLogin($event)"></app-wy-login-phone>
   <app-wy-layer-register name="register"></app-wy-layer-register>
 </app-wy-layer-modal>
