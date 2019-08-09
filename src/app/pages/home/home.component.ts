@@ -11,6 +11,7 @@ import { SetModalVisible } from 'src/app/store/actions/member.actions';
 import { Observable, Subject } from 'rxjs';
 import { getUserInfo } from '../../store/selectors/member.selector';
 import { User } from 'src/app/service/data-modals/member.models';
+import { SheetService } from '../../service/sheet/sheet.service';
 
 @Component({
   selector: 'app-home',
@@ -38,6 +39,7 @@ export class HomeComponent implements OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
+    private sheetServe: SheetService,
     private songServe: SongService,
     private store$: Store<AppStoreModule>,
     private multipleReducerServe: MultipleReducersService) {
@@ -59,7 +61,7 @@ export class HomeComponent implements OnDestroy {
   }
 
   playSong(id: number) {
-    this.songServe.getSongSheetDetail(id).subscribe(sheet => {
+    this.sheetServe.getSongSheetDetail(id).subscribe(sheet => {
       this.songServe.getSongList(sheet.tracks).subscribe(list => {
         this.multipleReducerServe.selectPlay(({ list, index: 0 }));
       });

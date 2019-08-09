@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {ServiceModule} from "../service.module";
 import {HttpClient, HttpParams} from "@angular/common/http";
-import {Song, SongUrl, Lyric, SongSheet} from "../data-modals/common.models";
+import {Song, SongUrl, Lyric} from "../data-modals/common.models";
 import {Observable} from "rxjs/index";
 import {map} from "rxjs/internal/operators";
 
@@ -11,13 +11,6 @@ import {map} from "rxjs/internal/operators";
 })
 export class SongService {
   constructor(private http: HttpClient) { }
-  
-  // 歌单详情
-  getSongSheetDetail(id: number): Observable<SongSheet> {
-    const params = new HttpParams().set('id', id.toString());
-    return this.http.get('/api/playlist/detail', { params })
-      .pipe(map((res: {playlist: SongSheet}) => res.playlist));
-  }
   
   // 歌曲url列表
   getSongUrl(id: string): Observable<SongUrl[]> {

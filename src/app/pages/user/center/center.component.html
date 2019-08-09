@@ -36,8 +36,7 @@
       </div>
     </div>
 
-
-    <div class="n-songtb wy-sec">
+    <div class="wy-sec">
       <div class="u-title wy-sec-wrap clearfix">
         <h3 class="wy-sec-tit"><span class="f-ff2">听歌排行</span></h3>
         <span class="sub s-fc3">累计听歌<span id="playlist-track-count">146</span>首</span>
@@ -47,9 +46,7 @@
           <span [class.active]="recordType === 0" (click)="changeRecord(0)">所有时间</span>
         </div>
       </div>
-    </div>
-
-    <nz-table nzTemplateMode nzBordered class="wy-table">
+      <nz-table nzTemplateMode nzBordered class="wy-table">
         <thead>
           <tr>
             <th nzWidth="80px"></th>
@@ -87,6 +84,8 @@
           </tr>
         </tbody>
       </nz-table>
+      <a class="look-more">查看更多&gt;</a>
+    </div>
   </div>
   
 </div>

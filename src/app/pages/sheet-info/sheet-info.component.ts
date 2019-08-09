@@ -10,6 +10,7 @@ import {select, Store} from "@ngrx/store";
 import {takeUntil} from "rxjs/internal/operators";
 import {getCurrentSong} from "../../store/selectors/player.selector";
 import {findIndex} from "../../utils/array";
+import { SheetService } from '../../service/sheet/sheet.service';
 
 @Component({
   selector: 'app-sheet-info',
@@ -38,11 +39,12 @@ export class SheetInfoComponent implements OnDestroy{
   constructor(
     private route: ActivatedRoute,
     private songServe: SongService,
+    private sheetServe: SheetService,
     private multipleReducerServe: MultipleReducersService,
-    private store$: Store<AppStoreModule>,
-    private router: Router
+    private store$: Store<AppStoreModule>
   ) {
     this.route.data.pipe(map(res => res.sheetInfo)).subscribe(res => {
+      // console.log('sheetInfo :', res);
       this.sheetInfo = res;
       this.changeDesc(res.description);
       this.listenCurrentSong();
@@ -65,7 +67,7 @@ export class SheetInfoComponent implements OnDestroy{
 
 
   playSong(id: number) {
-    this.songServe.getSongSheetDetail(id).subscribe(sheet => {
+    this.sheetServe.getSongSheetDetail(id).subscribe(sheet => {
       this.songServe.getSongList(sheet.tracks).subscribe(list => {
         this.multipleReducerServe.selectPlay(({ list, index: 0 }));
       });

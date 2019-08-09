@@ -21,7 +21,11 @@ export class SheetComponent implements OnInit {
 
   playlistInfo: playlistInfo;
 
-  constructor(private router: Router, private route: ActivatedRoute, private sheetServe: SheetService, private songServe: SongService, private multipleReducerServe: MultipleReducersService) {
+  constructor(private router: Router,
+    private route: ActivatedRoute,
+    private sheetServe: SheetService,
+    private songServe: SongService,
+    private multipleReducerServe: MultipleReducersService) {
     this.listParams.cat = this.route.snapshot.queryParamMap.get('cat') || '全部';
     this.getList();
   }
@@ -41,7 +45,7 @@ export class SheetComponent implements OnInit {
   }
 
   playSong(id: number) {
-    this.songServe.getSongSheetDetail(id).subscribe(sheet => {
+    this.sheetServe.getSongSheetDetail(id).subscribe(sheet => {
       this.songServe.getSongList(sheet.tracks).subscribe(list => {
         this.multipleReducerServe.selectPlay(({ list, index: 0 }));
       });

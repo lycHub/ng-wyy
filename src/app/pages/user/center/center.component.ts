@@ -6,6 +6,8 @@ import { Song } from 'src/app/service/data-modals/common.models';
 import { Observable, Subject } from 'rxjs';
 import { AppStoreModule } from 'src/app/store';
 import { MemberService, RecordType } from 'src/app/service/member/member.service';
+import { SongService } from 'src/app/service/song/song.service';
+import { MultipleReducersService } from 'src/app/store/multiple-reducers.service';
 
 @Component({
   selector: 'app-center',
@@ -27,11 +29,12 @@ export class CenterComponent implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
+    private songServe: SongService,
+    private multipleReducerServe: MultipleReducersService,
     private memberServe: MemberService
   ) {
     this.route.data.pipe(map(res => res.user)).subscribe(([user, userRecord]) => {
-      console.log('userRecord :', userRecord);
+      // console.log('userRecord :', userRecord);
       this.user = user;
       this.userRecord = userRecord;
     });
@@ -55,7 +58,7 @@ export class CenterComponent implements OnInit, OnDestroy {
     if (this.currentSong && this.currentSong.id === song.id) {
       console.log('存在');
     }else{
-      // this.songServe.getSongList(song).subscribe(list => this.multipleReducerServe.insertSong(list[0], play));
+      this.songServe.getSongList(song).subscribe(list => this.multipleReducerServe.insertSong(list[0], play));
     }
   }
 

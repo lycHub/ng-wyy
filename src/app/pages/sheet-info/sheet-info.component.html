@@ -63,7 +63,7 @@
     </div>
 
 
-    <div class="n-songtb wy-sec">
+    <div class="wy-sec">
       <div class="u-title wy-sec-wrap clearfix">
         <h3 class="wy-sec-tit"><span class="f-ff2">歌曲列表</span></h3>
         <span class="sub s-fc3"><span id="playlist-track-count">{{sheetInfo.tracks.length}}</span>首歌</span>
@@ -77,7 +77,7 @@
               <th nzWidth="80px"></th>
               <th>标题</th>
               <th nzWidth="120px">时长</th>
-              <th>歌手</th>
+              <th nzWidth="180px">歌手</th>
               <th>专辑</th>
             </tr>
           </thead>
@@ -89,7 +89,7 @@
                 <!-- <i nz-icon nzType="play-circle" nzTheme="outline"></i> -->
               </td>
               <td class="song-name">
-                  <a [routerLink]="['/songInfo', item.song.id]">{{item.name}}</a>
+                  <a [routerLink]="['/songInfo', item.id]">{{item.name}}</a>
               </td>
               <td class="time-col">
                  <span>{{item.dt / 1000 | FormatTime}}</span>
@@ -100,7 +100,12 @@
                   <i class="ico download" title="下载"></i>
                 </p>
               </td>
-              <td>{{item.ar[0].name}}</td>
+              <td>
+                <ng-container *ngFor="let singer of item.ar; last as isLast">
+                  <a>{{singer.name}}</a>
+                  <em [hidden]="isLast">/</em>
+                </ng-container>
+              </td>
               <td>{{item.al.name}}</td>
             </tr>
           </tbody>
