@@ -4,12 +4,21 @@ import {HttpClient, HttpParams} from "@angular/common/http";
 import { Observable, throwError } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import queryString from 'query-string';
-import { User } from '../data-modals/member.models';
+import { User, UserRecord, recordVal } from '../data-modals/member.models';
 import { LoginParams } from 'src/app/share/wy-ui/wy-layer/wy-login-phone/wy-login-phone.component';
+import { formatSinger } from 'src/app/utils/format';
+
 export type SignBack = {
   point: number;
   code: number;
 }
+
+export enum RecordType {
+  AllData,
+  weekData
+}
+
+const records = ['allData', 'weekData'];
 
 @Injectable({
   providedIn: ServiceModule
@@ -50,5 +59,19 @@ export class MemberService {
     const params = new HttpParams({fromString: queryString.stringify({ uid })});
     return this.http.get('/api/user/detail', { params })
     .pipe(map(res => res as User));
+  }
+
+  userRecord(uid: number, type = RecordType.weekData): Observable<recordVal[]> {
+    const params = new HttpParams({fromString: queryString.stringify({ uid, type })});
+    return this.http.get('/api/user/record', { params })
+    .pipe(map((res: UserRecord) => {
+      const copy = res[records[type]].slice();
+      copy.forEach(item => {
+        const ar = item.song.ar.slice();
+        item.song.ar = formatSinger(ar);
+      });
+      // console.log('copy :', copy);
+      return copy;
+    }));
   }
 }

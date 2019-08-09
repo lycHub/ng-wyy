@@ -79,7 +79,6 @@ export class SheetInfoComponent implements OnDestroy{
     }else{
       this.songServe.getSongList(song).subscribe(list => this.multipleReducerServe.insertSong(list[0], play));
     }
-    
   }
   
   // 添加歌单
@@ -109,11 +108,6 @@ export class SheetInfoComponent implements OnDestroy{
       this.description.short = str.slice(0, 99) + '...';
       this.description.long = str;
     }
-  }
-  
-  toInfo(id: number) {
-    console.log(id);
-    this.router.navigate(['/songInfo', id]);
   }
   
   ngOnDestroy(): void {

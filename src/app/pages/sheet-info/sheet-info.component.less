@@ -117,13 +117,9 @@
     }
 
     .n-songtb{
-      margin-top: 27px;
       .u-title{
-        padding-bottom: 10px;
-        border-bottom: 2px solid @red-color;
         h3{
           float: left;
-          font-size: @font-size-lgs;
         }
         .sub{
           float: left;
@@ -137,84 +133,6 @@
           }
         }
       }
-    }
-
-    .table{
-      tr{
-        td{
-          cursor: pointer;
-          font-size: @font-size-lg;
-          padding: 8px 16px;
-        }
-        .first-col{
-          span{
-            display: inline-block;
-            width: 30px;
-          }
-          .ico{
-            .icon('../images/table.png', 17px, 17px);
-            background-position: 0 -103px;
-            vertical-align: sub;
-            &:hover{
-              background-position: 0 -128px;
-            }
-            &.current{
-              background-position: -20px -128px;
-            }
-          }
-        }
-        .song-name{
-          color: @link-color;
-        }
-        .time-col{
-          .icons{
-            display: none;
-            margin-bottom: 0;
-            .ico{
-              .icon('../images/table.png', 18px, 16px);
-              margin-left: 5px;
-              &.add{
-                margin-left: 0;
-                background-image: url(../../../assets/images/icon.png);
-                background-position: -0 -700px;
-                &:hover{
-                  background-position: -22px -700px;
-                }
-              }
-              &.like{
-                background-position: 0 -174px;
-                &:hover{
-                  background-position: -20px -174px;
-                }
-              }
-              &.share{
-                background-position: 0 -195px;
-                &:hover{
-                  background-position: -20px -195px;
-                }
-              }
-              &.download{
-                background-position: -81px -174px;
-                &:hover{
-                  background-position: -104px -174px;
-                }
-              }
-            }
-          }
-        }
-
-         &:hover{
-          .time-col{
-            span{
-              display: none;
-            }
-            .icons{
-              display: block;
-            }
-          }
-        }
-      }
-      
     }
   }
 }

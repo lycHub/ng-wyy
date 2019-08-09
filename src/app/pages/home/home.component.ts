@@ -1,4 +1,4 @@
-import {Component, ViewChild} from '@angular/core';
+import { Component, ViewChild, OnDestroy } from '@angular/core';
 import {Banner, HotTag, SongSheet} from "../../service/data-modals/common.models";
 import {NzCarouselComponent} from "ng-zorro-antd";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -17,7 +17,7 @@ import { User } from 'src/app/service/data-modals/member.models';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.less']
 })
-export class HomeComponent {
+export class HomeComponent implements OnDestroy {
   arr = Array(5).fill(3);
   banners: Banner[];
   hotTags: HotTag[];
@@ -35,7 +35,8 @@ export class HomeComponent {
   private destroy$ = new Subject<void>();
   
   @ViewChild(NzCarouselComponent, { static: true }) private nzCarousel: NzCarouselComponent;
-  constructor(private route: ActivatedRoute,
+  constructor(
+    private route: ActivatedRoute,
     private router: Router,
     private songServe: SongService,
     private store$: Store<AppStoreModule>,
@@ -47,10 +48,7 @@ export class HomeComponent {
     });
 
     this.appStore$ = this.store$.pipe(select('member'), takeUntil(this.destroy$));
-    this.appStore$.pipe(select(getUserInfo)).subscribe(user => {
-      console.log('user :', user);
-      this.user = user;
-    });
+    this.appStore$.pipe(select(getUserInfo)).subscribe(user => this.user = user);
   }
 
   onChangeSlide(type) {
@@ -76,6 +74,11 @@ export class HomeComponent {
   
   toInfo(id: number) {
     this.router.navigate(['/sheetInfo', id]);
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
   
   trackByBanners(index: number, banner: Banner): number { return banner.targetId; }

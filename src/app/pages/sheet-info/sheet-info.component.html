@@ -63,15 +63,15 @@
     </div>
 
 
-    <div class="n-songtb">
-      <div class="u-title clearfix">
-        <h3><span class="f-ff2">歌曲列表</span></h3>
-        <span class="sub s-fc3"><span id="playlist-track-count">46</span>首歌</span>
-        <div class="more s-fc3">播放：<strong id="play-count" class="s-fc6">1672476</strong>次</div>
+    <div class="n-songtb wy-sec">
+      <div class="u-title wy-sec-wrap clearfix">
+        <h3 class="wy-sec-tit"><span class="f-ff2">歌曲列表</span></h3>
+        <span class="sub s-fc3"><span id="playlist-track-count">{{sheetInfo.tracks.length}}</span>首歌</span>
+        <div class="more s-fc3">播放：<strong id="play-count" class="s-fc6">{{sheetInfo.playCount}}</strong>次</div>
       </div>
 
 
-      <nz-table nzTemplateMode nzBordered class="table">
+      <nz-table nzTemplateMode nzBordered class="wy-table">
           <thead>
             <tr>
               <th nzWidth="80px"></th>
@@ -88,7 +88,9 @@
                 <i class="ico play-song" [class.current]="currentIndex === i" title="播放" (click)="onAddSong(item, true)"></i>
                 <!-- <i nz-icon nzType="play-circle" nzTheme="outline"></i> -->
               </td>
-              <td class="song-name" (click)="toInfo(item.id)">{{item.name}}</td>
+              <td class="song-name">
+                  <a [routerLink]="['/songInfo', item.song.id]">{{item.name}}</a>
+              </td>
               <td class="time-col">
                  <span>{{item.dt / 1000 | FormatTime}}</span>
                 <p class="icons">

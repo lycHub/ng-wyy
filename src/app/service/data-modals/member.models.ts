@@ -1,3 +1,5 @@
+import { Song } from './common.models';
+
 export type User = {
   level?: number;
   listenSongs?: number;
@@ -6,6 +8,7 @@ export type User = {
     nickname: string;
     avatarUrl: string;
     backgroundUrl: string;
+    signature: string;
 
     // 性别
     gender: number;
@@ -20,3 +23,13 @@ export type User = {
     eventCount: number;
   };
 }
+
+type recordKey = 'allData' | 'weekData';
+export type recordVal = {
+  playCount: number;
+  score: number;
+  song: Song;
+};
+export type UserRecord = {
+  [key in recordKey]: recordVal[];
+};
