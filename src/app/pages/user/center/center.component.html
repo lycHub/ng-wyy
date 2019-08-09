@@ -36,56 +36,14 @@
       </div>
     </div>
 
-    <div class="wy-sec">
-      <div class="u-title wy-sec-wrap clearfix">
-        <h3 class="wy-sec-tit"><span class="f-ff2">听歌排行</span></h3>
-        <span class="sub s-fc3">累计听歌<span id="playlist-track-count">146</span>首</span>
-        <div class="more tab-type">
-          <span [class.active]="recordType === 1" (click)="changeRecord(1)">最近一周</span>
-          <nz-divider nzType="vertical"></nz-divider>
-          <span [class.active]="recordType === 0" (click)="changeRecord(0)">所有时间</span>
-        </div>
-      </div>
-      <nz-table nzTemplateMode nzBordered class="wy-table">
-        <thead>
-          <tr>
-            <th nzWidth="80px"></th>
-            <th>标题</th>
-            <th nzWidth="120px">时长</th>
-            <th nzWidth="220px">歌手</th>
-            <th>播放次数</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let item of userRecord | slice:0:10; index as i">
-            <td class="first-col">
-              <span>{{i + 1}}</span>
-              <i class="ico play-song" [class.current]="currentIndex === i" title="播放" (click)="onAddSong(item.song, true)"></i>
-            </td>
-            <td class="song-name">
-              <a [routerLink]="['/songInfo', item.song.id]">{{item.song.name}}</a>
-            </td>
-            <td class="time-col">
-                <span>{{item.song.dt / 1000 | FormatTime}}</span>
-              <p class="icons">
-                <i class="ico add" title="添加" (click)="onAddSong(item.song)"></i>
-                <i class="ico like" title="收藏"></i>
-                <i class="ico share" title="分享"></i>
-                <i class="ico download" title="下载"></i>
-              </p>
-            </td>
-            <td>
-              <ng-container *ngFor="let singer of item.song.ar; last as isLast">
-                <a>{{singer.name}}</a>
-                <em [hidden]="isLast">/</em>
-              </ng-container>
-            </td>
-            <td>{{item.playCount}}</td>
-          </tr>
-        </tbody>
-      </nz-table>
-      <a class="look-more">查看更多&gt;</a>
-    </div>
+    <app-records
+      [userRecord]="userRecord"
+      [listenSongs]="user.listenSongs"
+      [recordType]="recordType"
+      [currentIndex]="currentIndex"
+      (onChangeRecordType)="onChangeRecordType($event)"
+      (onAddSong)="onAddSong($event)">
+    </app-records>
   </div>
   
 </div>

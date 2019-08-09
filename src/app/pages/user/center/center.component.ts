@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { map } from 'rxjs/operators';
+import { ActivatedRoute } from '@angular/router';
+import { map, takeUntil } from 'rxjs/operators';
 import { User, recordVal } from 'src/app/service/data-modals/member.models';
 import { Song } from 'src/app/service/data-modals/common.models';
 import { Observable, Subject } from 'rxjs';
@@ -8,6 +8,9 @@ import { AppStoreModule } from 'src/app/store';
 import { MemberService, RecordType } from 'src/app/service/member/member.service';
 import { SongService } from 'src/app/service/song/song.service';
 import { MultipleReducersService } from 'src/app/store/multiple-reducers.service';
+import { Store, select } from '@ngrx/store';
+import { getCurrentSong } from 'src/app/store/selectors/player.selector';
+import { findIndex } from 'src/app/utils/array';
 
 @Component({
   selector: 'app-center',
@@ -19,7 +22,7 @@ export class CenterComponent implements OnInit, OnDestroy {
   testArr: number[];
   userRecord: recordVal[];
 
-  recordType = RecordType.weekData
+  recordType = RecordType.weekData;
 
   currentIndex = -1;
   private currentSong: Song;
@@ -31,12 +34,14 @@ export class CenterComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private songServe: SongService,
     private multipleReducerServe: MultipleReducersService,
+    private store$: Store<AppStoreModule>,
     private memberServe: MemberService
   ) {
     this.route.data.pipe(map(res => res.user)).subscribe(([user, userRecord]) => {
       // console.log('userRecord :', userRecord);
       this.user = user;
       this.userRecord = userRecord;
+      this.listenCurrentSong();
     });
   }
 
@@ -44,7 +49,22 @@ export class CenterComponent implements OnInit, OnDestroy {
     // this.testArr = Array(10).fill(3);
   }
 
-  changeRecord(type: number) {
+  // 监听currentSong
+  private listenCurrentSong() {
+    this.appStore$ = this.store$.pipe(select('player'), takeUntil(this.destroy$));
+    this.appStore$.pipe(select(getCurrentSong)).subscribe(song => {
+      // console.log('listenCurrentSong :', song);
+      this.currentSong = song;
+      if (song) {
+        const songs = this.userRecord.map(item => item.song);
+        this.currentIndex = findIndex(songs, song);
+      }else{
+        this.currentIndex = -1;
+      }
+    });
+  }
+
+  onChangeRecordType(type: number) {
     if (this.recordType !== type) {
       this.recordType = type;
       this.memberServe.userRecord(this.user.profile.userId, this.recordType)
@@ -54,7 +74,7 @@ export class CenterComponent implements OnInit, OnDestroy {
 
 
    // 添加一首歌曲
-   onAddSong(song: Song, play = false) {
+   onAddSong([song, play]) {
     if (this.currentSong && this.currentSong.id === song.id) {
       console.log('存在');
     }else{
