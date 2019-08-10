@@ -2,7 +2,7 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { ModalTypes } from 'src/app/store/reducers/member.reducer';
 
 @Component({
-  selector: 'app-wy-login-start',
+  selector: 'app-wy-login-default',
   template: `<div class="cnzt">
   <div class="select-log">
     <div class="mid-wrap">
@@ -16,9 +16,9 @@ import { ModalTypes } from 'src/app/store/reducers/member.reducer';
     </div>
   </div>
 </div>`,
-  styleUrls: ['./wy-login-start.component.less']
+  styleUrls: ['./wy-login-default.component.less']
 })
-export class WyLoginStartComponent implements OnInit {
+export class WyLoginDefaultComponent implements OnInit {
   @Output() onChangeModalType = new EventEmitter<ModalTypes>();
   constructor() { }
 

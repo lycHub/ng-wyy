@@ -8,10 +8,10 @@ import { WyLoginPhoneComponent } from './wy-login-phone/wy-login-phone.component
 import { WyLayerRegisterComponent } from './wy-layer-register/wy-layer-register.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NzInputModule, NzAlertModule, NzCheckboxModule, NzFormModule, NzSpinModule } from 'ng-zorro-antd';
-import { WyLoginStartComponent } from './wy-login-start/wy-login-start.component';
+import { WyLoginDefaultComponent } from './wy-login-default/wy-login-default.component';
 
 @NgModule({
-  declarations: [WyLayerModalComponent, WyLoginPhoneComponent, WyLayerRegisterComponent, WyLoginStartComponent],
+  declarations: [WyLayerModalComponent, WyLoginPhoneComponent, WyLayerRegisterComponent, WyLoginDefaultComponent],
   imports: [
     CommonModule,
     NzButtonModule,
@@ -25,6 +25,6 @@ import { WyLoginStartComponent } from './wy-login-start/wy-login-start.component
     NzFormModule
   ],
   providers: [OverlayContainer],
-  exports: [WyLayerModalComponent, WyLoginPhoneComponent, WyLayerRegisterComponent, WyLoginStartComponent]
+  exports: [WyLayerModalComponent, WyLoginPhoneComponent, WyLayerRegisterComponent, WyLoginDefaultComponent]
 })
 export class WyLayerModule { }
