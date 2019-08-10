@@ -12,6 +12,11 @@ export enum ModalTypes {
   Default = 'default'
 }
 
+export type ShareParams = {
+  id: number;
+  type: string;
+}
+
 
 export type MemberState = {
 
@@ -23,6 +28,12 @@ export type MemberState = {
 
   // 会员信息
   userInfo: User;
+
+  // 收藏歌单的id
+  likeId?: number;
+
+  // 分享参数
+  shareParams?: ShareParams;
 }
 
 
@@ -40,6 +51,7 @@ const reducer = createReducer(
   on(MemberActions.SetModalVisible, (state, { visible }) => ({ ...state, modalVisible: visible })),
   on(MemberActions.SetModalType, (state, { modalType }) => ({ ...state, modalType })),
   on(MemberActions.SetUserInfo, (state, { user }) => ({ ...state, userInfo: user })),
+  on(MemberActions.SetLikeId, (state, { id }) => ({ ...state, likeId: id })),
 );
 
 export function memberReducer(state: MemberState | undefined, action: Action) {

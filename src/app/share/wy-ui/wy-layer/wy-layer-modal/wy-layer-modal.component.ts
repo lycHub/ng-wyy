@@ -36,6 +36,7 @@ export class WyLayerModalComponent implements OnInit {
   @Output() readonly onAfterOpen = new EventEmitter<void>(); // Trigger when modal open(visible) after animations
   @Output() readonly onAfterClose = new EventEmitter(); // Trigger when modal leave-animation over
   @Output() readonly onVisibleChange = new EventEmitter<boolean>();
+  @Output() readonly onLoadSheetList = new EventEmitter<void>();
   
 
   showModal: 'show' | 'hide';
@@ -102,6 +103,9 @@ export class WyLayerModalComponent implements OnInit {
   }
   
   private watchModalType(type: ModalTypes) {
+    if (type === ModalTypes.Like) {
+      this.onLoadSheetList.emit();
+    }
     this.currentModal = type;
   }
 

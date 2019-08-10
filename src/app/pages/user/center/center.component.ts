@@ -45,6 +45,7 @@ export class CenterComponent implements OnInit, OnDestroy {
     private memberServe: MemberService
   ) {
     this.route.data.pipe(map(res => res.user)).subscribe(([user, userRecord, userSheet]) => {
+      // console.log('user :', user);
       this.user = user;
       this.userRecord = userRecord.slice(0, 10);
       this.userSheet = userSheet;
@@ -98,6 +99,12 @@ export class CenterComponent implements OnInit, OnDestroy {
         }
       });
     });
+  }
+
+
+  // 收藏歌曲
+  onLikeSong(id: number) {
+    this.multipleReducerServe.likeSheet(id);
   }
 
 

@@ -1,7 +1,6 @@
-/*export type HttpRes<T> = {
+export type HttpRes = {
   code: number;
-  [key: string]: T;
-}*/
+}
 
 
 export type Banner = {

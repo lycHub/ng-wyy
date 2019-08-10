@@ -42,6 +42,7 @@
       [recordType]="recordType"
       [currentIndex]="currentIndex"
       (onChangeRecordType)="onChangeRecordType($event)"
+      (onLikeSong)="onLikeSong($event)"
       (onAddSong)="onAddSong($event)">
     </app-records>
     <a class="look-more" (click)="onLookMore()">查看更多&gt;</a>
@@ -51,7 +52,7 @@
       <div class="u-title wy-sec-wrap clearfix">
         <h3 class="wy-sec-tit">
           <span class="f-ff2">我创建的歌单 </span>
-          <span class="sub s-fc3">({{userSheet.subscribed.self}})</span>
+          <span class="sub s-fc3">({{userSheet.self.length}})</span>
         </h3>
       </div>
 

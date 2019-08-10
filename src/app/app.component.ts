@@ -12,7 +12,7 @@ import { Store } from '@ngrx/store';
 import { SetModalVisible, SetUserInfo, SetModalType } from './store/actions/member.actions';
 import { codeJson } from './utils/base64';
 import { StorageService } from './service/storage.service';
-import { User } from './service/data-modals/member.models';
+import { User, UserSheet } from './service/data-modals/member.models';
 import { ModalTypes } from './store/reducers/member.reducer';
 import { MultipleReducersService } from './store/multiple-reducers.service';
 
@@ -27,6 +27,7 @@ export class AppComponent {
   navEnd: Observable<NavigationEnd>;
   loadPercent = 0;
   user: User;
+  userSheet: UserSheet;
   
   menu = [{
     title: '发现',
@@ -100,6 +101,22 @@ export class AppComponent {
   onChangeModalType(type = ModalTypes.Default) {
     this.store$.dispatch(SetModalType({ modalType: type }));
   }
+
+
+  // 获取歌单列表
+  onLoadSheetList() {
+    if (this.user) {
+      this.memberServe.userSheets(this.user.profile.userId).subscribe(userSheet => {
+        this.userSheet = userSheet;
+        this.store$.dispatch(SetModalVisible({ visible: true }));
+      });
+    }else {
+      this.openModal(ModalTypes.Default);
+    }
+    
+  }
+
+
 
   openModal(type: ModalTypes) {
     this.multipleReducerServe.showModal(type);

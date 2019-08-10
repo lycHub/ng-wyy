@@ -11,6 +11,8 @@ import {takeUntil} from "rxjs/internal/operators";
 import {getCurrentSong} from "../../store/selectors/player.selector";
 import {findIndex} from "../../utils/array";
 import { SheetService } from '../../service/sheet/sheet.service';
+import { MemberService } from '../../service/member/member.service';
+import { NzMessageService } from 'ng-zorro-antd';
 
 @Component({
   selector: 'app-sheet-info',
@@ -40,11 +42,13 @@ export class SheetInfoComponent implements OnDestroy{
     private route: ActivatedRoute,
     private songServe: SongService,
     private sheetServe: SheetService,
+    private memberServe: MemberService,
+    private messageServe: NzMessageService,
     private multipleReducerServe: MultipleReducersService,
     private store$: Store<AppStoreModule>
   ) {
     this.route.data.pipe(map(res => res.sheetInfo)).subscribe(res => {
-      console.log('sheetInfo :', res);
+      // console.log('sheetInfo :', res);
       this.sheetInfo = res;
       
       if (res.description) {
@@ -118,6 +122,27 @@ export class SheetInfoComponent implements OnDestroy{
     }
   }
   
+
+  // 收藏歌曲
+  onLikeSong(id: number) {
+    this.multipleReducerServe.likeSheet(id);
+  }
+
+  // 收藏歌单
+  onLikeSheet(id: number) {
+    this.memberServe.likeSheet(id).subscribe(code => {
+      if (code === 200) {
+        this.alertMessage('success', '收藏成功');
+      }else{
+        this.alertMessage('error', '收藏失败');
+      }
+    }, error => this.alertMessage('error', '收藏失败'));
+  }
+
+  private alertMessage(type: string, msg: string) {
+    this.messageServe.create(type, msg);
+  }
+
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();

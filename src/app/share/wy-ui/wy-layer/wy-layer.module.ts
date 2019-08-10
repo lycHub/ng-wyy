@@ -6,25 +6,29 @@ import { OverlayModule, OverlayContainer } from '@angular/cdk/overlay';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { WyLoginPhoneComponent } from './wy-login-phone/wy-login-phone.component';
 import { WyLayerRegisterComponent } from './wy-layer-register/wy-layer-register.component';
-import { ReactiveFormsModule } from '@angular/forms';
-import { NzInputModule, NzAlertModule, NzCheckboxModule, NzFormModule, NzSpinModule } from 'ng-zorro-antd';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { NzInputModule, NzAlertModule, NzCheckboxModule, NzFormModule, NzSpinModule, NzListModule, NzIconModule } from 'ng-zorro-antd';
 import { WyLoginDefaultComponent } from './wy-login-default/wy-login-default.component';
+import { WyLoginLikeComponent } from './wy-login-like/wy-login-like.component';
 
 @NgModule({
-  declarations: [WyLayerModalComponent, WyLoginPhoneComponent, WyLayerRegisterComponent, WyLoginDefaultComponent],
+  declarations: [WyLayerModalComponent, WyLoginPhoneComponent, WyLayerRegisterComponent, WyLoginDefaultComponent, WyLoginLikeComponent],
   imports: [
     CommonModule,
     NzButtonModule,
     OverlayModule,
     DragDropModule,
+    FormsModule,
     ReactiveFormsModule,
     NzInputModule,
     NzCheckboxModule,
     NzSpinModule,
     NzAlertModule,
+    NzListModule,
+    NzIconModule,
     NzFormModule
   ],
   providers: [OverlayContainer],
-  exports: [WyLayerModalComponent, WyLoginPhoneComponent, WyLayerRegisterComponent, WyLoginDefaultComponent]
+  exports: [WyLayerModalComponent, WyLoginPhoneComponent, WyLayerRegisterComponent, WyLoginDefaultComponent, WyLoginLikeComponent]
 })
 export class WyLayerModule { }

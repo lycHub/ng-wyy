@@ -83,6 +83,11 @@ export class RecordDetailComponent implements OnInit, OnDestroy {
     }
   }
 
+   // 收藏歌曲
+   onLikeSong(id: number) {
+    this.multipleReducerServe.likeSheet(id);
+  }
+
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();

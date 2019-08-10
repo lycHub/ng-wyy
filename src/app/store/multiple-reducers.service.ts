@@ -6,7 +6,7 @@ import { shuffle, findIndex } from '../utils/array';
 import { PlayerState, CurrentActions } from './reducers/player.reducer';
 import {Song} from "../service/data-modals/common.models";
 import { MemberState, ModalTypes } from './reducers/member.reducer';
-import { SetModalType, SetModalVisible } from './actions/member.actions';
+import { SetModalType, SetModalVisible, SetLikeId } from './actions/member.actions';
 
 @Injectable({
   providedIn: AppStoreModule
@@ -108,9 +108,16 @@ export class MultipleReducersService {
 
 
 
-  // 线上弹窗
+  // 显示弹窗
   showModal(modalType: ModalTypes) {
     this.store$.dispatch(SetModalType({ modalType }));
     this.store$.dispatch(SetModalVisible({ visible: true }));
+  }
+
+
+  // 收藏歌单
+  likeSheet(id: number) {
+    this.store$.dispatch(SetModalType({ modalType: ModalTypes.Like }));
+    this.store$.dispatch(SetLikeId({ id }));
   }
 }

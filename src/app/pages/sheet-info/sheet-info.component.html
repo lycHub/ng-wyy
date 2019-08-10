@@ -29,7 +29,7 @@
               </button>
               <button nz-button nzType="primary" class="add" (click)="onAddSongs(sheetInfo.tracks)">+</button>
             </nz-button-group>
-            <button nz-button class="btn like">
+            <button nz-button class="btn like" (click)="onLikeSheet(sheetInfo.id)">
               <span>收藏</span>({{sheetInfo.subscribedCount}})
             </button>
             <button nz-button class="btn share">
@@ -95,7 +95,7 @@
                  <span>{{item.dt / 1000 | FormatTime}}</span>
                 <p class="icons">
                   <i class="ico add" title="添加" (click)="onAddSong(item)"></i>
-                  <i class="ico like" title="收藏"></i>
+                  <i class="ico like" title="收藏" (click)="onLikeSong(item.id)"></i>
                   <i class="ico share" title="分享"></i>
                   <i class="ico download" title="下载"></i>
                 </p>

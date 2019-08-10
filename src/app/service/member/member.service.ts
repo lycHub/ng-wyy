@@ -9,8 +9,8 @@ import { LoginParams } from 'src/app/share/wy-ui/wy-layer/wy-login-phone/wy-logi
 import { formatSinger } from 'src/app/utils/format';
 import { SongSheet } from '../data-modals/common.models';
 
-export type SignBack = {
-  point: number;
+export type sampleBack = {
+  [key: string]: any;
   code: number;
 }
 
@@ -28,12 +28,12 @@ export class MemberService {
   constructor(private http: HttpClient) {}
 
   // 签到/daily_signin
-  signIn(): Observable<SignBack | Observable<never>> {
+  signIn(): Observable<sampleBack | Observable<never>> {
     const params = new HttpParams({fromString: queryString.stringify({ type: 1 })});
     return this.http.get('/api/daily_signin', { params })
     .pipe(map((res: { code: number; point?: number; msg?: string; }) => {
       if (res.code === 200) {
-        return res as SignBack;
+        return res as sampleBack;
       }else{
         return throwError(res);
       }
@@ -88,5 +88,27 @@ export class MemberService {
         subscribed: list.filter(item => item.subscribed)
       }
     }))
+  }
+
+
+  // 新建歌单
+  createSheet(name: string): Observable<sampleBack> {
+    const params = new HttpParams({fromString: queryString.stringify({ name })});
+    return this.http.get('/api/playlist/create', { params }).pipe(map(res => res as sampleBack));
+  }
+
+
+  // 收藏歌单
+  likeSheet(id: number, t = 1): Observable<number> {
+    const params = new HttpParams({fromString: queryString.stringify({ id, t })});
+    return this.http.get('/api/playlist/subscribe', { params })
+    .pipe(map((res: { code: number }) => res.code));
+  }
+
+  // 收藏歌曲
+  likeSong(pid: number, tracks: number, op = 'add'): Observable<number> {
+    const params = new HttpParams({fromString: queryString.stringify({ pid, tracks: tracks, op })});
+    return this.http.get('/api/playlist/tracks', { params })
+    .pipe(map((res: { code: number }) => res.code));
   }
 }
