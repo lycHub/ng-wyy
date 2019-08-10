@@ -41,6 +41,7 @@ export type SongSheet = {
   shareCount: number;
   commentCount: number;
   tracks: Song[];
+  subscribed: boolean;  // 是否收藏
 }
 
 

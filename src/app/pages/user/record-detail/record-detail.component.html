@@ -1,1 +1,12 @@
-<p>record-detail works!</p>
+<div class="record-detail wrap feature-wrap">
+  <div class="page-wrap">
+    <app-records
+      [userRecord]="userRecord"
+      [listenSongs]="user.listenSongs"
+      [recordType]="recordType"
+      [currentIndex]="currentIndex"
+      (onChangeRecordType)="onChangeRecordType($event)"
+      (onAddSong)="onAddSong($event)">
+    </app-records>
+  </div>
+</div>

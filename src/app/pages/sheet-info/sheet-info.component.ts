@@ -44,9 +44,13 @@ export class SheetInfoComponent implements OnDestroy{
     private store$: Store<AppStoreModule>
   ) {
     this.route.data.pipe(map(res => res.sheetInfo)).subscribe(res => {
-      // console.log('sheetInfo :', res);
+      console.log('sheetInfo :', res);
       this.sheetInfo = res;
-      this.changeDesc(res.description);
+      
+      if (res.description) {
+        this.changeDesc(res.description);
+      }
+      
       this.listenCurrentSong();
     });
   }
@@ -69,7 +73,9 @@ export class SheetInfoComponent implements OnDestroy{
   playSong(id: number) {
     this.sheetServe.getSongSheetDetail(id).subscribe(sheet => {
       this.songServe.getSongList(sheet.tracks).subscribe(list => {
-        this.multipleReducerServe.selectPlay(({ list, index: 0 }));
+        if (list.length) {
+          this.multipleReducerServe.selectPlay(({ list, index: 0 }));
+        }
       });
     });
   }

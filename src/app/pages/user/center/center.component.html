@@ -44,6 +44,47 @@
       (onChangeRecordType)="onChangeRecordType($event)"
       (onAddSong)="onAddSong($event)">
     </app-records>
+    <a class="look-more" (click)="onLookMore()">查看更多&gt;</a>
+
+
+    <div class="wy-sec sheets">
+      <div class="u-title wy-sec-wrap clearfix">
+        <h3 class="wy-sec-tit">
+          <span class="f-ff2">我创建的歌单 </span>
+          <span class="sub s-fc3">({{userSheet.subscribed.self}})</span>
+        </h3>
+      </div>
+
+      <div class="sheet-list clearfix">
+        <app-single-sheet
+          class="sheet-item"
+          *ngFor="let item of userSheet.self;"
+          [sheet]="item"
+          (onPlay)="playSong($event)"
+          [routerLink]="['/sheetInfo', item.id]">
+        </app-single-sheet>
+      </div>
+    </div>
+
+
+    <div class="wy-sec sheets" *ngIf="userSheet.subscribed.length">
+      <div class="u-title wy-sec-wrap clearfix">
+        <h3 class="wy-sec-tit">
+          <span class="f-ff2">收藏的歌单 </span>
+          <span class="sub s-fc3">({{userSheet.subscribed.length}})</span>
+        </h3>
+      </div>
+
+      <div class="sheet-list clearfix">
+        <app-single-sheet
+          class="sheet-item"
+          *ngFor="let item of userSheet.subscribed;"
+          [sheet]="item"
+          (onPlay)="playSong($event)"
+          [routerLink]="['/sheetInfo', item.id]">
+        </app-single-sheet>
+      </div>
+    </div>
   </div>
   
 </div>

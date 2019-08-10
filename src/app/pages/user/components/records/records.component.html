@@ -8,7 +8,7 @@
         <span [class.active]="recordType === 0" (click)="onChangeRecordType.emit(0)">所有时间</span>
       </div>
     </div>
-    <nz-table nzTemplateMode nzBordered class="wy-table">
+    <nz-table #basicTable [nzData]="userRecord" [nzFrontPagination]="false" nzBordered nzNoResult="暂无音乐！" class="wy-table">
       <thead>
         <tr>
           <th nzWidth="80px"></th>
@@ -19,7 +19,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let item of userRecord | slice:0:10; index as i">
+        <tr *ngFor="let item of basicTable.data; index as i">
           <td class="first-col">
             <span>{{i + 1}}</span>
             <i class="ico play-song" [class.current]="currentIndex === i" title="播放" (click)="onAddSong.emit([item.song, true])"></i>
@@ -46,5 +46,4 @@
         </tr>
       </tbody>
     </nz-table>
-    <a class="look-more" (click)="lookMore()">查看更多&gt;</a>
   </div>

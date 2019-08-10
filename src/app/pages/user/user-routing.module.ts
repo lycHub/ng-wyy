@@ -7,7 +7,7 @@ import { RecordDetailComponent } from './record-detail/record-detail.component';
 const routes: Routes = [{
   path: '', component: CenterComponent, data: { title: '个人中心' }, resolve: { user: UserCenterResolverService }
 }, {
-  path: 'record-detail', component: RecordDetailComponent, data: { title: '听歌记录' }
+  path: 'record-detail', component: RecordDetailComponent, data: { title: '听歌记录' }, resolve: { user: UserCenterResolverService }
 }];
 
 @NgModule({

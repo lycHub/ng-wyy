@@ -1,8 +1,7 @@
-import { Component, OnInit, Input, ChangeDetectionStrategy, Output, EventEmitter } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy, Output, EventEmitter } from '@angular/core';
 import { recordVal } from 'src/app/service/data-modals/member.models';
 import { RecordType } from 'src/app/service/member/member.service';
 import { Song } from 'src/app/service/data-modals/common.models';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-records',
@@ -10,7 +9,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./records.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class RecordsComponent implements OnInit {
+export class RecordsComponent {
   @Input() userRecord: recordVal[];
   @Input() listenSongs = 0;
   @Input() currentIndex: number;
@@ -18,12 +17,4 @@ export class RecordsComponent implements OnInit {
 
   @Output() onChangeRecordType = new EventEmitter<number>();
   @Output() onAddSong = new EventEmitter<[Song, boolean]>();
-  constructor(private router: Router) { }
-
-  ngOnInit() {
-  }
-
-  lookMore() {
-    this.router.navigate(['/record-detail']);
-  }
 }

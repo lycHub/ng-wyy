@@ -1,4 +1,4 @@
-import { Song } from './common.models';
+import { Song, SongSheet } from './common.models';
 
 export type User = {
   level?: number;
@@ -33,3 +33,9 @@ export type recordVal = {
 export type UserRecord = {
   [key in recordKey]: recordVal[];
 };
+
+
+export type UserSheet = {
+  self: SongSheet[],
+  subscribed: SongSheet[]
+}

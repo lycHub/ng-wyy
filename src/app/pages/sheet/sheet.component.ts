@@ -47,7 +47,9 @@ export class SheetComponent implements OnInit {
   playSong(id: number) {
     this.sheetServe.getSongSheetDetail(id).subscribe(sheet => {
       this.songServe.getSongList(sheet.tracks).subscribe(list => {
-        this.multipleReducerServe.selectPlay(({ list, index: 0 }));
+        if (list.length) {
+          this.multipleReducerServe.selectPlay(({ list, index: 0 }));
+        }
       });
     });
   }
