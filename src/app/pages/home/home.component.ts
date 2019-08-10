@@ -12,6 +12,8 @@ import { Observable, Subject } from 'rxjs';
 import { getUserInfo } from '../../store/selectors/member.selector';
 import { User } from 'src/app/service/data-modals/member.models';
 import { SheetService } from '../../service/sheet/sheet.service';
+import { ModalTypes } from '../../store/reducers/member.reducer';
+import { SetModalType } from '../../store/actions/member.actions';
 
 @Component({
   selector: 'app-home',
@@ -71,7 +73,7 @@ export class HomeComponent implements OnDestroy {
   }
 
   openModal() {
-    this.store$.dispatch(SetModalVisible({ visible: true }));
+    this.multipleReducerServe.showModal(ModalTypes.Default);
   }
 
   

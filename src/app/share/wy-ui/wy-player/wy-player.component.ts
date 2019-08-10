@@ -145,10 +145,6 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
       this.appStore$.pipe(select(item.type)).subscribe(item.cb);
     });
     // this.appStore$.pipe(select(getPlayMode)).subscribe(mode => this.watchMode(mode));
-    // this.appStore$.pipe(select(getSongList)).subscribe(list => this.watchList(list, 'songList'));
-    // this.appStore$.pipe(select(getPlayList)).subscribe(list => this.watchList(list, 'playList'));
-    // this.appStore$.pipe(select(getCurrentIndex)).subscribe(index => this.watchCurrentIndex(index));
-    // this.appStore$.pipe(select(getCurrentSong)).subscribe(song => this.watchCurrentSong(song));
   }
 
 

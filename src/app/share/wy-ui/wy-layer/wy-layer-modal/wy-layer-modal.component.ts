@@ -1,23 +1,21 @@
 import { Component, EventEmitter, OnInit, Input, Output, ElementRef, ViewContainerRef, Inject, ViewChild, TemplateRef, Type, ComponentRef, Renderer2 } from '@angular/core';
-import { OverlayRef, Overlay, OverlayKeyboardDispatcher, BlockScrollStrategy, OverlayConfig } from '@angular/cdk/overlay';
+import { OverlayRef, Overlay, OverlayKeyboardDispatcher, BlockScrollStrategy, OverlayConfig, OverlayContainer } from '@angular/cdk/overlay';
 import { DOCUMENT } from '@angular/common';
 import { ESCAPE } from '@angular/cdk/keycodes';
 import { Subject, Observable } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { WINDOW } from '../../../../core/inject-tokens';
-import { trigger, transition, animate, style, state, AnimationEvent } from '@angular/animations';
+import { trigger, transition, animate, style, state } from '@angular/animations';
 import { AppStoreModule } from 'src/app/store';
 import { Store, select } from '@ngrx/store';
 import { getModalVisible } from 'src/app/store/selectors/member.selector';
 import { SetModalVisible } from 'src/app/store/actions/member.actions';
+import { ModalTypes } from 'src/app/store/reducers/member.reducer';
+import { getModalType } from '../../../../store/selectors/member.selector';
 
 type DomSize = { w: number; h: number };
 
-export enum ModalTypes {
-  Register = 'register',
-  LoginByPhone = 'loginByPhone',
-  Default = 'default'
-}
+
 
 @Component({
   selector: 'app-wy-layer-modal',
@@ -32,7 +30,6 @@ export enum ModalTypes {
 export class WyLayerModalComponent implements OnInit {
   @Input() nzGetContainer: HTMLElement | OverlayRef; // [STATIC]
   @Input() nzContent: TemplateRef<{}>;
-  @Input() currentModal = ModalTypes.Default;
   @Input() showSpin = false;
 
 
@@ -45,6 +42,8 @@ export class WyLayerModalComponent implements OnInit {
   modalTitle = {
     register: '注册',
     loginByPhone: '手机登陆',
+    share: '分享',
+    like: '收藏',
     default: ''
   }
   private isVisible = false;
@@ -54,6 +53,8 @@ export class WyLayerModalComponent implements OnInit {
   private resizeHandler: () => void;
   private modalSize: DomSize;
 
+  private currentModal = ModalTypes.Default;
+  private overLayContainerEl: HTMLElement;
   private appStore$: Observable<AppStoreModule>;
   private destroy$ = new Subject<void>();
 
@@ -65,6 +66,7 @@ export class WyLayerModalComponent implements OnInit {
     private elementRef: ElementRef,
     private rd: Renderer2,
     private store$: Store<AppStoreModule>,
+    private overLayContainerServe: OverlayContainer,
     @Inject(DOCUMENT) private doc: Document,
     @Inject(WINDOW) private win: Window
   ) {
@@ -72,6 +74,7 @@ export class WyLayerModalComponent implements OnInit {
     this.scrollStrategy = this.overlay.scrollStrategies.block();
     this.appStore$ = this.store$.pipe(select('member'), takeUntil(this.destroy$));
     this.appStore$.pipe(select(getModalVisible)).subscribe(visible => this.watchModalVisible(visible));
+    this.appStore$.pipe(select(getModalType)).subscribe(type => this.watchModalType(type));
   }
 
   ngOnInit() {
@@ -90,11 +93,16 @@ export class WyLayerModalComponent implements OnInit {
     this.resizeHandler = this.rd.listen('window', 'resize', () => {
       this.keepCenter(modal, this.modalSize);
     });
+    this.overLayContainerEl = this.overLayContainerServe.getContainerElement();
   }
 
   private watchModalVisible(visible: boolean) {
     this.isVisible = visible;
     this.handleVisibleStateChange(visible);
+  }
+  
+  private watchModalType(type: ModalTypes) {
+    this.currentModal = type;
   }
 
 
@@ -108,18 +116,26 @@ export class WyLayerModalComponent implements OnInit {
   private handleVisibleStateChange(visible: boolean) {
     if (visible) {
       this.showModal = 'show';
+      this.changePointerEvents('auto');
+
       // Hide scrollbar at the first time when shown up
       this.scrollStrategy.enable();
       this.overlayKeyboardDispatcher.add(this.overlayRef);
       this.onAfterOpen.emit();
     } else {
       this.showModal = 'hide';
+      this.changePointerEvents();
       this.overlayKeyboardDispatcher.remove(this.overlayRef);
       this.onAfterClose.emit();
       this.scrollStrategy.disable();
     }
   }
 
+  private changePointerEvents(type = 'none') {
+    if (this.overLayContainerEl) {
+      this.overLayContainerEl.style.pointerEvents = type;
+    }
+  }
   
   private keydownListener(event: KeyboardEvent): void {
     if (event.keyCode === ESCAPE) {
@@ -129,12 +145,6 @@ export class WyLayerModalComponent implements OnInit {
 
   private hide() {
     this.store$.dispatch(SetModalVisible({ visible: false }));
-  }
-
-  onAnimateDone(event: AnimationEvent) {
-    if (event.toState === 'hide') {
-      this.currentModal = ModalTypes.Default;
-    }
   }
 
 
@@ -168,5 +178,6 @@ export class WyLayerModalComponent implements OnInit {
     }
     this.destroy$.next();
     this.destroy$.complete();
+    this.changePointerEvents();
   }
 }

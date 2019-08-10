@@ -5,14 +5,18 @@ import { SetSongList, SetPlayList, SetCurrentIndex, SetCurrentAction } from './a
 import { shuffle, findIndex } from '../utils/array';
 import { PlayerState, CurrentActions } from './reducers/player.reducer';
 import {Song} from "../service/data-modals/common.models";
+import { MemberState, ModalTypes } from './reducers/member.reducer';
+import { SetModalType, SetModalVisible } from './actions/member.actions';
 
 @Injectable({
   providedIn: AppStoreModule
 })
 export class MultipleReducersService {
   private playState: PlayerState;
+  private memberState: MemberState;
   constructor(private store$: Store<AppStoreModule>) {
     this.store$.pipe(select('player')).subscribe(res => this.playState = res);
+    this.store$.pipe(select('member')).subscribe(res => this.memberState = res);
   }
 
   // 选择播放列表
@@ -100,5 +104,13 @@ export class MultipleReducersService {
     this.store$.dispatch(SetPlayList({ list: [] }));
     this.store$.dispatch(SetCurrentIndex({ index: -1 }));
     this.store$.dispatch(SetCurrentAction({ action: CurrentActions.Clear }));
+  }
+
+
+
+  // 线上弹窗
+  showModal(modalType: ModalTypes) {
+    this.store$.dispatch(SetModalType({ modalType }));
+    this.store$.dispatch(SetModalVisible({ visible: true }));
   }
 }

@@ -4,16 +4,17 @@ import { Observable, from } from 'rxjs/index';
 import {filter, map, mergeMap} from "rxjs/internal/operators";
 import {WINDOW} from "./core/inject-tokens";
 import { Title, Meta } from '@angular/platform-browser';
-import { ModalTypes } from './share/wy-ui/wy-layer/wy-layer-modal/wy-layer-modal.component';
 import { LoginParams } from './share/wy-ui/wy-layer/wy-login-phone/wy-login-phone.component';
 import { MemberService } from './service/member/member.service';
 import { NzMessageService } from 'ng-zorro-antd';
 import { AppStoreModule } from './store';
 import { Store } from '@ngrx/store';
-import { SetModalVisible, SetUserInfo } from './store/actions/member.actions';
+import { SetModalVisible, SetUserInfo, SetModalType } from './store/actions/member.actions';
 import { codeJson } from './utils/base64';
 import { StorageService } from './service/storage.service';
 import { User } from './service/data-modals/member.models';
+import { ModalTypes } from './store/reducers/member.reducer';
+import { MultipleReducersService } from './store/multiple-reducers.service';
 
 @Component({
   selector: 'app-root',
@@ -21,8 +22,6 @@ import { User } from './service/data-modals/member.models';
   styleUrls: ['./app.component.less']
 })
 export class AppComponent {
-  
-  currentModal = ModalTypes.Default;
   showSpin = false;
 
   navEnd: Observable<NavigationEnd>;
@@ -52,6 +51,7 @@ export class AppComponent {
     private meta: Meta,
     private message: NzMessageService,
     private store$: Store<AppStoreModule>,
+    private multipleReducerServe: MultipleReducersService,
     private storageServe: StorageService,
     @Inject(WINDOW) private win: Window) {
     const userId = this.storageServe.getStorage('wyUserId');
@@ -97,9 +97,12 @@ export class AppComponent {
     });
   }
 
-  openModal(type: string) {
-    this.currentModal = ModalTypes[type];
-    this.store$.dispatch(SetModalVisible({ visible: true }));
+  onChangeModalType(type = ModalTypes.Default) {
+    this.store$.dispatch(SetModalType({ modalType: type }));
+  }
+
+  openModal(type: ModalTypes) {
+    this.multipleReducerServe.showModal(type);
   }
   
   // 退出

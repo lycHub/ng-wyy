@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
@@ -9,6 +9,8 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 export class WyLayerRegisterComponent {
 
   formModel: FormGroup;
+  @Output() onChangeModalType = new EventEmitter<void>();
+
   constructor(private fb: FormBuilder) {
     this.formModel = this.fb.group({
       phone: ['', [Validators.required, Validators.pattern(/^1\d{10}$/)]],

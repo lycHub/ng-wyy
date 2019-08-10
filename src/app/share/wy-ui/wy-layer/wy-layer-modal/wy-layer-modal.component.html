@@ -1,6 +1,5 @@
 <div class="m-layer"
 [@showHide]="showModal"
-(@showHide.done)="onAnimateDone($event)"
 #modalContainer
 cdkDragBoundary=".cdk-overlay-container"
 cdkDrag>
@@ -12,33 +11,22 @@ cdkDrag>
         <ng-content select="[name=login]"></ng-content>
       </ng-container>
       <ng-container *ngSwitchCase="'register'">
-          <ng-content select="[name=register]"></ng-content>
+        <ng-content select="[name=register]"></ng-content>
+      </ng-container>
+      <ng-container *ngSwitchCase="'share'">
+        <ng-content select="[name=share]"></ng-content>
+      </ng-container>
+      <ng-container *ngSwitchCase="'like'">
+        <ng-content select="[name=like]"></ng-content>
       </ng-container>
       <ng-container *ngSwitchDefault>
-        <div class="cnzt">
-            <div class="select-log">
-              <div class="mid-wrap">
-                <div class="pic">
-                  <img src="../assets/images/platform.png" />
-                </div>
-                <div class="methods">
-                  <button nz-button nzType="primary" nzSize="large" nzBlock (click)="currentModal = 'loginByPhone'">手机号登陆</button>
-                  <button nz-button nzSize="large" nzBlock (click)="currentModal = 'register'">注册</button>
-                </div>
-              </div>
-            </div>
-          </div>
+        <ng-content></ng-content>
       </ng-container>
     </ng-container>
     
     
 
     <div class="zcls" title="关闭弹窗" (mousedown)="hide()"></div>
-
-    <div class="m-footer clearfix" [hidden]="currentModal === 'default'">
-      <a (click)="currentModal = 'default'"><  其他登录方式</a>
-      <a (click)="currentModal = 'register'" [hidden]="currentModal === 'register'">没有帐号？免费注册  ></a>
-    </div>
     <nz-spin nzTip="loading..." class="spin" *ngIf="showSpin"></nz-spin>
   </div>
  
