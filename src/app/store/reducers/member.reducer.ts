@@ -1,7 +1,6 @@
 import { createReducer, Action, on } from '@ngrx/store';
 import * as MemberActions from '../actions/member.actions';
 import { User } from 'src/app/service/data-modals/member.models';
-import { SetUserInfo } from '../actions/member.actions';
 
 
 export enum ModalTypes {
@@ -15,6 +14,7 @@ export enum ModalTypes {
 export type ShareParams = {
   id: number;
   type: string;
+  txt: string;
 }
 
 
@@ -38,8 +38,8 @@ export type MemberState = {
 
 
 export const initialState: MemberState = {
-  modalVisible: false,
-  modalType: ModalTypes.Default,
+  modalVisible: true,
+  modalType: ModalTypes.Share,
   userInfo: null
 };
 

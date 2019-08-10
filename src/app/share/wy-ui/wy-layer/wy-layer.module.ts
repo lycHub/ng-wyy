@@ -9,10 +9,11 @@ import { WyLayerRegisterComponent } from './wy-layer-register/wy-layer-register.
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { NzInputModule, NzAlertModule, NzCheckboxModule, NzFormModule, NzSpinModule, NzListModule, NzIconModule } from 'ng-zorro-antd';
 import { WyLoginDefaultComponent } from './wy-login-default/wy-login-default.component';
-import { WyLoginLikeComponent } from './wy-login-like/wy-login-like.component';
+import { WyLayerLikeComponent } from './wy-layer-like/wy-layer-like.component';
+import { WyLayerShareComponent } from './wy-layer-share/wy-layer-share.component';
 
 @NgModule({
-  declarations: [WyLayerModalComponent, WyLoginPhoneComponent, WyLayerRegisterComponent, WyLoginDefaultComponent, WyLoginLikeComponent],
+  declarations: [WyLayerModalComponent, WyLoginPhoneComponent, WyLayerRegisterComponent, WyLoginDefaultComponent, WyLayerLikeComponent, WyLayerShareComponent],
   imports: [
     CommonModule,
     NzButtonModule,
@@ -29,6 +30,6 @@ import { WyLoginLikeComponent } from './wy-login-like/wy-login-like.component';
     NzFormModule
   ],
   providers: [OverlayContainer],
-  exports: [WyLayerModalComponent, WyLoginPhoneComponent, WyLayerRegisterComponent, WyLoginDefaultComponent, WyLoginLikeComponent]
+  exports: [WyLayerModalComponent, WyLoginPhoneComponent, WyLayerRegisterComponent, WyLoginDefaultComponent, WyLayerLikeComponent, WyLayerShareComponent]
 })
 export class WyLayerModule { }

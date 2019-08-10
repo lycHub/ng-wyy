@@ -11,11 +11,11 @@ import { NzMessageService } from 'ng-zorro-antd';
 import { SetModalVisible } from '../../../../store/actions/member.actions';
 
 @Component({
-  selector: 'app-wy-login-like',
-  templateUrl: './wy-login-like.component.html',
-  styleUrls: ['./wy-login-like.component.less']
+  selector: 'app-wy-layer-like',
+  templateUrl: './wy-layer-like.component.html',
+  styleUrls: ['./wy-layer-like.component.less']
 })
-export class WyLoginLikeComponent implements OnInit, OnDestroy {
+export class WyLayerLikeComponent implements OnInit, OnDestroy {
   sheetName = '';
   creating = false;
   likeId: number;

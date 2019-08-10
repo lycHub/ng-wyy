@@ -76,6 +76,7 @@
 <app-wy-layer-modal [showSpin]="showSpin" (onLoadSheetList)="onLoadSheetList()">
   <app-wy-login-phone name="login" [wyUserLogin]="wyUserLogin" (onChangeModalType)="onChangeModalType($event)" (onLogin)="onLogin($event)"></app-wy-login-phone>
   <app-wy-layer-register name="register" (onChangeModalType)="onChangeModalType($event)"></app-wy-layer-register>
-  <app-wy-login-like name="like" [mySheets]="userSheet?.self"></app-wy-login-like>
+  <app-wy-layer-like name="like" [mySheets]="userSheet?.self"></app-wy-layer-like>
+  <app-wy-layer-share name="share"></app-wy-layer-share>
   <app-wy-login-default (onChangeModalType)="onChangeModalType($event)"></app-wy-login-default>
 </app-wy-layer-modal>
