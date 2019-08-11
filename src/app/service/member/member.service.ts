@@ -107,8 +107,15 @@ export class MemberService {
 
   // 收藏歌曲
   likeSong(pid: number, tracks: number, op = 'add'): Observable<number> {
-    const params = new HttpParams({fromString: queryString.stringify({ pid, tracks: tracks, op })});
+    const params = new HttpParams({fromString: queryString.stringify({ pid, tracks, op })});
     return this.http.get('/api/playlist/tracks', { params })
+    .pipe(map((res: { code: number }) => res.code));
+  }
+
+  // 分享
+  userShare(id: number, msg = '', type = 'song'): Observable<number> {
+    const params = new HttpParams({fromString: queryString.stringify({ id, type, msg })});
+    return this.http.get('/api/share/resource', { params })
     .pipe(map((res: { code: number }) => res.code));
   }
 }

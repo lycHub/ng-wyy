@@ -5,8 +5,8 @@ import { SetSongList, SetPlayList, SetCurrentIndex, SetCurrentAction } from './a
 import { shuffle, findIndex } from '../utils/array';
 import { PlayerState, CurrentActions } from './reducers/player.reducer';
 import {Song} from "../service/data-modals/common.models";
-import { MemberState, ModalTypes } from './reducers/member.reducer';
-import { SetModalType, SetModalVisible, SetLikeId } from './actions/member.actions';
+import { MemberState, ModalTypes, ShareParams } from './reducers/member.reducer';
+import { SetModalType, SetModalVisible, SetLikeId, SetShareParams } from './actions/member.actions';
 
 @Injectable({
   providedIn: AppStoreModule
@@ -119,5 +119,12 @@ export class MultipleReducersService {
   likeSheet(id: number) {
     this.store$.dispatch(SetModalType({ modalType: ModalTypes.Like }));
     this.store$.dispatch(SetLikeId({ id }));
+  }
+
+  // 分享
+  share(params: ShareParams) {
+    this.store$.dispatch(SetModalType({ modalType: ModalTypes.Share }));
+    this.store$.dispatch(SetShareParams({ params }));
+    this.store$.dispatch(SetModalVisible({ visible: true }));
   }
 }

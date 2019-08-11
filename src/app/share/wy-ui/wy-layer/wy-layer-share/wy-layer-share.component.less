@@ -1,0 +1,44 @@
+@import "../../../../../assets/styles/varibles.less";
+@import "../../../../../assets/styles/mixins.less";
+
+.share{
+  padding: 30px 20px;
+  .u-txtwrap{
+    border: 1px solid #d9d9d9;
+    border-radius: 2px;
+    padding-right: 14px;
+    textarea{
+      border: none;
+      resize: none;
+    }
+    .info{
+      height: 45px;
+      line-height: 45px;
+      margin: 0 -14px 0 0;
+      padding: 0 10px;
+      .text{
+        width: 100%;
+        font-size: @font-size-base;
+        border-top: 1px solid #e5e5e5;
+      }
+    }
+  }
+
+  .tools{
+    margin: 15px 0;
+    text-align: right;
+    .txt-count{
+      float: left;
+      color: #999;
+      &.exceed{
+        color: @error-color;
+      }
+    }
+    .btns{
+      float: right;
+      button:last-child{
+        margin-left: 8px;
+      }
+    }
+  }
+}

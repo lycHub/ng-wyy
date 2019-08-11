@@ -50,7 +50,7 @@ export class AppComponent {
     private titleService: Title,
     private memberServe: MemberService,
     private meta: Meta,
-    private message: NzMessageService,
+    private messageServe: NzMessageService,
     private store$: Store<AppStoreModule>,
     private multipleReducerServe: MultipleReducersService,
     private storageServe: StorageService,
@@ -169,6 +169,6 @@ export class AppComponent {
 
   private alertMessage(type: string, msg: string) {
     this.showSpin = false;
-    this.message.create(type, msg);
+    this.messageServe.create(type, msg);
   }
 }

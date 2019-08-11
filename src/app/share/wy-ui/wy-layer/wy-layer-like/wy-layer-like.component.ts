@@ -6,7 +6,6 @@ import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { getLikeId } from '../../../../store/selectors/member.selector';
 import { MemberService } from 'src/app/service/member/member.service';
-import { MultipleReducersService } from 'src/app/store/multiple-reducers.service';
 import { NzMessageService } from 'ng-zorro-antd';
 import { SetModalVisible } from '../../../../store/actions/member.actions';
 
@@ -25,7 +24,6 @@ export class WyLayerLikeComponent implements OnInit, OnDestroy {
   constructor(
     private store$: Store<AppStoreModule>,
     private memberServe: MemberService,
-    private multipleReducerServe: MultipleReducersService,
     private messageServe: NzMessageService
   ) {
     this.appStore$ = this.store$.pipe(select('member'), takeUntil(this.destroy$));

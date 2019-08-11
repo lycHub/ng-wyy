@@ -1,1 +1,20 @@
-<p>wy-layer-share works!</p>
+<div class="share">
+  <div class="u-txtwrap">
+    <textarea rows="6" nz-input [(ngModel)]="msg" (ngModelChange)="onMsgChange($event)"></textarea>
+    <div class="info">
+      <div class="text">
+        <p class="f-thide ellipsis">{{shareParams?.txt}}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="tools clearfix">
+    <!-- <i class="icon-at"></i> -->
+    <span class="txt-count" [class.exceed]="surplusTxt < 0">{{surplusTxt}}</span>
+    <div class="btns">
+      <button nz-button nzType="default" (click)="onCancel()">取消</button>
+      <button nz-button nzType="primary" (click)="onShare()">分享</button>
+    </div>
+  </div>
+  <nz-alert nzType="error" nzMessage="Error" nzShowIcon *ngIf="showAlert"></nz-alert>
+</div>

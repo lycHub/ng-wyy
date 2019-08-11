@@ -1,7 +1,7 @@
 import {Component, OnDestroy} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {SongService} from 'src/app/service/song/song.service';
-import {Song, SongSheet} from 'src/app/service/data-modals/common.models';
+import {Song, SongSheet, Singer} from 'src/app/service/data-modals/common.models';
 import { map } from 'rxjs/operators';
 import { MultipleReducersService } from 'src/app/store/multiple-reducers.service';
 import {Observable, Subject} from "rxjs/index";
@@ -33,6 +33,10 @@ export class SheetInfoComponent implements OnDestroy{
   }
   
   currentIndex = -1;
+
+  // 是否已收藏
+  hasLiked: boolean;
+
   private currentSong: Song;
   
   private appStore$: Observable<AppStoreModule>;
@@ -50,6 +54,7 @@ export class SheetInfoComponent implements OnDestroy{
     this.route.data.pipe(map(res => res.sheetInfo)).subscribe(res => {
       // console.log('sheetInfo :', res);
       this.sheetInfo = res;
+      this.hasLiked = res.subscribed;
       
       if (res.description) {
         this.changeDesc(res.description);
@@ -137,6 +142,29 @@ export class SheetInfoComponent implements OnDestroy{
         this.alertMessage('error', '收藏失败');
       }
     }, error => this.alertMessage('error', '收藏失败'));
+  }
+
+
+  // 分享
+  onShare(info: SongSheet | Song, type = 'song') {
+    let txt = '';
+    if (type === 'playlist') {
+      txt = this.makeTxt('歌单', info.name, (<SongSheet>info).creator.nickname);
+    }else{
+      txt = this.makeTxt('单曲', info.name, (<Song>info).ar);
+    }
+    this.multipleReducerServe.share({ id: info.id, type, txt });
+  }
+
+  private makeTxt(type: string, name: string, makeBy: string | Singer[]): string {
+    let makeByStr = '';
+    if (makeBy instanceof Array) {
+      makeByStr = makeBy.map(item => item.name).join('/');
+    }else {
+      makeByStr = makeBy;
+    }
+    
+    return `${type}：${name} -- ${makeByStr}`;
   }
 
   private alertMessage(type: string, msg: string) {

@@ -1,6 +1,7 @@
 import { createReducer, Action, on } from '@ngrx/store';
 import * as MemberActions from '../actions/member.actions';
 import { User } from 'src/app/service/data-modals/member.models';
+import { SetShareParams } from '../actions/member.actions';
 
 
 export enum ModalTypes {
@@ -38,8 +39,8 @@ export type MemberState = {
 
 
 export const initialState: MemberState = {
-  modalVisible: true,
-  modalType: ModalTypes.Share,
+  modalVisible: false,
+  modalType: ModalTypes.Default,
   userInfo: null
 };
 
@@ -52,6 +53,7 @@ const reducer = createReducer(
   on(MemberActions.SetModalType, (state, { modalType }) => ({ ...state, modalType })),
   on(MemberActions.SetUserInfo, (state, { user }) => ({ ...state, userInfo: user })),
   on(MemberActions.SetLikeId, (state, { id }) => ({ ...state, likeId: id })),
+  on(MemberActions.SetShareParams, (state, { params }) => ({ ...state, shareParams: params }))
 );
 
 export function memberReducer(state: MemberState | undefined, action: Action) {

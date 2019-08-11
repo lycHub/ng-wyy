@@ -23,13 +23,13 @@
       <ul>
         <li *ngFor="let item of songList; index as i" [class.current]="currentIndex === i" (click)="onChangeSong.emit(item)">
           <i class="col arrow"></i>
-          <div class="col name">{{item.name}}</div>
+          <div class="col name ellipsis">{{item.name}}</div>
           <div class="col icons">
             <i class="ico like" title="收藏"></i>
             <i class="ico share" title="分享"></i>
             <i class="ico trush" title="删除" (click)="onDelete($event, item)"></i>
           </div>
-          <a class="col singer">{{item.ar[0].name}}</a>
+          <a class="col singer ellipsis">{{item.ar[0].name}}</a>
           <div class="col duration">{{(item.dt / 1000) | FormatTime}}</div>
           <div class="col link"></div>  
         </li>
