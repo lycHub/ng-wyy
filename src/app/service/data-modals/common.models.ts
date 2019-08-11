@@ -57,6 +57,10 @@ export type playlistInfo = {
 export type Singer = {
   id: number;
   name: string;
+  picUrl: string;
+  img1v1Url: string;
+  albumSize: number;
+  alias: string[];
 }
 
 

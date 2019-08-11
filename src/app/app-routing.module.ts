@@ -1,10 +1,15 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { SingerModule } from './pages/singer/singer.module';
 
 const routes: Routes = [
   {
     path: 'home',
     loadChildren: () => import('./pages/home/home.module').then(mod => mod.HomeModule)
+  },
+  {
+    path: 'singer/:id',
+    loadChildren: () => import('./pages/singer/singer.module').then(mod => mod.SingerModule)
   },
   {
     path: 'sheet',

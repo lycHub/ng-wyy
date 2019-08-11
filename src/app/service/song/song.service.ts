@@ -1,28 +1,29 @@
-import {Injectable} from '@angular/core';
+import {Injectable, Inject} from '@angular/core';
 import {ServiceModule} from "../service.module";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {Song, SongUrl, Lyric} from "../data-modals/common.models";
 import {Observable} from "rxjs/index";
 import {map} from "rxjs/internal/operators";
+import { API_CONFIG } from 'src/app/core/inject-tokens';
 
 
 @Injectable({
   providedIn: ServiceModule
 })
 export class SongService {
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, @Inject(API_CONFIG) private uri: string) { }
   
   // 歌曲url列表
   getSongUrl(id: string): Observable<SongUrl[]> {
     const params = new HttpParams().set('id', id);
-    return this.http.get('/api/song/url', { params })
+    return this.http.get(this.uri + 'song/url', { params })
       .pipe(map((res: {data: SongUrl[]}) => res.data));
   }
   
   // 歌曲详情
   getSongDetail(id: string): Observable<Song> {
     const params = new HttpParams().set('ids', id);
-    return this.http.get('/api/song/detail', { params })
+    return this.http.get(this.uri + 'song/detail', { params })
       .pipe(map((res: {songs: Song[]}) => res.songs[0]));
   }
 
@@ -30,7 +31,7 @@ export class SongService {
     // 歌词
  getLyric(id: number): Observable<Lyric> {
     const params = new HttpParams().set('id', id.toString());
-    return this.http.get('/api/lyric', { params })
+    return this.http.get(this.uri + 'lyric', { params })
       .pipe(
         map((res: { [type: string]: {lyric: string} }) => {
           return {

@@ -6,7 +6,7 @@ import { httpInterceptorProviders } from './http-interceptors';
 @NgModule({
   providers: [
     {
-      provide: API_CONFIG, useValue: 'http://127.0.0.1:3000/'
+      provide: API_CONFIG, useValue: '/api/'
     },
     /*{ provide: ICON_FONT,
       useFactory(_iconService: NzIconService) {

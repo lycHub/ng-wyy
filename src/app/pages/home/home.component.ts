@@ -1,5 +1,5 @@
 import { Component, ViewChild, OnDestroy } from '@angular/core';
-import {Banner, HotTag, SongSheet} from "../../service/data-modals/common.models";
+import {Banner, HotTag, SongSheet, Singer} from "../../service/data-modals/common.models";
 import {NzCarouselComponent} from "ng-zorro-antd";
 import {ActivatedRoute, Router} from "@angular/router";
 import {map, takeUntil} from "rxjs/internal/operators";
@@ -25,6 +25,7 @@ export class HomeComponent implements OnDestroy {
   banners: Banner[];
   hotTags: HotTag[];
   songSheetList: SongSheet[];
+  singers: Singer[];
 
   user: User;
   
@@ -45,10 +46,11 @@ export class HomeComponent implements OnDestroy {
     private songServe: SongService,
     private store$: Store<AppStoreModule>,
     private multipleReducerServe: MultipleReducersService) {
-     this.route.data.pipe(map(res => res.homeDatas)).subscribe(([banners, hotTags, songSheetList]) => {
+     this.route.data.pipe(map(res => res.homeDatas)).subscribe(([banners, hotTags, songSheetList, singers]) => {
       this.banners = banners;
       this.hotTags = hotTags;
       this.songSheetList = songSheetList;
+      this.singers = singers;
     });
 
     this.appStore$ = this.store$.pipe(select('member'), takeUntil(this.destroy$));
