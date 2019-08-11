@@ -20,17 +20,23 @@
         <i class="next" (click)="onNext(currentIndex + 1)"></i>
       </div>
       <div class="head">
-        <img [hidden]="currentSong" src="http://s4.music.126.net/style/web2/img/default/default_album.jpg" />
+        <img [hidden]="currentSong" src="//s4.music.126.net/style/web2/img/default/default_album.jpg" />
         <img [hidden]="!currentSong" src="{{currentSong?.al.picUrl}}" alt="{{currentSong?.name}}" />
         <i class="mask"></i>
       </div>
       <div class="play">
-        <div class="words" [class.hide]="!currentSong">
-          <span class="ellipsis">{{currentSong?.name}}</span>
-          <ng-container>
+        <div class="words clearfix" [class.hide]="!currentSong">
+          <p class="ellipsis">{{currentSong?.name}}</p>
+          <ul class="songs clearfix">
+            <li *ngFor="let item of currentSong?.ar; last as isLast">
+              <a>{{item.name}}</a>
+              <span [hidden]="isLast">/</span>
+            </li>
+          </ul>
+          <!-- <ng-container>
             <span *ngFor="let item of currentSong?.ar">{{item.name}}</span>
-          </ng-container>
-          <i></i>
+          </ng-container> -->
+          <!-- <i></i> -->
         </div>
         <div class="bar">
           <div class="slider-wrap">

@@ -96,19 +96,25 @@
           &.hide{
             visibility: hidden;
           }
-          span{
-            display: inline-block;
+          p{
+            float: left;
             max-width: 300px;
             margin-right: 10px;
             cursor: pointer;
           }
-          i{
+          .songs {
+            float: left;
+            li{
+              float: left;
+            }
+          }
+          /* i{
             .icon('../images/playbar.png', 14px, 15px);
             background-position: -110px -103px;
             &:hover{
               background-position: -130px -103px;
             }
-          }
+          } */
         }
         .bar{
           color: @white-color;

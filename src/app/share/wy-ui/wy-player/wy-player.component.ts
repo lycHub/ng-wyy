@@ -196,7 +196,6 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
     this.currentSong = song;
     if (song) {
       this.duration = song.dt / 1000;
-      this.arStr(song.ar);
     }
   }
   
@@ -278,15 +277,6 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
   private updateCurrentIndex(list: Song[], song: Song) {
     const index = list.findIndex(item => item.id === song.id);
     this.store$.dispatch(SetCurrentIndex({ index }));
-  }
-
-  
-  arStr(ar: Singer[]): string {
-    let result = '';
-    if (ar && ar.length) {
-      result = ar.map(item => item.name).join(' ');
-    }
-    return result;
   }
   
   
@@ -430,6 +420,7 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
       this.toolTipTimer = this.win.setTimeout(() => {
         this.showToolTip = false;
         this.controlToolTip.show = false;
+        this.controlToolTip.title = '';
         this.togglePlayer('hide');
       }, 2000);
     }

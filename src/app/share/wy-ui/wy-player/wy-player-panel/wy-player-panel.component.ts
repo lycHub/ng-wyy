@@ -1,9 +1,4 @@
-import {
-  AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges,
-  ViewChildren,
-  QueryList,
-  Inject, ElementRef
-} from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChildren, QueryList, Inject } from '@angular/core';
 import {SongService} from "../../../../service/song/song.service";
 import {WyScrollComponent} from "../wy-scroll.component";
 import { WINDOW } from 'src/app/core/inject-tokens';
@@ -67,8 +62,13 @@ export class WyPlayerPanelComponent implements OnChanges {
         this.wyScroll.first.refreshScroll();
         this.wyScroll.last.refreshScroll();
         this.win.setTimeout(() => {
+          if (this.currentSong) {
+            this.scrollToCurrent(0);
+          }
           if (this.lyricRefs) {
             const targetLine = this.lyricRefs[this.currentLineIndex - this.startLine];
+            console.log('targetLine :', this.currentLineIndex);
+            console.log('startLine :', this.startLine);
             if (targetLine) {
               this.wyScroll.last.scrollToElement(targetLine, 0, false, false);
             }
