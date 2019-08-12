@@ -1,7 +1,7 @@
 import {Injectable, Inject} from '@angular/core';
 import {ServiceModule} from "../service.module";
 import {HttpClient, HttpParams} from "@angular/common/http";
-import {Singer} from "../data-modals/common.models";
+import {Singer, Song} from "../data-modals/common.models";
 import {Observable} from "rxjs";
 import {map} from "rxjs/internal/operators";
 import queryString from 'query-string';
@@ -18,6 +18,12 @@ const defaultParams = {
   limit: 9
 }
 
+
+export type SingerDetail = {
+  artist: Singer;
+  hotSongs: Song[]
+}
+
 @Injectable({
   providedIn: ServiceModule
 })
@@ -31,10 +37,18 @@ export class SingService {
       .pipe(map((res: {artists: Singer[]}) => res.artists));
   }
 
-  // 热门歌手
-  getHotSingers(args: SingerParams = defaultParams): Observable<Singer[]> {
-    const params = new HttpParams({fromString: queryString.stringify(args)});
-    return this.http.get(this.uri + 'top/artists', { params })
+  // 相似歌手
+  getSimiSingers(id: string): Observable<Singer[]> {
+    const params = new HttpParams().set('id', id);
+    return this.http.get(this.uri + 'simi/artist', { params })
       .pipe(map((res: {artists: Singer[]}) => res.artists));
+  }
+
+
+  // 歌手详情和单曲
+  getSingerDetail(id: string): Observable<SingerDetail> {
+    const params = new HttpParams().set('id', id);
+    return this.http.get(this.uri + 'artists', { params })
+      .pipe(map(res => res as SingerDetail));
   }
 }

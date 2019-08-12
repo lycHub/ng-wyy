@@ -1,1 +1,46 @@
-<p>singer-detail works!</p>
+<div class="singer-detail wrap feature-wrap clearfix">
+  <div class="dt-left">
+    <div class="left-wrap">
+      <div class="n-artist">
+        <div class="names clearfix">
+          <h2 class="ellipsis">{{detail.artist.name}}</h2>
+          <h3 class="ellipsis">{{alias}}</h3>
+        </div>
+        <div class="cover-img">
+          <img class="full-height" [src]="detail.artist.picUrl" [alt]="detail.artist.name">
+        </div>
+        <button class="btn btn-liked" title="收藏"></button>
+      </div>
+
+
+      <div class="top-50">
+        <div class="btns clearfix">
+          <nz-button-group class="btn">
+            <button nz-button nzType="primary" class="play">
+              <i nz-icon nzType="play-circle" nzTheme="outline"></i>播放
+            </button>
+            <button nz-button nzType="primary" class="add">+</button>
+          </nz-button-group>
+          <button nz-button class="btn like">
+            <span>收藏</span>(50)
+          </button>
+        </div>
+
+        表格
+      </div>
+    </div>
+  </div>
+  <div class="dt-right">
+    <div class="right-wrap">
+      <h3>相似歌手</h3>
+      <ul class="clearfix">
+        <li *ngFor="let singer of simiSingers">
+          <div class="pic">
+            <img [src]="singer.img1v1Url" [alt]="singer.name">
+          </div>
+          <p class="ellipsis">{{singer.name}}</p>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

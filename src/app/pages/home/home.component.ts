@@ -7,13 +7,11 @@ import { SongService } from 'src/app/service/song/song.service';
 import { MultipleReducersService } from 'src/app/store/multiple-reducers.service';
 import { AppStoreModule } from 'src/app/store';
 import { Store, select } from '@ngrx/store';
-import { SetModalVisible } from 'src/app/store/actions/member.actions';
 import { Observable, Subject } from 'rxjs';
 import { getUserInfo } from '../../store/selectors/member.selector';
 import { User } from 'src/app/service/data-modals/member.models';
 import { SheetService } from '../../service/sheet/sheet.service';
 import { ModalTypes } from '../../store/reducers/member.reducer';
-import { SetModalType } from '../../store/actions/member.actions';
 
 @Component({
   selector: 'app-home',

@@ -107,7 +107,7 @@ export class MemberService {
   }
 
   // 收藏歌曲
-  likeSong(pid: number, tracks: number, op = 'add'): Observable<number> {
+  likeSong(pid: number, tracks: string, op = 'add'): Observable<number> {
     const params = new HttpParams({fromString: queryString.stringify({ pid, tracks, op })});
     return this.http.get(this.uri + 'playlist/tracks', { params })
     .pipe(map((res: { code: number }) => res.code));

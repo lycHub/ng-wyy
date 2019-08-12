@@ -39,7 +39,7 @@ export class WyLayerLikeComponent implements OnInit, OnDestroy {
 
   // 收藏歌曲
   onLike(id: number) {
-    this.memberServe.likeSong(id, this.likeId).subscribe(code => {
+    this.memberServe.likeSong(id, this.likeId.toString()).subscribe(code => {
       console.log('code :', code);
       if (code === 200) {
         this.alertMessage('success', '收藏成功');
