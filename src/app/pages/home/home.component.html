@@ -56,17 +56,17 @@
           </div>
 
           <div class="list">
-              <div class="card" *ngFor="let item of singers" [routerLink]="[ '/singer', item.id ]">
-                <div class="pic">
-                  <img appImgDefault class="full-height" [src]="item.img1v1Url" [alt]="item.name" />
-                </div>
-                <div class="txt">
-                  <b class="ellipsis">{{item.name}}</b>
-                  <span class="ellipsis">
-                    专辑数：{{item.albumSize}}
-                  </span>
-                </div>
+            <div class="card" *ngFor="let item of singers" [routerLink]="[ '/singer', item.id ]">
+              <div class="pic">
+                <img appImgDefault class="full-height" [src]="item.img1v1Url" [alt]="item.name" />
               </div>
+              <div class="txt">
+                <b class="ellipsis">{{item.name}}</b>
+                <span class="ellipsis">
+                  专辑数：{{item.albumSize}}
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </aside>
