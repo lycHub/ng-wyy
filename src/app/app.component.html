@@ -11,14 +11,8 @@
           </ul>
         </div>
         <div class="right">
-          <div class="search">
-            <nz-input-group [nzSuffix]="suffixIconSearch">
-              <input type="text" nz-input placeholder="input search text" />
-            </nz-input-group>
-            <ng-template #suffixIconSearch>
-              <i nz-icon type="search"></i>
-            </ng-template>
-          </div>
+          <app-wy-search></app-wy-search>
+          
           <div class="member">
             <div class="no-login" *ngIf="!user else logined">
               <ul nz-menu nzMode="horizontal" nzTheme="dark">

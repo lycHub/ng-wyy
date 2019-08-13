@@ -43,6 +43,8 @@ export class AppComponent {
   routeTitle = '';
 
   wyUserLogin: LoginParams;
+
+  searchVisible = false;
   
   constructor(
     private activatedRoute: ActivatedRoute,
