@@ -1,13 +1,13 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppStoreModule } from 'src/app/store';
-import { SetModalVisible } from 'src/app/store/actions/member.actions';
 import { NzMessageService } from 'ng-zorro-antd';
 import { MemberService } from 'src/app/service/member/member.service';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { getShareParams } from 'src/app/store/selectors/member.selector';
-import { ShareParams } from '../../../../store/reducers/member.reducer';
+import { ShareParams, ModalTypes } from '../../../../store/reducers/member.reducer';
+import { MultipleReducersService } from 'src/app/store/multiple-reducers.service';
 
 const MaxMsg = 140;
 
@@ -26,7 +26,8 @@ export class WyLayerShareComponent implements OnInit, OnDestroy {
   constructor(
     private store$: Store<AppStoreModule>,
     private messageServe: NzMessageService,
-    private memberServe: MemberService
+    private memberServe: MemberService,
+    private multipleReducerServe: MultipleReducersService
   ) {
     this.appStore$ = this.store$.pipe(select('member'), takeUntil(this.destroy$));
     this.appStore$.pipe(select(getShareParams)).subscribe(params => this.watchShareParams(params));
@@ -51,7 +52,7 @@ export class WyLayerShareComponent implements OnInit, OnDestroy {
         if (code === 200) {
           this.alertMessage('success', '分享成功');
           this.msg = '';
-          this.store$.dispatch(SetModalVisible({ visible: false }));
+          this.multipleReducerServe.controlModal(ModalTypes.Default, false);
         }else{
           this.alertMessage('error', '分享失败');
         }
@@ -64,7 +65,7 @@ export class WyLayerShareComponent implements OnInit, OnDestroy {
   }
 
   onCancel() {
-    this.store$.dispatch(SetModalVisible({ visible: false }));
+    this.multipleReducerServe.controlModal(ModalTypes.Default, false);
   }
 
   ngOnDestroy(): void {

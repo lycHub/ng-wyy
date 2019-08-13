@@ -6,7 +6,6 @@ import { map, switchMap } from 'rxjs/operators';
 import queryString from 'query-string';
 import { User, UserRecord, recordVal, UserSheet } from '../data-modals/member.models';
 import { LoginParams } from 'src/app/share/wy-ui/wy-layer/wy-login-phone/wy-login-phone.component';
-import { formatSinger } from 'src/app/utils/format';
 import { SongSheet } from '../data-modals/common.models';
 import { API_CONFIG } from 'src/app/core/inject-tokens';
 
@@ -66,15 +65,7 @@ export class MemberService {
   userRecord(uid: number, type = RecordType.weekData): Observable<recordVal[]> {
     const params = new HttpParams({fromString: queryString.stringify({ uid, type })});
     return this.http.get(this.uri + 'user/record', { params })
-    .pipe(map((res: UserRecord) => {
-      const copy = res[records[type]].slice();
-      copy.forEach(item => {
-        const ar = item.song.ar.slice();
-        item.song.ar = formatSinger(ar);
-      });
-      // console.log('copy :', copy);
-      return copy;
-    }));
+    .pipe(map((res: UserRecord) => res[records[type]]));
   }
 
 
@@ -107,7 +98,7 @@ export class MemberService {
   }
 
   // 收藏歌曲
-  likeSong(pid: number, tracks: string, op = 'add'): Observable<number> {
+  likeSongs(pid: number, tracks: string, op = 'add'): Observable<number> {
     const params = new HttpParams({fromString: queryString.stringify({ pid, tracks, op })});
     return this.http.get(this.uri + 'playlist/tracks', { params })
     .pipe(map((res: { code: number }) => res.code));
@@ -117,6 +108,14 @@ export class MemberService {
   userShare(id: number, msg = '', type = 'song'): Observable<number> {
     const params = new HttpParams({fromString: queryString.stringify({ id, type, msg })});
     return this.http.get(this.uri + 'share/resource', { params })
+    .pipe(map((res: { code: number }) => res.code));
+  }
+
+
+  // 收藏歌手
+  likeSinger(id: number, t = 1): Observable<number> {
+    const params = new HttpParams({fromString: queryString.stringify({ id, t })});
+    return this.http.get(this.uri + 'artist/sub', { params })
     .pipe(map((res: { code: number }) => res.code));
   }
 }

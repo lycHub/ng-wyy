@@ -8,6 +8,8 @@ import { getLikeId } from '../../../../store/selectors/member.selector';
 import { MemberService } from 'src/app/service/member/member.service';
 import { NzMessageService } from 'ng-zorro-antd';
 import { SetModalVisible } from '../../../../store/actions/member.actions';
+import { ModalTypes } from 'src/app/store/reducers/member.reducer';
+import { MultipleReducersService } from '../../../../store/multiple-reducers.service';
 
 @Component({
   selector: 'app-wy-layer-like',
@@ -17,14 +19,15 @@ import { SetModalVisible } from '../../../../store/actions/member.actions';
 export class WyLayerLikeComponent implements OnInit, OnDestroy {
   sheetName = '';
   creating = false;
-  likeId: number;
+  likeId: string;
   @Input() mySheets: SongSheet[];
   private appStore$: Observable<AppStoreModule>;
   private destroy$ = new Subject<void>();
   constructor(
     private store$: Store<AppStoreModule>,
     private memberServe: MemberService,
-    private messageServe: NzMessageService
+    private messageServe: NzMessageService,
+    private multipleReducerServe: MultipleReducersService
   ) {
     this.appStore$ = this.store$.pipe(select('member'), takeUntil(this.destroy$));
     this.appStore$.pipe(select(getLikeId)).subscribe(id => this.watchLikeId(id));
@@ -33,17 +36,17 @@ export class WyLayerLikeComponent implements OnInit, OnDestroy {
   ngOnInit() {
   }
 
-  private watchLikeId(id: number) {
+  private watchLikeId(id: string) {
     this.likeId = id;
   }
 
   // 收藏歌曲
   onLike(id: number) {
-    this.memberServe.likeSong(id, this.likeId.toString()).subscribe(code => {
+    this.memberServe.likeSongs(id, this.likeId).subscribe(code => {
       console.log('code :', code);
       if (code === 200) {
         this.alertMessage('success', '收藏成功');
-        this.store$.dispatch(SetModalVisible({ visible: false }));
+        this.multipleReducerServe.controlModal(ModalTypes.Default, false);
       }else{
         this.alertMessage('error', '收藏失败');
       }

@@ -129,8 +129,8 @@ export class SheetInfoComponent implements OnDestroy{
   
 
   // 收藏歌曲
-  onLikeSong(id: number) {
-    this.multipleReducerServe.likeSheet(id);
+  onLikeSong(id: string) {
+    this.multipleReducerServe.likeSongs(id);
   }
 
   // 收藏歌单

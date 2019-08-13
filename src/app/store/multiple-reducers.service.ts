@@ -108,15 +108,16 @@ export class MultipleReducersService {
 
 
 
-  // 显示弹窗
-  showModal(modalType: ModalTypes) {
+
+  // 弹窗显示/隐藏
+  controlModal(modalType: ModalTypes, visible = true) {
     this.store$.dispatch(SetModalType({ modalType }));
-    this.store$.dispatch(SetModalVisible({ visible: true }));
+    this.store$.dispatch(SetModalVisible({ visible }));
   }
 
 
   // 收藏歌单
-  likeSheet(id: number) {
+  likeSongs(id: string) {
     this.store$.dispatch(SetModalType({ modalType: ModalTypes.Like }));
     this.store$.dispatch(SetLikeId({ id }));
   }

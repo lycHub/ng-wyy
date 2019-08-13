@@ -108,6 +108,7 @@ export class AppComponent {
     if (this.user) {
       this.memberServe.userSheets(this.user.profile.userId).subscribe(userSheet => {
         this.userSheet = userSheet;
+        // console.log('userSheet :', userSheet);
         this.store$.dispatch(SetModalVisible({ visible: true }));
       });
     }else {
@@ -119,7 +120,7 @@ export class AppComponent {
 
 
   openModal(type: ModalTypes) {
-    this.multipleReducerServe.showModal(type);
+    this.multipleReducerServe.controlModal(type);
   }
   
   // 退出
@@ -146,7 +147,7 @@ export class AppComponent {
   private doLogin(params: LoginParams) {
     this.memberServe.login(params).subscribe(user => {
       this.user = user;
-      this.store$.dispatch(SetModalVisible({ visible: false }));
+      this.multipleReducerServe.controlModal(ModalTypes.Default, false);
       this.store$.dispatch(SetUserInfo({ user }));
       this.alertMessage('success', '登陆成功');
       

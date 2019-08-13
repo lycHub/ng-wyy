@@ -73,7 +73,7 @@ export class HomeComponent implements OnDestroy {
   }
 
   openModal() {
-    this.multipleReducerServe.showModal(ModalTypes.Default);
+    this.multipleReducerServe.controlModal(ModalTypes.Default);
   }
 
   

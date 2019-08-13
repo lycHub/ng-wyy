@@ -9,7 +9,7 @@
         <nz-list-item class="list-item" (click)="onLike(item.id)">
           <nz-list-item-meta
             [nzTitle]="nzTitle"
-            [nzDescription]="item.tracks?.length + '首'"
+            [nzDescription]="item.tracks?.length || 0 + '首'"
             [nzAvatar]="item.coverImgUrl">
             <ng-template #nzTitle>
               <span>{{ item.name }}</span>

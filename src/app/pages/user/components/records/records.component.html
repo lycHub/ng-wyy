@@ -31,7 +31,7 @@
               <span>{{item.song.dt / 1000 | FormatTime}}</span>
             <p class="icons">
               <i class="ico add" title="添加" (click)="onAddSong.emit([item.song, false])"></i>
-              <i class="ico like" title="收藏" (click)="onLikeSong.emit(item.song.id)"></i>
+              <i class="ico like" title="收藏" (click)="onLikeSong.emit(item.song.id.toString())"></i>
               <i class="ico share" title="分享"></i>
               <i class="ico download" title="下载"></i>
             </p>

@@ -31,7 +31,7 @@ export type MemberState = {
   userInfo: User;
 
   // 收藏歌单的id
-  likeId?: number;
+  likeId?: string;
 
   // 分享参数
   shareParams?: ShareParams;

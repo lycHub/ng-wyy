@@ -9,9 +9,10 @@ import { trigger, transition, animate, style, state } from '@angular/animations'
 import { AppStoreModule } from 'src/app/store';
 import { Store, select } from '@ngrx/store';
 import { getModalVisible } from 'src/app/store/selectors/member.selector';
-import { SetModalVisible } from 'src/app/store/actions/member.actions';
+import { SetModalVisible, SetModalType } from 'src/app/store/actions/member.actions';
 import { ModalTypes } from 'src/app/store/reducers/member.reducer';
 import { getModalType } from '../../../../store/selectors/member.selector';
+import { MultipleReducersService } from 'src/app/store/multiple-reducers.service';
 
 type DomSize = { w: number; h: number };
 
@@ -67,6 +68,7 @@ export class WyLayerModalComponent implements OnInit {
     private elementRef: ElementRef,
     private rd: Renderer2,
     private store$: Store<AppStoreModule>,
+    private multipleReducerServe: MultipleReducersService,
     private overLayContainerServe: OverlayContainer,
     @Inject(DOCUMENT) private doc: Document,
     @Inject(WINDOW) private win: Window
@@ -148,7 +150,7 @@ export class WyLayerModalComponent implements OnInit {
   }
 
   private hide() {
-    this.store$.dispatch(SetModalVisible({ visible: false }));
+    this.multipleReducerServe.controlModal(ModalTypes.Default, false);
   }
 
 

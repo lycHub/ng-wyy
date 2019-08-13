@@ -5,7 +5,6 @@ import { playlistInfo, SongSheet } from '../data-modals/common.models';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import queryString from 'query-string';
-import { formatSinger } from 'src/app/utils/format';
 import { API_CONFIG } from 'src/app/core/inject-tokens';
 
 export type SheetParams = {
@@ -30,14 +29,6 @@ export class SheetService {
   getSongSheetDetail(id: number): Observable<SongSheet> {
     const params = new HttpParams().set('id', id.toString());
     return this.http.get(this.uri + 'playlist/detail', { params })
-    .pipe(map((res: {playlist: SongSheet}) => {
-      const copy = res.playlist.tracks.slice();
-      copy.forEach(item => {
-        const ar = item.ar.slice();
-        item.ar = formatSinger(ar);
-      });
-      res.playlist.tracks = copy;
-      return res.playlist;
-    }));
+    .pipe(map((res: {playlist: SongSheet}) => res.playlist));
   }
 }
