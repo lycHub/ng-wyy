@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, OnChanges, Output, EventEmitter, OnDestroy } from '@angular/core';
-import { Subject } from 'rxjs';
+import { WySerchBusService } from '../wy-serch-bus.service';
 
 @Component({
   selector: 'app-wy-search-panel',
@@ -14,7 +14,7 @@ export class WySearchPanelComponent implements OnInit, OnChanges, OnDestroy {
   // evtSub = new Subject();
   @Output('out') out = new EventEmitter<string>();
 
-  constructor() { }
+  constructor(private searchBusServe: WySerchBusService) { }
 
   ngOnInit() {
     
@@ -24,8 +24,7 @@ export class WySearchPanelComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   outEvent() {
-    console.log('in click:');
-    this.out.emit('outValue');
+    this.searchBusServe.broadcast('clicked xxx');
   }
 
   ngOnDestroy(): void {

@@ -1,14 +1,16 @@
-import { Component, OnInit, Input, TemplateRef, ViewContainerRef, ViewChild, ElementRef, OnChanges, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Input, TemplateRef, ViewContainerRef, ViewChild, ElementRef, OnChanges, AfterViewInit, OnDestroy } from '@angular/core';
 import { OverlayConfig, Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal, ComponentType } from '@angular/cdk/portal';
 import { WySearchPanelComponent } from './wy-search-panel/wy-search-panel.component';
+import { WySerchBusService } from './wy-serch-bus.service';
+
 
 @Component({
   selector: 'app-wy-search',
   templateUrl: './wy-search.component.html',
   styleUrls: ['./wy-search.component.less']
 })
-export class WySearchComponent implements OnInit, AfterViewInit {
+export class WySearchComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() handlerView: TemplateRef<any>;
   @Input() connectedTo: ElementRef;
 
@@ -19,7 +21,7 @@ export class WySearchComponent implements OnInit, AfterViewInit {
   @ViewChild('search', { static: false }) private defaultRef: ElementRef;
 
 
-  constructor(private overlay: Overlay, private viewContainerRef: ViewContainerRef) { }
+  constructor(private overlay: Overlay, private viewContainerRef: ViewContainerRef, private searchBusServe: WySerchBusService) { }
 
   ngOnInit() {
   }
@@ -37,7 +39,7 @@ export class WySearchComponent implements OnInit, AfterViewInit {
         offsetX: 0,
         offsetY: 0
     }]);
-    // strategy.withLockedPosition(true);
+    strategy.withLockedPosition(true);  // 锁定位置
     const config = new OverlayConfig({positionStrategy: strategy});
     config.scrollStrategy = this.overlay.scrollStrategies.reposition(); // 更随滑动的策略
     this.overlayRef = this.overlay.create(config);
@@ -46,9 +48,12 @@ export class WySearchComponent implements OnInit, AfterViewInit {
     // console.log('c :', c);
     c.test = 'myTest';
     console.log('test :', c.test);
-    c.out.subscribe((res) => {
+    /* c.out.subscribe((res) => {
       console.log('res :', res);
-    });
+    }); */
+    this.searchBusServe.on().subscribe(res => {
+      console.log('res ddd:', res);
+    })
   }
 
   onFocus() {
@@ -73,4 +78,8 @@ export class WySearchComponent implements OnInit, AfterViewInit {
     }
   }
 
+
+  ngOnDestroy(): void {
+    this.searchBusServe.clear();
+  }
 }
