@@ -67,15 +67,16 @@ export class WyPlayerPanelComponent implements OnChanges {
           }
           if (this.lyricRefs) {
             const targetLine = this.lyricRefs[this.currentLineIndex - this.startLine];
-            console.log('targetLine :', this.currentLineIndex);
-            console.log('startLine :', this.startLine);
+            // console.log('lyricRefs :', this.lyricRefs);
+            // console.log('startLine :',this.currentLineIndex - this.startLine);
             if (targetLine) {
               this.wyScroll.last.scrollToElement(targetLine, 0, false, false);
             }
           }
-        }, 100);
+        }, 80);
+      }else{
+        this.wyScroll && this.wyScroll.first.scrollTo(0, 0);
       }
-      
     }
 
     // console.log('songList :', changes['songList']);
