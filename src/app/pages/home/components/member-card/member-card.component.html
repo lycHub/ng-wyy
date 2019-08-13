@@ -8,7 +8,7 @@
     <div class="n-myinfo" *ngIf="user">
       <div class="f-cb clearfix">
         <a class="head">
-          <img [src]="user.profile.avatarUrl" [alt]="user.profile.nickname" />
+          <img appImgDefault [src]="user.profile.avatarUrl" [alt]="user.profile.nickname" />
         </a>
         <div class="info">
           <h4><a class="nm ellipsis">{{user.profile.nickname}}</a></h4>

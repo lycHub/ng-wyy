@@ -16,7 +16,7 @@
 
           <div class="user f-cb">
             <a class="face" href="/user/home?id=450639585">
-              <img [src]="sheetInfo.creator.avatarUrl" [alt]="sheetInfo.creator.nickname">
+              <img appImgDefault [src]="sheetInfo.creator.avatarUrl" [alt]="sheetInfo.creator.nickname">
             </a>
             <span class="name"><a [href]="'https://music.163.com/artist?id=' + sheetInfo.userId" class="s-fc7">{{sheetInfo.creator.nickname}}</a></span>
             <span class="time s-fc4">{{sheetInfo.createTime | date:'yyyy-MM-dd'}}&nbsp;创建</span>

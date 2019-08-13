@@ -3,7 +3,7 @@
     <nz-carousel nzAutoPlay [nzEffect]="'fade'" [nzDotRender]="wyCarousel.dotRef" (nzBeforeChange)="nzBeforeChange($event)">
       <div class="carousel-item" nz-carousel-content *ngFor="let item of banners; trackBy: trackByBanners">
         <a [href]="item.url" target="_blank" class="banner-item">
-          <img [src]="item.imageUrl" />
+          <img [src]="item.imageUrl" appImgDefault />
         </a>
       </div>
     </nz-carousel>
@@ -58,7 +58,7 @@
           <div class="list">
               <div class="card" *ngFor="let item of singers" [routerLink]="[ '/singer', item.id ]">
                 <div class="pic">
-                  <img class="full-height" [src]="item.img1v1Url" [alt]="item.name" />
+                  <img appImgDefault class="full-height" [src]="item.img1v1Url" [alt]="item.name" />
                 </div>
                 <div class="txt">
                   <b class="ellipsis">{{item.name}}</b>

@@ -6,7 +6,7 @@ import { SongSheet } from 'src/app/service/data-modals/common.models';
   template: `
   <ng-container>
     <a class="cover">
-      <img src="{{sheet.picUrl || sheet.coverImgUrl}}" alt="{{sheet.name}}">
+      <img src="{{sheet.picUrl || sheet.coverImgUrl}}" alt="{{sheet.name}}" appImgDefault />
       <div class="bottom">
         <div class="num">
           <i class="icon erji"></i>

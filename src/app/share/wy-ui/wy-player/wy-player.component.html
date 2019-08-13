@@ -20,8 +20,8 @@
         <i class="next" (click)="onNext(currentIndex + 1)"></i>
       </div>
       <div class="head">
-        <img [hidden]="currentSong" src="//s4.music.126.net/style/web2/img/default/default_album.jpg" />
-        <img [hidden]="!currentSong" src="{{currentSong?.al.picUrl}}" alt="{{currentSong?.name}}" />
+        <img appImgDefault [hidden]="currentSong" src="//s4.music.126.net/style/web2/img/default/default_album.jpg" />
+        <img appImgDefault [hidden]="!currentSong" src="{{currentSong?.al.picUrl}}" alt="{{currentSong?.name}}" />
         <i class="mask"></i>
       </div>
       <div class="play">

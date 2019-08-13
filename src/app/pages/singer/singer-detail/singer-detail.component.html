@@ -7,7 +7,7 @@
           <h3 class="ellipsis">{{alias}}</h3>
         </div>
         <div class="cover-img">
-          <img class="full-height" [src]="detail.artist.picUrl" [alt]="detail.artist.name">
+          <img appImgDefault class="full-height" [src]="detail.artist.picUrl" [alt]="detail.artist.name">
         </div>
         <button class="btn btn-like" [class.btn-liked]="hasLiked" title="收藏" (click)="onLikeSinger(detail.artist.id)"></button>
       </div>
@@ -67,7 +67,7 @@
       <ul class="clearfix">
         <li *ngFor="let singer of simiSingers" [routerLink]="[ '/singer', singer.id ]">
           <div class="pic">
-            <img [src]="singer.img1v1Url" [alt]="singer.name">
+            <img appImgDefault [src]="singer.img1v1Url" [alt]="singer.name">
           </div>
           <p class="ellipsis">{{singer.name}}</p>
         </li>
