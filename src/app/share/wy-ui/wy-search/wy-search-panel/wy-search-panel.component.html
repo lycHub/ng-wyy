@@ -1,1 +1,3 @@
-<p (click)="outEvent('clicked!')">wy-search-panel works!</p>
+<ul (click)="onClick('clicked!')">
+  <li *ngFor="let item of list">{{item}}--list</li>
+</ul>

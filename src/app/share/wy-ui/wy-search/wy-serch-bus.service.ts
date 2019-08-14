@@ -28,6 +28,8 @@ export class WySerchBusService {
   }
 
   clear() {
+    this.dataBus.next();
+    this.dataBus.complete();
     this.eventBus.next();
     this.eventBus.complete();
   }

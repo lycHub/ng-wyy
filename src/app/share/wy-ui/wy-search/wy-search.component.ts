@@ -1,8 +1,7 @@
-import { Component, OnInit, Input, TemplateRef, ViewContainerRef, ViewChild, ElementRef, OnChanges, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, TemplateRef, ViewContainerRef, ViewChild, ElementRef, AfterViewInit, OnDestroy, ComponentRef } from '@angular/core';
 import { OverlayConfig, Overlay, OverlayRef } from '@angular/cdk/overlay';
-import { ComponentPortal, ComponentType } from '@angular/cdk/portal';
+import { ComponentPortal } from '@angular/cdk/portal';
 import { WySearchPanelComponent } from './wy-search-panel/wy-search-panel.component';
-import { WySerchBusService } from './wy-serch-bus.service';
 
 
 @Component({
@@ -16,19 +15,27 @@ export class WySearchComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private overlayRef: OverlayRef;
 
+  private panelRef: ComponentRef<WySearchPanelComponent>;
   private panelPortal: ComponentPortal<WySearchPanelComponent>;
 
   @ViewChild('search', { static: false }) private defaultRef: ElementRef;
 
 
-  constructor(private overlay: Overlay, private viewContainerRef: ViewContainerRef, private searchBusServe: WySerchBusService) { }
+  constructor(private overlay: Overlay, private viewContainerRef: ViewContainerRef) { }
 
   ngOnInit() {
+    
+    
   }
 
 
 
   ngAfterViewInit(): void {
+    
+  }
+
+  onKeyUp() {
+    console.log('onKeyUp');
     const strategy = this.overlay.position()
     .flexibleConnectedTo(this.connectedTo || this.defaultRef)
     .withPositions([{
@@ -39,22 +46,16 @@ export class WySearchComponent implements OnInit, AfterViewInit, OnDestroy {
         offsetX: 0,
         offsetY: 0
     }]);
-    strategy.withLockedPosition(true);  // 锁定位置
+    // strategy.withLockedPosition(true);  // 锁定位置
     const config = new OverlayConfig({positionStrategy: strategy});
     config.scrollStrategy = this.overlay.scrollStrategies.reposition(); // 更随滑动的策略
     this.overlayRef = this.overlay.create(config);
     this.panelPortal = new ComponentPortal(WySearchPanelComponent, this.viewContainerRef);
-    const c = new this.panelPortal.component();
-    
-    this.searchBusServe.on().subscribe(res => {
-      console.log('res ddd:', res);
-    })
-  }
-
-  onFocus() {
-    console.log('onFocus');
-    this.showOverlayPanel();
-    
+    this.panelRef = this.overlayRef.attach(this.panelPortal);
+    this.panelRef.instance.list = [1, 2, 3];
+    this.panelRef.instance.onSelected.subscribe(selected => {
+      console.log('selected :', selected);
+    });
   }
   onBlur() {
     console.log('onBlur');
@@ -65,10 +66,9 @@ export class WySearchComponent implements OnInit, AfterViewInit, OnDestroy {
   showOverlayPanel() {
    
 
-    this.overlayRef.attach(this.panelPortal);
-    setTimeout(() => {
-      this.searchBusServe.setData('subject tests');
-    }, 500);
+    
+   
+    
   }
 
   dismissOverlayPanel() {
@@ -79,6 +79,6 @@ export class WySearchComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
   ngOnDestroy(): void {
-    this.searchBusServe.clear();
+    this.dismissOverlayPanel();
   }
 }

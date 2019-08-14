@@ -1,5 +1,4 @@
-import { Component, OnInit, Input, OnChanges, Output, EventEmitter, OnDestroy } from '@angular/core';
-import { WySerchBusService } from '../wy-serch-bus.service';
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 
 @Component({
   selector: 'app-wy-search-panel',
@@ -7,18 +6,23 @@ import { WySerchBusService } from '../wy-serch-bus.service';
   styleUrls: ['./wy-search-panel.component.less']
 })
 export class WySearchPanelComponent implements OnInit, OnDestroy {
-  constructor(private searchBusServe: WySerchBusService) {
+ 
+  @Input() list = [];
+
+  @Output() onSelected = new EventEmitter<any>();
+  constructor() {
     
   }
 
   ngOnInit() {
-    this.searchBusServe.subData().subscribe(res => {
-      console.log('sub data:', res);
-    });
+   
   }
 
-  outEvent() {
-    this.searchBusServe.broadcast('clicked xxx');
+
+
+
+  onClick() {
+    this.onSelected.emit('clicked aaa');
   }
 
   ngOnDestroy(): void {
