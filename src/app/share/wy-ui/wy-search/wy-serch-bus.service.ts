@@ -4,7 +4,18 @@ import { Subject, Observable } from 'rxjs';
 @Injectable()
 export class WySerchBusService {
   private eventBus = new Subject<any>();
-  constructor() { }
+  private dataBus = new Subject<any>();
+  constructor() {
+    
+  }
+
+  setData(data: any) {
+    this.dataBus.next(data);
+  }
+
+  subData(): Observable<any> {
+    return this.dataBus.asObservable();
+  }
 
 
   broadcast(arg: any) {

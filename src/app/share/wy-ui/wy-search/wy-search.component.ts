@@ -45,12 +45,7 @@ export class WySearchComponent implements OnInit, AfterViewInit, OnDestroy {
     this.overlayRef = this.overlay.create(config);
     this.panelPortal = new ComponentPortal(WySearchPanelComponent, this.viewContainerRef);
     const c = new this.panelPortal.component();
-    // console.log('c :', c);
-    c.test = 'myTest';
-    console.log('test :', c.test);
-    /* c.out.subscribe((res) => {
-      console.log('res :', res);
-    }); */
+    
     this.searchBusServe.on().subscribe(res => {
       console.log('res ddd:', res);
     })
@@ -59,6 +54,7 @@ export class WySearchComponent implements OnInit, AfterViewInit, OnDestroy {
   onFocus() {
     console.log('onFocus');
     this.showOverlayPanel();
+    
   }
   onBlur() {
     console.log('onBlur');
@@ -70,6 +66,9 @@ export class WySearchComponent implements OnInit, AfterViewInit, OnDestroy {
    
 
     this.overlayRef.attach(this.panelPortal);
+    setTimeout(() => {
+      this.searchBusServe.setData('subject tests');
+    }, 500);
   }
 
   dismissOverlayPanel() {

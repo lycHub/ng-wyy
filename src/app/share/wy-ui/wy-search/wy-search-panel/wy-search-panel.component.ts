@@ -6,21 +6,15 @@ import { WySerchBusService } from '../wy-serch-bus.service';
   templateUrl: './wy-search-panel.component.html',
   styleUrls: ['./wy-search-panel.component.less']
 })
-export class WySearchPanelComponent implements OnInit, OnChanges, OnDestroy {
- 
-  
-  @Input() test = 'defTest';
-
-  // evtSub = new Subject();
-  @Output('out') out = new EventEmitter<string>();
-
-  constructor(private searchBusServe: WySerchBusService) { }
-
-  ngOnInit() {
+export class WySearchPanelComponent implements OnInit, OnDestroy {
+  constructor(private searchBusServe: WySerchBusService) {
     
   }
-  ngOnChanges(changes: import("@angular/core").SimpleChanges): void {
-    console.log('test change :', changes['test']);
+
+  ngOnInit() {
+    this.searchBusServe.subData().subscribe(res => {
+      console.log('sub data:', res);
+    });
   }
 
   outEvent() {
