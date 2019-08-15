@@ -15,6 +15,7 @@ import { StorageService } from './service/storage.service';
 import { User, UserSheet } from './service/data-modals/member.models';
 import { ModalTypes } from './store/reducers/member.reducer';
 import { MultipleReducersService } from './store/multiple-reducers.service';
+import { SearchService } from './service/search.service';
 
 @Component({
   selector: 'app-root',
@@ -56,6 +57,7 @@ export class AppComponent {
     private store$: Store<AppStoreModule>,
     private multipleReducerServe: MultipleReducersService,
     private storageServe: StorageService,
+    private searchServe: SearchService,
     @Inject(WINDOW) private win: Window) {
     const userId = this.storageServe.getStorage('wyUserId');
     if (userId) {
@@ -173,5 +175,13 @@ export class AppComponent {
   private alertMessage(type: string, msg: string) {
     this.showSpin = false;
     this.messageServe.create(type, msg);
+  }
+
+
+  onSearch(val: string) {
+    console.log('val :', val);
+    this.searchServe.search(val).subscribe(res => {
+      console.log('res :', res);
+    })
   }
 }

@@ -6,7 +6,7 @@ import { Directive, HostListener } from '@angular/core';
 export class ImgDefaultDirective {
 
   constructor() {
-    console.log('img');
+    
   }
 
   @HostListener('mousedown', ['$event']) onMouseDown(evt) {
