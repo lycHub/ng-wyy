@@ -1,8 +1,8 @@
-import { AfterViewInit, Component, ElementRef, Inject, OnChanges, OnDestroy, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Inject, OnDestroy, ViewChild } from '@angular/core';
 import {fromEvent, Subscription, Observable, Subject} from "rxjs/index";
 import {DOCUMENT} from "@angular/common";
 import {shuffle} from "../../../utils/array";
-import {Singer, Song} from "../../../service/data-modals/common.models";
+import {Song} from "../../../service/data-modals/common.models";
 import { WyPlayerPanelComponent } from './wy-player-panel/wy-player-panel.component';
 import { Store, select } from '@ngrx/store';
 import { AppStoreModule } from 'src/app/store';
@@ -44,7 +44,7 @@ const modeTypes: PlayMode[] = [{
     transition('hide=>show', [ animate('0.1s') ])
   ])]
 })
-export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
+export class WyPlayerComponent implements AfterViewInit, OnDestroy {
   showPlayer = 'hide';
   lockPlayer = false;
 
@@ -294,9 +294,6 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
     }
   }
   
-  visibleChange(bol: boolean) {
-    console.log('visibleChange :', bol);
-  }
   
   onToggle() {
     if (!this.currentSong) {
@@ -412,28 +409,20 @@ export class WyPlayerComponent implements OnChanges, AfterViewInit, OnDestroy {
     this.animating = false;
     if (event.toState === 'show' && this.showToolTip) {
       this.controlToolTip.show = true;
-      /* if (this.toolTipTimer) {
-        this.win.clearTimeout(this.toolTipTimer);
-        this.toolTipTimer = null;
-      } */
       
       this.toolTipTimer = this.win.setTimeout(() => {
         this.showToolTip = false;
         this.controlToolTip.show = false;
         this.controlToolTip.title = '';
-        this.togglePlayer('hide');
+        // this.togglePlayer('hide');
       }, 2000);
     }
-  }
-  
-  
-  ngOnChanges(changes: SimpleChanges): void {
-    
   }
   
   ngOnDestroy(): void {
     this.unbindDocumentClickListener();
     this.destroy$.next();
     this.destroy$.complete();
+    this.toolTipTimer && this.win.clearTimeout(this.toolTipTimer);
   }
 }

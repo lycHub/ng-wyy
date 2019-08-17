@@ -8,9 +8,9 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 export type SearchResult = {
-  artists: Singer[],
-  playlists: SongSheet[],
-  songs: Song[]
+  artists?: Singer[],
+  playlists?: SongSheet[],
+  songs?: Song[]
 }
 
 @Injectable({

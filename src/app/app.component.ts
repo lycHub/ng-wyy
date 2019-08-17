@@ -15,7 +15,8 @@ import { StorageService } from './service/storage.service';
 import { User, UserSheet } from './service/data-modals/member.models';
 import { ModalTypes } from './store/reducers/member.reducer';
 import { MultipleReducersService } from './store/multiple-reducers.service';
-import { SearchService } from './service/search.service';
+import { SearchService, SearchResult } from './service/search.service';
+import { isEmptyObj } from './utils/tools';
 
 @Component({
   selector: 'app-root',
@@ -47,6 +48,8 @@ export class AppComponent {
 
   searchVisible = false;
   
+  searchResult: SearchResult;
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
@@ -179,9 +182,25 @@ export class AppComponent {
 
 
   onSearch(val: string) {
-    console.log('val :', val);
     this.searchServe.search(val).subscribe(res => {
-      console.log('res :', res);
-    })
+      this.searchResult = this.highlightKeyWords(val, res);
+    });
+  }
+
+
+
+  private highlightKeyWords(keywords: string, searchResult: SearchResult): SearchResult {
+    if (!isEmptyObj(searchResult)) {
+      const reg = new RegExp(keywords, 'ig');
+      ['artists', 'songs', 'playlists'].forEach(type => {
+        if (searchResult[type]) {
+          searchResult[type].forEach(item => {
+            item.name = item.name.replace(reg, `<span class="highlight">$&</span>`);
+          });
+        }
+      });
+    }
+    
+    return searchResult;
   }
 }

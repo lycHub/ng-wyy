@@ -37,7 +37,7 @@ export class SingerDetailComponent implements OnInit, OnDestroy {
     private store$: Store<AppStoreModule>
   ) {
     this.route.data.pipe(map(res => res.singerDatas)).subscribe(([detail, singers]) => {
-      console.log('detail :', detail);
+      // console.log('detail :', detail);
       this.detail = detail;
       this.simiSingers = singers;
       if (this.detail) {

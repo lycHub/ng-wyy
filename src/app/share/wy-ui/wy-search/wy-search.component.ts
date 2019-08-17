@@ -1,9 +1,11 @@
-import { Component, OnInit, Input, TemplateRef, ViewContainerRef, ViewChild, ElementRef, AfterViewInit, OnDestroy, ComponentRef, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, TemplateRef, ViewContainerRef, ViewChild, ElementRef, AfterViewInit, OnDestroy, ComponentRef, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { OverlayConfig, Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { WySearchPanelComponent } from './wy-search-panel/wy-search-panel.component';
 import { Subscription, fromEvent } from 'rxjs/index';
 import { pluck, debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { SearchResult } from '../../../service/search.service';
+import { isEmptyObj } from '../../../utils/tools';
 
 
 @Component({
@@ -11,17 +13,20 @@ import { pluck, debounceTime, distinctUntilChanged } from 'rxjs/operators';
   templateUrl: './wy-search.component.html',
   styleUrls: ['./wy-search.component.less']
 })
-export class WySearchComponent implements OnInit, AfterViewInit, OnDestroy {
+export class WySearchComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
   @Input() handlerView: TemplateRef<any>;
   @Input() connectedTo: ElementRef;
+  @Input() searchResult: SearchResult;
 
   @Output() onSearch = new EventEmitter<string>();
 
   private overlayRef: OverlayRef;
   private panelRef: ComponentRef<WySearchPanelComponent>;
   private panelPortal: ComponentPortal<WySearchPanelComponent>;
-
   private search$: Subscription;
+
+  private keywords: string;
+
   @ViewChild('search', { static: false }) private defaultRef: ElementRef;
   @ViewChild('nzInput', { static: false }) private nzInput: ElementRef;
 
@@ -42,27 +47,45 @@ export class WySearchComponent implements OnInit, AfterViewInit, OnDestroy {
     this.search$ = fromEvent(this.nzInput.nativeElement, 'input')
     .pipe(debounceTime(300), distinctUntilChanged(), pluck('target', 'value'))
     .subscribe((value: string) => {
+      this.keywords = value;
       if (value) {
         this.onSearch.emit(value);
+      }else {
+        this.dismissOverlayPanel();
       }
     });
   }
 
-  onKeyUp(evt) {
-    const val = evt.target.value;
-    /* if (evt.target.value) {
-      this.onSearch.emit(val);
-    } */
-    // this.searchServe.search()
-    // this.showOverlayPanel();
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['searchResult'] && !changes['searchResult'].firstChange) {
+      if (!isEmptyObj(this.searchResult)) {
+        this.showOverlayPanel();
+      }else {
+        this.dismissOverlayPanel();
+      }
+    }
   }
+
+  onFocus() {
+    if (this.searchResult && !isEmptyObj(this.searchResult)) {
+      this.showOverlayPanel();
+    }
+  }
+
+  
+
+
   onBlur() {
-    console.log('onBlur');
-    // this.dismissOverlayPanel();
+    this.dismissOverlayPanel();
   }
 
 
   showOverlayPanel() {
+    if (this.overlayRef && this.overlayRef.hasAttached()) {
+      this.dismissOverlayPanel();
+    }
+    
     const strategy = this.overlay.position()
     .flexibleConnectedTo(this.connectedTo || this.defaultRef)
     .withPositions([{
@@ -79,10 +102,8 @@ export class WySearchComponent implements OnInit, AfterViewInit, OnDestroy {
     this.overlayRef = this.overlay.create(config);
     this.panelPortal = new ComponentPortal(WySearchPanelComponent, this.viewContainerRef);
     this.panelRef = this.overlayRef.attach(this.panelPortal);
-    this.panelRef.instance.list = [1, 2, 3];
-    this.panelRef.instance.onSelected.subscribe(selected => {
-      console.log('selected :', selected);
-    });
+    console.log('searchResult :', this.searchResult);
+    this.panelRef.instance.searchResult = this.searchResult;
   }
 
   dismissOverlayPanel() {
