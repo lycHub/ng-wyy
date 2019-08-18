@@ -118,4 +118,8 @@ export class MemberService {
     return this.http.get(this.uri + 'artist/sub', { params })
     .pipe(map((res: { code: number }) => res.code));
   }
+
+
+  // 发送验证码
+  
 }

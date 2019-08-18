@@ -1,6 +1,5 @@
 import { Component, Output, EventEmitter, Inject, OnChanges, SimpleChanges, Input } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { WINDOW } from 'src/app/core/inject-tokens';
 import { codeJson } from 'src/app/utils/base64';
 import { ModalTypes } from '../../../../store/reducers/member.reducer';
 
@@ -22,7 +21,7 @@ export class WyLoginPhoneComponent implements OnChanges {
   @Input() wyUserLogin: LoginParams;
   @Output() onLogin = new EventEmitter<LoginParams>();
   @Output() onChangeModalType = new EventEmitter<ModalTypes | void>();
-  constructor(private fb: FormBuilder, @Inject(WINDOW) private win: Window) {
+  constructor(private fb: FormBuilder) {
     
     
   }
