@@ -11,9 +11,12 @@ import { NzInputModule, NzAlertModule, NzCheckboxModule, NzFormModule, NzSpinMod
 import { WyLoginDefaultComponent } from './wy-login-default/wy-login-default.component';
 import { WyLayerLikeComponent } from './wy-layer-like/wy-layer-like.component';
 import { WyLayerShareComponent } from './wy-layer-share/wy-layer-share.component';
+import { CheckCodeComponent } from '../check-code/check-code.component';
+import { CodeComponent } from '../check-code/code/code.component';
+
 
 @NgModule({
-  declarations: [WyLayerModalComponent, WyLoginPhoneComponent, WyLayerRegisterComponent, WyLoginDefaultComponent, WyLayerLikeComponent, WyLayerShareComponent],
+  declarations: [WyLayerModalComponent, WyLoginPhoneComponent, WyLayerRegisterComponent, WyLoginDefaultComponent, WyLayerLikeComponent, WyLayerShareComponent, CheckCodeComponent, CodeComponent],
   imports: [
     CommonModule,
     NzButtonModule,
@@ -30,6 +33,6 @@ import { WyLayerShareComponent } from './wy-layer-share/wy-layer-share.component
     NzFormModule
   ],
   providers: [OverlayContainer],
-  exports: [WyLayerModalComponent, WyLoginPhoneComponent, WyLayerRegisterComponent, WyLoginDefaultComponent, WyLayerLikeComponent, WyLayerShareComponent]
+  exports: [WyLayerModalComponent, WyLoginPhoneComponent, WyLayerRegisterComponent, WyLoginDefaultComponent, WyLayerLikeComponent, WyLayerShareComponent, CheckCodeComponent, CodeComponent]
 })
 export class WyLayerModule { }

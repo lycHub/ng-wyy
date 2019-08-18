@@ -105,8 +105,8 @@ export class AppComponent {
     });
   }
 
-  onChangeModalType(type = ModalTypes.Default) {
-    this.store$.dispatch(SetModalType({ modalType: type }));
+  onChangeModalType(modalType = ModalTypes.Default) {
+    this.store$.dispatch(SetModalType({ modalType }));
   }
 
 

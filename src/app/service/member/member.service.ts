@@ -121,5 +121,9 @@ export class MemberService {
 
 
   // 发送验证码
-  
+  sendCode(phone: number): Observable<number> {
+    const params = new HttpParams({fromString: queryString.stringify({ phone })});
+    return this.http.get(this.uri + 'captcha/sent', { params })
+    .pipe(map((res: { code: number }) => res.code));
+  }
 }
