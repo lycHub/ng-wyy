@@ -29,10 +29,6 @@ export class HomeComponent implements OnDestroy {
   
   // 轮播当前索引
   carouselActiveIndex = 0;
-  get bannerBg(): string {
-    return this.banners && this.banners[this.carouselActiveIndex].bgColor;
-  }
-  
   private appStore$: Observable<AppStoreModule>;
   private destroy$ = new Subject<void>();
   

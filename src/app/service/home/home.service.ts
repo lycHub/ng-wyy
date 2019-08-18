@@ -12,15 +12,9 @@ import { API_CONFIG } from 'src/app/core/inject-tokens';
 export class HomeService {
   constructor(private http: HttpClient, @Inject(API_CONFIG) private uri: string) { }
   
-  getBanners(): Observable<Banner[]> {// bgColor
-    const bgColor = ['#f1f0ee', '#5e786b', '#040404', '#eff1fd', '#202441', '#f1eee9', '#c17335', '#f1f1e7', '#5a5a5a'];
+  getBanners(): Observable<Banner[]> {
     return this.http.get(this.uri + 'banner')
-      .pipe(map((res: { banners: Banner[] }) => {
-        res.banners.forEach((item, key) => {
-          item.bgColor = bgColor[key]
-        });
-        return res.banners;
-      }));
+      .pipe(map((res: { banners: Banner[] }) => res.banners));
   }
   
   

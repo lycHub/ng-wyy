@@ -1,5 +1,5 @@
 <div class="home">
-  <wy-carousel #wyCarousel [activeIndex]="carouselActiveIndex" [bgColor]="bannerBg" (changeSlide)="onChangeSlide($event)">
+  <wy-carousel #wyCarousel [activeIndex]="carouselActiveIndex" (changeSlide)="onChangeSlide($event)">
     <nz-carousel nzAutoPlay [nzEffect]="'fade'" [nzDotRender]="wyCarousel.dotRef" (nzBeforeChange)="nzBeforeChange($event)">
       <div class="carousel-item" nz-carousel-content *ngFor="let item of banners; trackBy: trackByBanners">
         <a [href]="item.url" target="_blank" class="banner-item">

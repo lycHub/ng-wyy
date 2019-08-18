@@ -9,7 +9,6 @@ import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output, Templat
 export class WyCarouselComponent {
   @ViewChild('dot', { static: true }) dotRef: TemplateRef<any>;
   @Input() activeIndex: number;
-  @Input() bgColor: string;
   @Output() changeSlide = new EventEmitter<string>();
   onChangeSlide(type: string) {
     this.changeSlide.emit(type);
