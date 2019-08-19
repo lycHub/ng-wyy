@@ -1,7 +1,7 @@
 <div class="home">
   <wy-carousel #wyCarousel [activeIndex]="carouselActiveIndex" (changeSlide)="onChangeSlide($event)">
     <nz-carousel nzAutoPlay [nzEffect]="'fade'" [nzDotRender]="wyCarousel.dotRef" (nzBeforeChange)="nzBeforeChange($event)">
-      <div class="carousel-item" nz-carousel-content *ngFor="let item of banners; trackBy: trackByBanners">
+      <div class="carousel-item" nz-carousel-content *ngFor="let item of banners">
         <a [href]="item.url" target="_blank" class="banner-item">
           <img [src]="item.imageUrl" appImgDefault />
         </a>
@@ -20,7 +20,7 @@
                 <a routerLink="/sheet">热门推荐</a>
               </h2>
               <nav>
-                <a routerLink="/sheet" [queryParams]="{cat: item.name}" *ngFor="let item of hotTags;trackBy: trackByHotTags">{{item.name}}</a>
+                <a routerLink="/sheet" [queryParams]="{cat: item.name}" *ngFor="let item of hotTags">{{item.name}}</a>
               </nav>
             </div>
             <a routerLink="/sheet">
@@ -33,7 +33,7 @@
             <div class="down-wrap">
               <app-single-sheet
                 class="sheet-item"
-                *ngFor="let item of songSheetList;trackBy: trackBySongList"
+                *ngFor="let item of songSheetList"
                 [sheet]="item"
                 (onPlay)="playSong($event)"
                 (click)="toInfo(item.id)">

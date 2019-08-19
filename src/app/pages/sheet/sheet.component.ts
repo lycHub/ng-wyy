@@ -61,6 +61,4 @@ export class SheetComponent implements OnInit {
   toInfo(id: number) {
     this.router.navigate(['/sheetInfo', id]);
   }
-
-  trackBySongList(index: number, songSheet: SongSheet): number { return songSheet.id; }
 }

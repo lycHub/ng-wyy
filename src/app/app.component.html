@@ -6,7 +6,6 @@
         <div class="left">
           <h1>Music</h1>
           <ul nz-menu [nzTheme]="'dark'" [nzMode]="'horizontal'">
-            <!-- nzSelected -->
             <li nz-menu-item [nzSelected]="routeTitle === item.title" *ngFor="let item of menu" [routerLink]="item.path">{{item.title}}</li>
           </ul>
         </div>

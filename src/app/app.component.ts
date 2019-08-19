@@ -1,9 +1,9 @@
 import { Component, Inject } from '@angular/core';
 import {NavigationEnd, Router, ActivatedRoute} from "@angular/router";
-import { Observable, from } from 'rxjs/index';
+import { Observable } from 'rxjs/index';
 import {filter, map, mergeMap} from "rxjs/internal/operators";
 import {WINDOW} from "./core/inject-tokens";
-import { Title, Meta } from '@angular/platform-browser';
+import { Title } from '@angular/platform-browser';
 import { LoginParams } from './share/wy-ui/wy-layer/wy-login-phone/wy-login-phone.component';
 import { MemberService } from './service/member.service';
 import { NzMessageService } from 'ng-zorro-antd';
@@ -55,7 +55,6 @@ export class AppComponent {
     private router: Router,
     private titleService: Title,
     private memberServe: MemberService,
-    private meta: Meta,
     private messageServe: NzMessageService,
     private store$: Store<AppStoreModule>,
     private multipleReducerServe: MultipleReducersService,
@@ -74,7 +73,7 @@ export class AppComponent {
     const storage = JSON.parse(localStorage.getItem('wyUserLogin'));
     this.wyUserLogin = storage;
     this.setLoadingBar();
-    this.setMT();
+    this.setTitle();
   }
 
 
@@ -89,19 +88,16 @@ export class AppComponent {
     });
   }
 
-  private setMT() {
+  private setTitle() {
     this.navEnd.pipe(
       map(() => this.activatedRoute),
       map((route: ActivatedRoute) => {
         while (route.firstChild) route = route.firstChild;
         return route;
       }),
-      // filter((route) => route.outlet === 'primary'),
       mergeMap(route => route.data)).subscribe(event => {
       this.routeTitle = event['title'];
       this.titleService.setTitle(this.routeTitle);
-      this.meta.addTag({ keywords: event['keywords'], description: event['description'] });
-      this.meta.updateTag({ keywords: event['keywords'], description: event['description'] });
     });
   }
 

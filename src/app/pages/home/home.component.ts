@@ -82,8 +82,4 @@ export class HomeComponent implements OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
   }
-  
-  trackByBanners(index: number, banner: Banner): number { return banner.targetId; }
-  trackByHotTags(index: number, tag: HotTag): number { return tag.id; }
-  trackBySongList(index: number, songSheet: SongSheet): number { return songSheet.id; }
 }

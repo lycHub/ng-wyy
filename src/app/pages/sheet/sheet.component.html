@@ -21,7 +21,7 @@
     <div class="list">
       <app-single-sheet
         class="sheet-item"
-        *ngFor="let item of playlistInfo?.playlists;trackBy: trackBySongList"
+        *ngFor="let item of playlistInfo?.playlists"
         [sheet]="item"
         (onPlay)="playSong($event)"
         (click)="toInfo(item.id)">

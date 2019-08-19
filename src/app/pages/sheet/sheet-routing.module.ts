@@ -5,7 +5,7 @@ import { SheetComponent } from './sheet.component';
 const routes: Routes = [
   {
     path: '', component: SheetComponent,
-    data: { title: '歌单', keywords: 'sheet, 歌单', description: '歌单页' }
+    data: { title: '歌单' }
   }
 ];
 
