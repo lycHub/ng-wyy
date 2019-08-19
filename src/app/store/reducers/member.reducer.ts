@@ -1,7 +1,6 @@
 import { createReducer, Action, on } from '@ngrx/store';
 import * as MemberActions from '../actions/member.actions';
 import { User } from 'src/app/service/data-modals/member.models';
-import { SetShareParams } from '../actions/member.actions';
 
 
 export enum ModalTypes {

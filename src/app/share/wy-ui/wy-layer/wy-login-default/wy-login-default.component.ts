@@ -20,10 +20,8 @@ import { ModalTypes } from 'src/app/store/reducers/member.reducer';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WyLoginDefaultComponent implements OnInit {
-  @Output() onChangeModalType = new EventEmitter<ModalTypes>();
+  @Output() onChangeModalType = new EventEmitter<string | void>();
   constructor() { }
 
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }

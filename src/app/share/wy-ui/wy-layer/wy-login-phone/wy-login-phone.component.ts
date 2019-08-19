@@ -20,7 +20,7 @@ export class WyLoginPhoneComponent implements OnChanges {
   formModel: FormGroup;
   @Input() wyUserLogin: LoginParams;
   @Output() onLogin = new EventEmitter<LoginParams>();
-  @Output() onChangeModalType = new EventEmitter<ModalTypes | void>();
+  @Output() onChangeModalType = new EventEmitter<string | void>();
   constructor(private fb: FormBuilder) {
     
     
@@ -64,5 +64,4 @@ export class WyLoginPhoneComponent implements OnChanges {
       });
     }
   }
-
 }

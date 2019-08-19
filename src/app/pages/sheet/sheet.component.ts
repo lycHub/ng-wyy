@@ -12,7 +12,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 })
 export class SheetComponent implements OnInit {
   radioValue = 'hot';
-  private listParams: SheetParams = {
+  listParams: SheetParams = {
     cat: '全部',
     limit: 35,
     offset: 1,

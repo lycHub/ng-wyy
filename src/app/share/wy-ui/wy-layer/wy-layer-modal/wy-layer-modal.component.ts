@@ -55,7 +55,7 @@ export class WyLayerModalComponent implements OnInit {
   private resizeHandler: () => void;
   private modalSize: DomSize;
 
-  private currentModal = ModalTypes.Default;
+  currentModal = ModalTypes.Default;
   private overLayContainerEl: HTMLElement;
   private appStore$: Observable<AppStoreModule>;
   private destroy$ = new Subject<void>();
@@ -149,7 +149,7 @@ export class WyLayerModalComponent implements OnInit {
     }
   }
 
-  private hide() {
+  hide() {
     this.multipleReducerServe.controlModal(ModalTypes.Default, false);
   }
 

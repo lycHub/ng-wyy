@@ -49,8 +49,8 @@ export class WyPlayerComponent implements AfterViewInit, OnDestroy {
   lockPlayer = false;
 
   // 是否正在动画
-  private animating = false;
-  private songList: Song[];
+  animating = false;
+  songList: Song[];
   
   private playList: Song[];
   
