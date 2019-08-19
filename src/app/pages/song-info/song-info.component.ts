@@ -23,14 +23,14 @@ export class SongInfoComponent implements OnInit {
     label: '展开',
     iconCls: 'down'
   }
-  constructor(private route: ActivatedRoute,
-              private songServe: SongService,
-              private multipleReducerServe: MultipleReducersService) {
+  constructor(
+    private route: ActivatedRoute,
+    private songServe: SongService,
+    private multipleReducerServe: MultipleReducersService
+  ) {
     this.route.data.pipe(map(res => res.songInfo)).subscribe(([song, lyric]) => {
       this.song = song;
-      console.log('lyric :', lyric);
       this.updateLyric(lyric);
-      // console.dir(this.lyric);
     });
   }
 
@@ -59,17 +59,5 @@ export class SongInfoComponent implements OnInit {
   private updateLyric({ lyric, tlyric }: Lyric) {
     this.lyric = new LyricParser({lyric, tlyric});
     this.currentLyric = this.lyric.lines;
-    // console.log('currentLyric', this.currentLyric);
   }
-  
-  
-  /* private concatLyric(lyric: LyricItem[], tlyric: LyricItem[]): LyricItem[] {
-    const result = [];
-    lyric.forEach(item => {
-      const cnItem = tlyric.find(cnLyric => cnLyric.time === item.time);
-      const txtCn = cnItem ? cnItem.txt : '';
-      result.push({ ...item, txtCn });
-    });
-    return result;
-  } */
 }

@@ -45,7 +45,6 @@ export class CenterComponent implements OnInit, OnDestroy {
     private memberServe: MemberService
   ) {
     this.route.data.pipe(map(res => res.user)).subscribe(([user, userRecord, userSheet]) => {
-      // console.log('user :', user);
       this.user = user;
       this.userRecord = userRecord.slice(0, 10);
       this.userSheet = userSheet;
@@ -54,14 +53,13 @@ export class CenterComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // this.testArr = Array(10).fill(3);
+    
   }
 
   // 监听currentSong
   private listenCurrentSong() {
     this.appStore$ = this.store$.pipe(select('player'), takeUntil(this.destroy$));
     this.appStore$.pipe(select(getCurrentSong)).subscribe(song => {
-      // console.log('listenCurrentSong :', song);
       this.currentSong = song;
       if (song) {
         const songs = this.userRecord.map(item => item.song);
@@ -84,9 +82,7 @@ export class CenterComponent implements OnInit, OnDestroy {
 
    // 添加一首歌曲
    onAddSong([song, play]) {
-    if (this.currentSong && this.currentSong.id === song.id) {
-      console.log('存在');
-    }else{
+    if (!this.currentSong || this.currentSong.id !== song.id) {
       this.songServe.getSongList(song).subscribe(list => this.multipleReducerServe.insertSong(list[0], play));
     }
   }

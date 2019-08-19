@@ -49,30 +49,6 @@ export class LyricParser {
    }else{
     this.generLyric();
    }
-    
-    /* for (let i = 0; i < lines.length; i++) {
-      const line = lines[i];
-      const result = timeExp.exec(line);
-      if (result) {
-        const txt = line.replace(timeExp, '').trim();
-        if (txt) {
-          let tirdResult = result[3] || '0'; // 数字的 0 查询长度会变为 undefined，感觉不如直接指定 '0'
-          let length = tirdResult.length;
-          let _tirdResult = parseInt(tirdResult, 10);
-          _tirdResult = length > 2 ? Number(_tirdResult) : Number(_tirdResult) * 10;
-
-          this.lines.push({
-            // time: result[1] * 60 * 1000 + result[2] * 1000 + (result[3] || 0) * 10 + offset,
-            time: Number(result[1]) * 60 * 1000 + Number(result[2]) * 1000 + _tirdResult,
-            txt
-          })
-        }
-      }
-    }
-    
-    this.lines.sort((a, b) => {
-      return a.time - b.time
-    }) */
   }
 
 
@@ -82,8 +58,6 @@ export class LyricParser {
       return timeExp.exec(item) !== null;
     });
     const moreLine = lines.length - tlines.length;
-
-    // console.log('tlines :', tlines);
 
     let tempArr = [];
     let zipLines$; 

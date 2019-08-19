@@ -20,7 +20,6 @@ export class WySliderTrackComponent implements OnInit {
 
   
   ngOnChanges(changes: SimpleChanges): void {
-    // console.log('changes track :', changes);
     if (changes.nzVertical || changes.nzLength) {
       if (this.nzVertical) {
         this.style.height = `${this.nzLength}%`;

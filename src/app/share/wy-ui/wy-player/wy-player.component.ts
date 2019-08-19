@@ -227,7 +227,6 @@ export class WyPlayerComponent implements AfterViewInit, OnDestroy {
   private bindDocumentClickListener() {
     if (!this.winClick$) {
       this.winClick$ = fromEvent(this.doc, 'click').subscribe(() => {
-        // console.log('click');
         if (!this.selfClick) {  // 说明点击了控件外的其它地方
           this.showVolPanel = false;
           this.showPanel = false;
@@ -380,7 +379,6 @@ export class WyPlayerComponent implements AfterViewInit, OnDestroy {
     if (this.currentMode.type !== 'singleLoop') {
       this.onNext(this.currentIndex + 1);
     }else {
-      console.log('loop');
       this.loop();
     }
   }
@@ -389,7 +387,6 @@ export class WyPlayerComponent implements AfterViewInit, OnDestroy {
   private loop() {
     this.audioEl.currentTime = 0;
     if (this.playPanel) {
-      console.log('seek');
       this.playPanel.lyric.seek(0);
     }
     this.play();
@@ -405,7 +402,6 @@ export class WyPlayerComponent implements AfterViewInit, OnDestroy {
   }
 
   onAnimateDone(event: AnimationEvent) {
-    // console.log('event :', event.toState);
     this.animating = false;
     if (event.toState === 'show' && this.showToolTip) {
       this.controlToolTip.show = true;
@@ -414,7 +410,6 @@ export class WyPlayerComponent implements AfterViewInit, OnDestroy {
         this.showToolTip = false;
         this.controlToolTip.show = false;
         this.controlToolTip.title = '';
-        // this.togglePlayer('hide');
       }, 2000);
     }
   }

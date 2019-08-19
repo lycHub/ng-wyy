@@ -42,7 +42,7 @@ export class CheckCodeComponent implements OnChanges, OnInit {
   }
 
   ngOnInit() {
-    // console.log('check-code init');
+    
   }
 
   ngOnChanges(changes: SimpleChanges) {

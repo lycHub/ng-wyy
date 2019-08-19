@@ -43,7 +43,6 @@ export class WyLayerLikeComponent implements OnInit, OnDestroy {
   // 收藏歌曲
   onLike(id: number) {
     this.memberServe.likeSongs(id, this.likeId).subscribe(code => {
-      console.log('code :', code);
       if (code === 200) {
         this.alertMessage('success', '收藏成功');
         this.multipleReducerServe.controlModal(ModalTypes.Default, false);

@@ -37,7 +37,6 @@ export class SingerDetailComponent implements OnInit, OnDestroy {
     private store$: Store<AppStoreModule>
   ) {
     this.route.data.pipe(map(res => res.singerDatas)).subscribe(([detail, singers]) => {
-      // console.log('detail :', detail);
       this.detail = detail;
       this.simiSingers = singers;
       if (this.detail) {
@@ -62,9 +61,7 @@ export class SingerDetailComponent implements OnInit, OnDestroy {
 
    // 添加一首歌曲
    onAddSong(song: Song, play = false) {
-    if (this.currentSong && this.currentSong.id === song.id) {
-      console.log('存在');
-    }else{
+    if (!this.currentSong && this.currentSong.id !== song.id) {
       this.songServe.getSongList(song).subscribe(list => this.multipleReducerServe.insertSong(list[0], play));
     }
   }
@@ -100,7 +97,6 @@ export class SingerDetailComponent implements OnInit, OnDestroy {
       }
     }
     this.memberServe.likeSinger(id, typeInfo.type).subscribe(code => {
-      console.log('code :', code);
       if (code === 200) {
         this.hasLiked = !this.hasLiked;
         this.alertMessage('success', typeInfo.msg + '成功');
@@ -128,7 +124,6 @@ export class SingerDetailComponent implements OnInit, OnDestroy {
   private listenCurrentSong() {
     this.appStore$ = this.store$.pipe(select('player'), takeUntil(this.destroy$));
     this.appStore$.pipe(select(getCurrentSong)).subscribe(song => {
-      // console.log('listenCurrentSong :', song);
       this.currentSong = song;
       if (song) {
         this.currentIndex = findIndex(this.detail.hotSongs, song);

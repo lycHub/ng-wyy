@@ -115,7 +115,6 @@ export class AppComponent {
     if (this.user) {
       this.memberServe.userSheets(this.user.profile.userId).subscribe(userSheet => {
         this.userSheet = userSheet;
-        // console.log('userSheet :', userSheet);
         this.store$.dispatch(SetModalVisible({ visible: true }));
       });
     }else {

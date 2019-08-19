@@ -53,7 +53,7 @@ export class MultipleReducersService {
       this.store$.dispatch(SetSongList({ list: songList }));
       this.store$.dispatch(SetPlayList({ list: playlist }));
     }
-    // console.log(currentIndex, this.playState.currentIndex);
+    
     if (insertIndex !== this.playState.currentIndex) {
       this.store$.dispatch(SetCurrentIndex({ index: insertIndex }));
       this.store$.dispatch(SetCurrentAction({ action: CurrentActions.Play }));

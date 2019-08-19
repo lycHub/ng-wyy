@@ -96,13 +96,12 @@ export class WySearchComponent implements OnInit, AfterViewInit, OnChanges, OnDe
         offsetX: 0,
         offsetY: 0
     }]);
-    // strategy.withLockedPosition(true);  // 锁定位置
+    strategy.withLockedPosition(true);  // 锁定位置
     const config = new OverlayConfig({positionStrategy: strategy});
-    config.scrollStrategy = this.overlay.scrollStrategies.reposition();   // 更随滑动的策略
+    config.scrollStrategy = this.overlay.scrollStrategies.reposition();
     this.overlayRef = this.overlay.create(config);
     this.panelPortal = new ComponentPortal(WySearchPanelComponent, this.viewContainerRef);
     this.panelRef = this.overlayRef.attach(this.panelPortal);
-    console.log('searchResult :', this.searchResult);
     this.panelRef.instance.searchResult = this.searchResult;
   }
 

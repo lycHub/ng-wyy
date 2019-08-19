@@ -59,7 +59,6 @@ export class WyScrollComponent implements AfterViewInit, OnChanges {
   
   // 刷新
   refreshScroll(): void {
-    // console.log('refreshScroll');
     this.win.setTimeout(() => {
       this.refresh();
     }, this.refreshDelay);

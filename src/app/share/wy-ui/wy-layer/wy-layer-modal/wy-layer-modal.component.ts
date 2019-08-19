@@ -108,7 +108,6 @@ export class WyLayerModalComponent implements OnInit {
     if (type === ModalTypes.Like) {
       this.onLoadSheetList.emit();
     }
-    console.log('type :', type);
     this.currentModal = type;
   }
 

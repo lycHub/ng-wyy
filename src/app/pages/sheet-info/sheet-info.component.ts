@@ -52,7 +52,6 @@ export class SheetInfoComponent implements OnDestroy{
     private store$: Store<AppStoreModule>
   ) {
     this.route.data.pipe(map(res => res.sheetInfo)).subscribe(res => {
-      // console.log('sheetInfo :', res);
       this.sheetInfo = res;
       this.hasLiked = res.subscribed;
       
@@ -68,7 +67,6 @@ export class SheetInfoComponent implements OnDestroy{
   private listenCurrentSong() {
     this.appStore$ = this.store$.pipe(select('player'), takeUntil(this.destroy$));
     this.appStore$.pipe(select(getCurrentSong)).subscribe(song => {
-      // console.log('listenCurrentSong :', song);
       this.currentSong = song;
       if (song) {
         this.currentIndex = findIndex(this.sheetInfo.tracks, song);
@@ -91,9 +89,7 @@ export class SheetInfoComponent implements OnDestroy{
   
   // 添加一首歌曲
   onAddSong(song: Song, play = false) {
-    if (this.currentSong && this.currentSong.id === song.id) {
-      console.log('存在');
-    }else{
+    if (!this.currentSong || this.currentSong.id !== song.id) {
       this.songServe.getSongList(song).subscribe(list => this.multipleReducerServe.insertSong(list[0], play));
     }
   }

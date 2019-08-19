@@ -54,7 +54,6 @@ export class WyLayerRegisterComponent {
       password: this.getFormValue('password'),
       captcha
     }).subscribe(res => {
-      console.log('onRegister :', res);
     }, error => {
       this.messageServe.error(error.message);
     });

@@ -51,7 +51,6 @@ export class WyPlayerPanelComponent implements OnChanges {
   constructor(private songServe: SongService, @Inject(WINDOW) private win: Window) {}
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['playing']) {
-      // console.log('changes playing', this.playing);
       if(!changes['playing'].firstChange) {
         this.lyric && this.lyric.togglePlay(this.playing);
       }
@@ -67,8 +66,6 @@ export class WyPlayerPanelComponent implements OnChanges {
           }
           if (this.lyricRefs) {
             const targetLine = this.lyricRefs[this.currentLineIndex - this.startLine];
-            // console.log('lyricRefs :', this.lyricRefs);
-            // console.log('startLine :',this.currentLineIndex - this.startLine);
             if (targetLine) {
               this.wyScroll.last.scrollToElement(targetLine, 0, false, false);
             }
@@ -79,7 +76,6 @@ export class WyPlayerPanelComponent implements OnChanges {
       }
     }
 
-    // console.log('songList :', changes['songList']);
     if (changes['songList']) {
       if (this.currentSong) {
         // if (this.lyric) this.lyric.togglePlay();
@@ -90,7 +86,6 @@ export class WyPlayerPanelComponent implements OnChanges {
   
   
     let currentSong = null;
-    // console.log('currentSong :', changes['currentSong']);
     if (changes['currentSong']) {
       currentSong = changes['currentSong'].currentValue;
       if (currentSong) {
@@ -114,7 +109,6 @@ export class WyPlayerPanelComponent implements OnChanges {
     this.songServe.getLyric(this.currentSong.id).subscribe(({ lyric, tlyric }) => {
       this.lyric = new LyricParser({ lyric, tlyric });
       this.handleLyric();
-      // console.log('lyric lines :', this.lyric.lines);
       this.currentLyric = this.lyric.lines;
       if (tlyric) {
         this.isCnSong = false;
@@ -131,7 +125,6 @@ export class WyPlayerPanelComponent implements OnChanges {
     this.win.setTimeout(() => {
       this.lyricRefs = this.wyScroll.last.el.nativeElement.querySelectorAll('ul li');
     }, 500);
-      // console.log(this.currentLyric);
     });
   }
 
@@ -149,25 +142,12 @@ export class WyPlayerPanelComponent implements OnChanges {
     
   }
   
-  /* private concatLyric(lyric: LyricItem[], tlyric: LyricItem[]): LyricItem[] {
-    const result = [];
-    lyric.forEach(item => {
-      const cnItem = tlyric.find(cnLyric => cnLyric.time === item.time);
-      const txtCn = cnItem ? cnItem.txt : '';
-      result.push({ ...item, txtCn });
-    });
-    return result;
-  } */
-  
   private scrollToCurrent(speed = 300) {
     const songListRefs = this.wyScroll.first.el.nativeElement.querySelectorAll('ul li');
     if (songListRefs.length) {
-      // console.log('currentIndex :', this.currentIndex);
       const dom = <HTMLElement>songListRefs[this.currentIndex || 0];
-      // console.log('dom :', dom);
       const offsetTop = dom.offsetTop;
       const scrollY = this.scrollY;
-      // console.log(dom);
       if ((offsetTop < Math.abs(scrollY)) || (Math.abs(offsetTop - Math.abs(scrollY)) > 205)) {
         this.wyScroll.first.scrollToElement(dom, speed, false, false);
       }
