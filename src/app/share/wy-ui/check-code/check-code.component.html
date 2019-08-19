@@ -12,9 +12,10 @@
   <div class="form">
     <form nz-form nzLayout="vertical" [formGroup]="formModel" class="login-form" (ngSubmit)="submitForm()">
       <nz-form-item>
-        <nz-form-control nzErrorTip="验证码错误">
-          <app-code></app-code>
-          <div class="send">
+        <nz-form-control>
+          <app-code (onInput)="onInput($event)" formControlName="code"></app-code>
+          <div class="send clearfix">
+            <span class="err" [hidden]="!errorTip">{{errorTip}}</span>
             <span class="txt" *ngIf="!showRepeatBtn else repeatBtn">{{timing}}s</span>
             <ng-template #repeatBtn>
               <span class="txt repeat" (click)="onRepeatSendCode.emit()">重新发送</span>

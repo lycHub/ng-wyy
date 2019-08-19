@@ -19,6 +19,13 @@ export enum RecordType {
   weekData
 }
 
+type RegisterParams = {
+  captcha: string;
+  phone: string;
+  password: string;
+  nickname?: string;
+}
+
 const records = ['allData', 'weekData'];
 
 @Injectable({
@@ -125,5 +132,29 @@ export class MemberService {
     const params = new HttpParams({fromString: queryString.stringify({ phone })});
     return this.http.get(this.uri + 'captcha/sent', { params })
     .pipe(map((res: { code: number }) => res.code));
+  }
+
+  // 验证验证码
+  checkCode(phone: number, captcha: number): Observable<number> {
+    const params = new HttpParams({fromString: queryString.stringify({ phone, captcha })});
+    return this.http.get(this.uri + 'captcha/verify', { params })
+    .pipe(map((res: { code: number }) => res.code));
+  }
+
+
+  // 是否已注册
+  checkExist(phone: number): Observable<number> {
+    const params = new HttpParams({fromString: queryString.stringify({ phone })});
+    return this.http.get(this.uri + 'cellphone/existence/check', { params })
+    .pipe(map((res: { exist: number }) => res.exist));
+  }
+
+  // 注册
+  register(args: RegisterParams): Observable<any> {
+    if (!args.nickname) {
+      args.nickname = Date.now().toString();
+    }
+    const params = new HttpParams({fromString: queryString.stringify(args)});
+    return this.http.get(this.uri + 'register/cellphone', { params });
   }
 }

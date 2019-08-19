@@ -30,23 +30,38 @@ export class WyLayerRegisterComponent {
   }
   submitForm(): void {
     if (this.formModel.valid) {
-      console.log('phone', this.formModel.get('phone'));
-      console.log('password', this.formModel.get('password'));
       this.sendCode();
     }
   }
 
   sendCode() {
-    this.memberServe.sendCode(this.formModel.get('phone').value).subscribe(code => {
-      console.log('sendCode :', code);
+    this.memberServe.sendCode(this.getFormValue('phone')).subscribe(code => {
       this.timing = 60;
       if (!this.showCode) {
         this.showCode = true;
       }
-      interval(1000).pipe(take(60)).subscribe(res => this.timing--);
+      interval(1000).pipe(take(60)).subscribe(() => this.timing--);
     }, error => {
       this.messageServe.error(error.message);
     });
+  }
+
+
+  // 注册
+  onRegister(captcha: string) {
+    this.memberServe.register({
+      phone: this.getFormValue('phone'),
+      password: this.getFormValue('password'),
+      captcha
+    }).subscribe(res => {
+      console.log('onRegister :', res);
+    }, error => {
+      this.messageServe.error(error.message);
+    });
+  }
+
+  private getFormValue(key: string): any {
+    return this.formModel.get(key).value;
   }
 
   otherMethod() {
