@@ -1,15 +1,15 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { map, takeUntil } from 'rxjs/operators';
-import { SingerDetail } from '../../../service/singer/singer.service';
+import { SingerDetail } from '../../../service/singer.service';
 import { Singer, Song } from 'src/app/service/data-modals/common.models';
 import { Observable, Subject } from 'rxjs';
 import { AppStoreModule } from 'src/app/store';
 import { MultipleReducersService } from 'src/app/store/multiple-reducers.service';
 import { Store, select } from '@ngrx/store';
 import { NzMessageService } from 'ng-zorro-antd';
-import { MemberService } from 'src/app/service/member/member.service';
-import { SongService } from 'src/app/service/song/song.service';
+import { MemberService } from 'src/app/service/member.service';
+import { SongService } from 'src/app/service/song.service';
 import { getCurrentSong } from 'src/app/store/selectors/player.selector';
 import { findIndex } from 'src/app/utils/array';
 

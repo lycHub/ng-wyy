@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { Actions, ofType, createEffect } from '@ngrx/effects';
 import { EMPTY } from 'rxjs';
 import { map, catchError, switchMap, tap } from 'rxjs/operators';
-import { SongService } from 'src/app/service/song/song.service';
+import { SongService } from 'src/app/service/song.service';
 import { SetSongList } from '../actions/player.actions';
 import { Store } from '@ngrx/store';
 import { AppStoreModule } from '..';

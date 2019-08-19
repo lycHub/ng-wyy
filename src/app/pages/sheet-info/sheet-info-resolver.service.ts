@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
 import {Observable} from "rxjs/index";
 import { SongSheet } from 'src/app/service/data-modals/common.models';
-import { SheetService } from '../../service/sheet/sheet.service';
+import { SheetService } from '../../service/sheet.service';
 
 
 @Injectable()

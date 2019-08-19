@@ -1,6 +1,6 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { MemberService } from '../../../../service/member/member.service';
+import { MemberService } from '../../../../service/member.service';
 import { NzMessageService } from 'ng-zorro-antd';
 import { interval } from 'rxjs';
 import { take } from 'rxjs/operators';

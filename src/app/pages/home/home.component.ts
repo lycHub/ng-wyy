@@ -3,14 +3,14 @@ import {Banner, HotTag, SongSheet, Singer} from "../../service/data-modals/commo
 import {NzCarouselComponent} from "ng-zorro-antd";
 import {ActivatedRoute, Router} from "@angular/router";
 import {map, takeUntil} from "rxjs/internal/operators";
-import { SongService } from 'src/app/service/song/song.service';
+import { SongService } from 'src/app/service/song.service';
 import { MultipleReducersService } from 'src/app/store/multiple-reducers.service';
 import { AppStoreModule } from 'src/app/store';
 import { Store, select } from '@ngrx/store';
 import { Observable, Subject } from 'rxjs';
 import { getUserInfo } from '../../store/selectors/member.selector';
 import { User } from 'src/app/service/data-modals/member.models';
-import { SheetService } from '../../service/sheet/sheet.service';
+import { SheetService } from '../../service/sheet.service';
 import { ModalTypes } from '../../store/reducers/member.reducer';
 
 @Component({

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChildren, QueryList, Inject } from '@angular/core';
-import {SongService} from "../../../../service/song/song.service";
+import {SongService} from "../../../../service/song.service";
 import {WyScrollComponent} from "../wy-scroll.component";
 import { WINDOW } from 'src/app/core/inject-tokens';
 import { findIndex } from 'src/app/utils/array';

@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppStoreModule } from 'src/app/store';
 import { NzMessageService } from 'ng-zorro-antd';
-import { MemberService } from 'src/app/service/member/member.service';
+import { MemberService } from 'src/app/service/member.service';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { getShareParams } from 'src/app/store/selectors/member.selector';

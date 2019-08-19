@@ -5,7 +5,7 @@ import { AppStoreModule } from 'src/app/store';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { getLikeId } from '../../../../store/selectors/member.selector';
-import { MemberService } from 'src/app/service/member/member.service';
+import { MemberService } from 'src/app/service/member.service';
 import { NzMessageService } from 'ng-zorro-antd';
 import { SetModalVisible } from '../../../../store/actions/member.actions';
 import { ModalTypes } from 'src/app/store/reducers/member.reducer';

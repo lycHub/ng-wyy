@@ -5,13 +5,13 @@ import { User, recordVal, UserSheet } from 'src/app/service/data-modals/member.m
 import { Song } from 'src/app/service/data-modals/common.models';
 import { Observable, Subject } from 'rxjs';
 import { AppStoreModule } from 'src/app/store';
-import { MemberService, RecordType } from 'src/app/service/member/member.service';
-import { SongService } from 'src/app/service/song/song.service';
+import { MemberService, RecordType } from 'src/app/service/member.service';
+import { SongService } from 'src/app/service/song.service';
 import { MultipleReducersService } from 'src/app/store/multiple-reducers.service';
 import { Store, select } from '@ngrx/store';
 import { getCurrentSong } from 'src/app/store/selectors/player.selector';
 import { findIndex } from 'src/app/utils/array';
-import { SheetService } from '../../../service/sheet/sheet.service';
+import { SheetService } from '../../../service/sheet.service';
 
 @Component({
   selector: 'app-center',

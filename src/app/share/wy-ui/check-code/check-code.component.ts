@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, EventEmitter, Input, OnChanges, SimpleChanges, Output, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd';
-import { MemberService } from '../../../service/member/member.service';
+import { MemberService } from '../../../service/member.service';
 
 enum Exist {
   '存在' = 1,

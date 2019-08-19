@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import {Observable, forkJoin} from "rxjs/index";
-import { MemberService } from 'src/app/service/member/member.service';
+import { MemberService } from 'src/app/service/member.service';
 import { User, recordVal, UserSheet } from 'src/app/service/data-modals/member.models';
 import { take, map } from 'rxjs/operators';
 

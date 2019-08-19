@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { User } from 'src/app/service/data-modals/member.models';
-import { MemberService } from 'src/app/service/member/member.service';
+import { MemberService } from 'src/app/service/member.service';
 import { NzMessageService } from 'ng-zorro-antd';
 import Cookies from 'universal-cookie';
 

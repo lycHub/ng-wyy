@@ -1,12 +1,12 @@
 import {Injectable, Inject} from '@angular/core';
-import {ServiceModule} from "../service.module";
+import {ServiceModule} from "./service.module";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import { Observable, throwError } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import queryString from 'query-string';
-import { User, UserRecord, recordVal, UserSheet } from '../data-modals/member.models';
+import { User, UserRecord, recordVal, UserSheet } from './data-modals/member.models';
 import { LoginParams } from 'src/app/share/wy-ui/wy-layer/wy-login-phone/wy-login-phone.component';
-import { SongSheet } from '../data-modals/common.models';
+import { SongSheet } from './data-modals/common.models';
 import { API_CONFIG } from 'src/app/core/inject-tokens';
 
 export type sampleBack = {

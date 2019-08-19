@@ -1,6 +1,6 @@
 import {Component, OnDestroy} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
-import {SongService} from 'src/app/service/song/song.service';
+import {SongService} from 'src/app/service/song.service';
 import {Song, SongSheet, Singer} from 'src/app/service/data-modals/common.models';
 import { map } from 'rxjs/operators';
 import { MultipleReducersService } from 'src/app/store/multiple-reducers.service';
@@ -10,8 +10,8 @@ import {select, Store} from "@ngrx/store";
 import {takeUntil} from "rxjs/internal/operators";
 import {getCurrentSong} from "../../store/selectors/player.selector";
 import {findIndex} from "../../utils/array";
-import { SheetService } from '../../service/sheet/sheet.service';
-import { MemberService } from '../../service/member/member.service';
+import { SheetService } from '../../service/sheet.service';
+import { MemberService } from '../../service/member.service';
 import { NzMessageService } from 'ng-zorro-antd';
 
 @Component({

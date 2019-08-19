@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Resolve } from '@angular/router';
 import {forkJoin, Observable} from "rxjs/index";
-import {HomeService} from "../../service/home/home.service";
+import {HomeService} from "../../service/home.service";
 import {take} from "rxjs/internal/operators";
 import {Banner, HotTag, SongSheet, Singer} from "../../service/data-modals/common.models";
-import { SingService } from 'src/app/service/singer/singer.service';
+import { SingService } from 'src/app/service/singer.service';
 
 type HomeDataModel = [Banner[], HotTag[], SongSheet[], Singer[]];
 

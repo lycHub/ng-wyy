@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { SheetService, SheetParams } from 'src/app/service/sheet/sheet.service';
+import { SheetService, SheetParams } from 'src/app/service/sheet.service';
 import { SongSheet, playlistInfo } from '../../service/data-modals/common.models';
-import { SongService } from 'src/app/service/song/song.service';
+import { SongService } from 'src/app/service/song.service';
 import { MultipleReducersService } from 'src/app/store/multiple-reducers.service';
 import {ActivatedRoute, Router} from '@angular/router';
 

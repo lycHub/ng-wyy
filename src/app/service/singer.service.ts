@@ -1,7 +1,7 @@
 import {Injectable, Inject} from '@angular/core';
-import {ServiceModule} from "../service.module";
+import {ServiceModule} from "./service.module";
 import {HttpClient, HttpParams} from "@angular/common/http";
-import {Singer, Song} from "../data-modals/common.models";
+import {Singer, Song} from "./data-modals/common.models";
 import {Observable} from "rxjs";
 import {map} from "rxjs/internal/operators";
 import queryString from 'query-string';

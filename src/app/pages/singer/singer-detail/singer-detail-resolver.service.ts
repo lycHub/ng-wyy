@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
 import {forkJoin, Observable} from "rxjs/index";
 import {take} from "rxjs/internal/operators";
-import { SingService, SingerDetail } from 'src/app/service/singer/singer.service';
+import { SingService, SingerDetail } from 'src/app/service/singer.service';
 import { Singer } from 'src/app/service/data-modals/common.models';
 
 type SingerDetailDataModel = [SingerDetail, Singer[]];

@@ -5,7 +5,7 @@ import {filter, map, mergeMap} from "rxjs/internal/operators";
 import {WINDOW} from "./core/inject-tokens";
 import { Title, Meta } from '@angular/platform-browser';
 import { LoginParams } from './share/wy-ui/wy-layer/wy-login-phone/wy-login-phone.component';
-import { MemberService } from './service/member/member.service';
+import { MemberService } from './service/member.service';
 import { NzMessageService } from 'ng-zorro-antd';
 import { AppStoreModule } from './store';
 import { Store } from '@ngrx/store';

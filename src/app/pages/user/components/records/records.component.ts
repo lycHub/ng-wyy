@@ -1,6 +1,6 @@
 import { Component, Input, ChangeDetectionStrategy, Output, EventEmitter } from '@angular/core';
 import { recordVal } from 'src/app/service/data-modals/member.models';
-import { RecordType } from 'src/app/service/member/member.service';
+import { RecordType } from 'src/app/service/member.service';
 import { Song } from 'src/app/service/data-modals/common.models';
 
 @Component({
