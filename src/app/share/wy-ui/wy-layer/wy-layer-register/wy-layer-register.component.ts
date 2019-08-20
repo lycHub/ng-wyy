@@ -2,8 +2,11 @@ import { Component, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MemberService } from '../../../../service/member.service';
 import { NzMessageService } from 'ng-zorro-antd';
-import { interval } from 'rxjs';
+import { interval, Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
+import { AppStoreModule } from '../../../../store/index';
+import { Store, select } from '@ngrx/store';
+import { getModalVisible } from '../../../../store/selectors/member.selector';
 
 @Component({
   selector: 'app-wy-layer-register',
@@ -21,13 +24,24 @@ export class WyLayerRegisterComponent {
   constructor(
     private fb: FormBuilder,
     private messageServe: NzMessageService,
+    private store$: Store<AppStoreModule>,
     private memberServe: MemberService) {
     this.formModel = this.fb.group({
       phone: ['', [Validators.required, Validators.pattern(/^1\d{10}$/)]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       remember: [true]
     });
+    this.store$.pipe(select('member'), select(getModalVisible))
+    .subscribe(visible => this.watchModalVisible(visible));
   }
+
+  private watchModalVisible(visible: boolean) {
+    if (!visible) {
+      this.showCode = false;
+    }
+  }
+
+
   submitForm(): void {
     if (this.formModel.valid) {
       this.sendCode();

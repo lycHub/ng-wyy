@@ -10,7 +10,6 @@ import { getSongList, getPlayList, getCurrentSong, getPlayMode, getCurrentIndex,
 import { SetCurrentIndex, SetPlayMode, SetPlayList, SetCurrentAction } from '../../../store/actions/player.actions';
 import { MultipleReducersService } from 'src/app/store/multiple-reducers.service';
 import { NzModalService } from 'ng-zorro-antd';
-import { takeUntil } from 'rxjs/operators';
 import { trigger, state, style, transition, animate, AnimationEvent } from '@angular/animations';
 import { WINDOW } from '../../../core/inject-tokens';
 import { CurrentActions } from '../../../store/reducers/player.reducer';
@@ -44,7 +43,7 @@ const modeTypes: PlayMode[] = [{
     transition('hide=>show', [ animate('0.1s') ])
   ])]
 })
-export class WyPlayerComponent implements AfterViewInit, OnDestroy {
+export class WyPlayerComponent implements AfterViewInit {
   showPlayer = 'hide';
   lockPlayer = false;
 
@@ -112,7 +111,6 @@ export class WyPlayerComponent implements AfterViewInit, OnDestroy {
   showPanel = false;
 
   private appStore$: Observable<AppStoreModule>;
-  private destroy$ = new Subject<void>();
 
   constructor(
     @Inject(DOCUMENT) private doc: Document,
@@ -121,7 +119,7 @@ export class WyPlayerComponent implements AfterViewInit, OnDestroy {
     private multipleReducerServe: MultipleReducersService,
     private modalService: NzModalService
   ) {
-    this.appStore$ = this.store$.pipe(select('player'), takeUntil(this.destroy$));
+    this.appStore$ = this.store$.pipe(select('player'));
     const arr = [{
       type: getPlayMode,
       cb: mode => this.watchMode(mode)
@@ -405,19 +403,15 @@ export class WyPlayerComponent implements AfterViewInit, OnDestroy {
     this.animating = false;
     if (event.toState === 'show' && this.showToolTip) {
       this.controlToolTip.show = true;
-      
+      if (this.toolTipTimer) {
+        this.win.clearTimeout(this.toolTipTimer);
+        this.toolTipTimer = null;
+      }
       this.toolTipTimer = this.win.setTimeout(() => {
         this.showToolTip = false;
         this.controlToolTip.show = false;
         this.controlToolTip.title = '';
       }, 2000);
     }
-  }
-  
-  ngOnDestroy(): void {
-    this.unbindDocumentClickListener();
-    this.destroy$.next();
-    this.destroy$.complete();
-    this.toolTipTimer && this.win.clearTimeout(this.toolTipTimer);
   }
 }

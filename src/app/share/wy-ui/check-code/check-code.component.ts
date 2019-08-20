@@ -16,13 +16,26 @@ enum Exist {
 })
 export class CheckCodeComponent implements OnChanges, OnInit {
   @Input() timing = 60;
-  @Input() phone: string;
   @Output() onRepeatSendCode = new EventEmitter<void>();
   @Output() onRegister = new EventEmitter<string>();
+
+  
 
   showRepeatBtn = false;
   errorTip = '';
   formModel: FormGroup;
+  phoneHideStr: string;
+
+  @Input()
+   set phone(phone: string) {
+    const arr = phone.split('');
+    arr.splice(3, 4, '****');
+    this.phoneHideStr = arr.join('');
+   }
+
+   get phone(): string {
+     return this.phoneHideStr;
+   }
 
   private hasPassed = false;
   constructor(

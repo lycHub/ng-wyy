@@ -1,5 +1,5 @@
-import { Component, EventEmitter, OnInit, Input, Output, ElementRef, ViewContainerRef, Inject, ViewChild, TemplateRef, Type, ComponentRef, Renderer2 } from '@angular/core';
-import { OverlayRef, Overlay, OverlayKeyboardDispatcher, BlockScrollStrategy, OverlayConfig, OverlayContainer } from '@angular/cdk/overlay';
+import { Component, EventEmitter, OnInit, Input, Output, ElementRef, ViewContainerRef, Inject, ViewChild, TemplateRef, Renderer2 } from '@angular/core';
+import { OverlayRef, Overlay, OverlayKeyboardDispatcher, BlockScrollStrategy, OverlayContainer } from '@angular/cdk/overlay';
 import { DOCUMENT } from '@angular/common';
 import { ESCAPE } from '@angular/cdk/keycodes';
 import { Subject, Observable } from 'rxjs';
@@ -9,7 +9,6 @@ import { trigger, transition, animate, style, state } from '@angular/animations'
 import { AppStoreModule } from 'src/app/store';
 import { Store, select } from '@ngrx/store';
 import { getModalVisible } from 'src/app/store/selectors/member.selector';
-import { SetModalVisible, SetModalType } from 'src/app/store/actions/member.actions';
 import { ModalTypes } from 'src/app/store/reducers/member.reducer';
 import { getModalType } from '../../../../store/selectors/member.selector';
 import { MultipleReducersService } from 'src/app/store/multiple-reducers.service';
@@ -58,10 +57,10 @@ export class WyLayerModalComponent implements OnInit {
   currentModal = ModalTypes.Default;
   private overLayContainerEl: HTMLElement;
   private appStore$: Observable<AppStoreModule>;
-  private destroy$ = new Subject<void>();
 
   @ViewChild('modalContainer', { static: true }) modalContainer: ElementRef;
   @ViewChild('bodyContainer', { static: false, read: ViewContainerRef }) bodyContainer: ViewContainerRef;
+
   constructor(
     private overlay: Overlay,
     private overlayKeyboardDispatcher: OverlayKeyboardDispatcher,
@@ -75,7 +74,7 @@ export class WyLayerModalComponent implements OnInit {
   ) {
     this.overlayRef = this.overlay.create();
     this.scrollStrategy = this.overlay.scrollStrategies.block();
-    this.appStore$ = this.store$.pipe(select('member'), takeUntil(this.destroy$));
+    this.appStore$ = this.store$.pipe(select('member'));
     this.appStore$.pipe(select(getModalVisible)).subscribe(visible => this.watchModalVisible(visible));
     this.appStore$.pipe(select(getModalType)).subscribe(type => this.watchModalType(type));
   }
@@ -172,18 +171,5 @@ export class WyLayerModalComponent implements OnInit {
     dom.style.visibility = 'visible';
     dom.style.transform = 'scale(0)';
     return size;
-  }
-
-  
-  ngOnDestroy(): void {
-    this.overlayRef.dispose();
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
-    if (this.resizeHandler) {
-      this.resizeHandler();
-    }
-    this.destroy$.next();
-    this.destroy$.complete();
-    this.changePointerEvents();
   }
 }
