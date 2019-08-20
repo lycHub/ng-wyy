@@ -11,6 +11,7 @@ import { MultipleReducersService } from 'src/app/store/multiple-reducers.service
 import { Store, select } from '@ngrx/store';
 import { getCurrentSong } from 'src/app/store/selectors/player.selector';
 import { findIndex } from 'src/app/utils/array';
+import { Singer } from '../../../service/data-modals/common.models';
 
 @Component({
   selector: 'app-record-detail',
@@ -82,6 +83,17 @@ export class RecordDetailComponent implements OnInit, OnDestroy {
    // 收藏歌曲
    onLikeSong(id: string) {
     this.multipleReducerServe.likeSongs(id);
+  }
+
+  // 分享
+  onShareSong(song: Song) {
+    const txt = this.makeTxt('单曲', song.name, song.ar);
+    this.multipleReducerServe.share({ id: song.id, type: 'song', txt });
+  }
+
+  private makeTxt(type: string, name: string, makeBy: Singer[]): string {
+    let makeByStr = makeBy.map(item => item.name).join('/');
+    return `${type}：${name} -- ${makeByStr}`;
   }
 
   ngOnDestroy(): void {

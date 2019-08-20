@@ -164,10 +164,10 @@ export class WyLayerModalComponent implements OnInit {
   }
 
   hide() {
-    if (this.registerIns instanceof WyLayerRegisterComponent) {
+    if (this.currentModal === ModalTypes.Register) {
       this.registerIns.formModel.markAllAsTouched();
       this.registerIns.showCode = false;
-    }else {
+    }else if (this.currentModal === ModalTypes.LoginByPhone) {
       this.loginPhoneIns.formModel.markAllAsTouched();
     }
     this.multipleReducerServe.controlModal(ModalTypes.Default, false);

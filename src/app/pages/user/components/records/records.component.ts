@@ -18,4 +18,5 @@ export class RecordsComponent {
   @Output() onChangeRecordType = new EventEmitter<number>();
   @Output() onAddSong = new EventEmitter<[Song, boolean]>();
   @Output() onLikeSong = new EventEmitter<string>();
+  @Output() onShareSong = new EventEmitter<Song>();
 }
