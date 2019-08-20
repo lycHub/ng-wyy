@@ -24,10 +24,10 @@ import { ensureNumberInRange, getPercent } from '../../../utils/number';
 })
 export class WySliderComponent implements OnInit, ControlValueAccessor, OnDestroy {
   @ViewChild('slider', { static: true }) slider: ElementRef;
-  @Input() nzVertical: boolean = false;
-  @Input() nzDefaultValue: SliderValue = 0;
-  @Input() nzMax = 100;
-  @Input() nzMin = 0;
+  @Input() wyVertical: boolean = false;
+  @Input() wyDefaultValue: SliderValue = 0;
+  @Input() wyMax = 100;
+  @Input() wyMin = 0;
   
   @Input() bufferOffset: SliderValue = 0; // 缓冲条长度百分比
 
@@ -46,7 +46,7 @@ export class WySliderComponent implements OnInit, ControlValueAccessor, OnDestro
   private dragMove_: Subscription | null;
   private dragEnd_: Subscription | null;
 
-  @Output() private nzOnAfterChange = new EventEmitter<SliderValue>();
+  @Output() private wyOnAfterChange = new EventEmitter<SliderValue>();
   constructor(private cdr: ChangeDetectorRef, @Inject(PLATFORM_ID) private platformId: Object) { }
 
   ngOnInit() {
@@ -67,7 +67,7 @@ export class WySliderComponent implements OnInit, ControlValueAccessor, OnDestro
 
   private createDraggingObservables(): void {
     const sliderDOM = this.sliderDOM;
-    const orientField = this.nzVertical ? 'pageY' : 'pageX';
+    const orientField = this.wyVertical ? 'pageY' : 'pageX';
     const mouse: MouseTouchObserverConfig = {
       start: 'mousedown',
       move: 'mousemove',
@@ -128,9 +128,9 @@ export class WySliderComponent implements OnInit, ControlValueAccessor, OnDestro
 
     /* 
       求值val：
-      (val - this.nzMin) / (this.nzMax - this.nzMin) = (position - sliderStart) / sliderLength
+      (val - this.wyMin) / (this.wyMax - this.wyMin) = (position - sliderStart) / sliderLength
     */
-    return (this.nzMax - this.nzMin) * (this.nzVertical ? 1 - ratio : ratio) + this.nzMin;
+    return (this.wyMax - this.wyMin) * (this.wyVertical ? 1 - ratio : ratio) + this.wyMin;
   }
 
 
@@ -165,7 +165,7 @@ export class WySliderComponent implements OnInit, ControlValueAccessor, OnDestro
   }
 
   private onDragEnd(): void {
-    this.nzOnAfterChange.emit(this.value);
+    this.wyOnAfterChange.emit(this.value);
     this.toggleDragMoving(false);
     this.cdr.markForCheck();
   }
@@ -208,12 +208,12 @@ export class WySliderComponent implements OnInit, ControlValueAccessor, OnDestro
 
   private getSliderStartPosition(): number {
     const offset = getElementOffset(this.sliderDOM);
-    return this.nzVertical ? offset.top : offset.left;
+    return this.wyVertical ? offset.top : offset.left;
   }
 
   private getSliderLength(): number {
     const sliderDOM = this.sliderDOM;
-    return this.nzVertical ? sliderDOM.clientHeight : sliderDOM.clientWidth;
+    return this.wyVertical ? sliderDOM.clientHeight : sliderDOM.clientWidth;
   }
 
 
@@ -269,7 +269,7 @@ export class WySliderComponent implements OnInit, ControlValueAccessor, OnDestro
       normalizedValue = this.value;
     }
 
-    return getPercent(this.nzMin, this.nzMax, normalizedValue);
+    return getPercent(this.wyMin, this.wyMax, normalizedValue);
   }
 
 
@@ -277,9 +277,9 @@ export class WySliderComponent implements OnInit, ControlValueAccessor, OnDestro
   private formatValue(value: SliderValue): SliderValue {
     let res = value;
     if (!this.assertValueValid(value)) { // 如果value是NAN
-      res = this.nzDefaultValue || this.nzMin;
+      res = this.wyDefaultValue || this.wyMin;
     } else {
-      res = ensureNumberInRange(value, this.nzMin, this.nzMax);
+      res = ensureNumberInRange(value, this.wyMin, this.wyMax);
     }
     return res;
   }

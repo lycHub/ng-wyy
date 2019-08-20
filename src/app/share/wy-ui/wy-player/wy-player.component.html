@@ -40,7 +40,7 @@
         </div>
         <div class="bar">
           <div class="slider-wrap">
-            <app-wy-slider [bufferOffset]="bufferPercent" [(ngModel)]="percent" (nzOnAfterChange)="onPercentChange($event)"></app-wy-slider>
+            <app-wy-slider [bufferOffset]="bufferPercent" [(ngModel)]="percent" (wyOnAfterChange)="onPercentChange($event)"></app-wy-slider>
           </div>
           <span class="time">
           <em>{{currentTime | FormatTime}}</em> / {{duration | FormatTime}}
@@ -61,7 +61,7 @@
 
         <!--音量-->
         <div class="control-vol" [hidden]="!showVolPanel">
-          <app-wy-slider [nzVertical]="true" [(ngModel)]="currentVol" (ngModelChange)="onVolChange($event)"></app-wy-slider>
+          <app-wy-slider [wyVertical]="true" [(ngModel)]="currentVol" (ngModelChange)="onVolChange($event)"></app-wy-slider>
         </div>
       </div>
 

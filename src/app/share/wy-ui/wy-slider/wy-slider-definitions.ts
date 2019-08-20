@@ -1,5 +1,5 @@
 export type SliderValue = number | null;
-export interface NzSliderTrackStyle {
+export interface wySliderTrackStyle {
   bottom?: string | null;
   height?: string | null;
   left?: string | null;

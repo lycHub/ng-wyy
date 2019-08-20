@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewEncapsulation, Input, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
-import { NzSliderTrackStyle } from './wy-slider-definitions';
+import { wySliderTrackStyle } from './wy-slider-definitions';
 
 @Component({
   selector: 'app-wy-slider-handle',
@@ -8,10 +8,10 @@ import { NzSliderTrackStyle } from './wy-slider-definitions';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WySliderHandleComponent implements OnInit {
-  @Input() nzOffset: number;
-  @Input() nzVertical: string;
+  @Input() wyOffset: number;
+  @Input() wyVertical: string;
 
-  style: NzSliderTrackStyle = {};
+  style: wySliderTrackStyle = {};
   constructor() { }
 
   ngOnInit() {
@@ -19,8 +19,8 @@ export class WySliderHandleComponent implements OnInit {
 
   
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['nzOffset']) {
-      this.style[this.nzVertical ? 'bottom' : 'left'] = `${this.nzOffset}%`;
+    if (changes['wyOffset']) {
+      this.style[this.wyVertical ? 'bottom' : 'left'] = `${this.wyOffset}%`;
     }
   }
 

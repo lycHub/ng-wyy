@@ -1,18 +1,18 @@
 import { Component, OnInit, ViewEncapsulation, Input, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
-import { NzSliderTrackStyle } from './wy-slider-definitions';
+import { wySliderTrackStyle } from './wy-slider-definitions';
 
 @Component({
   selector: 'app-wy-slider-track',
-  template: `<div class="wy-slider-track" [class.buffer]="nzBuffer" [ngStyle]="style"></div>`,
+  template: `<div class="wy-slider-track" [class.buffer]="wyBuffer" [ngStyle]="style"></div>`,
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WySliderTrackComponent implements OnInit {
-  @Input() nzBuffer = false;
-  @Input() nzLength: number;
-  @Input() nzVertical = false;
+  @Input() wyBuffer = false;
+  @Input() wyLength: number;
+  @Input() wyVertical = false;
 
-  style: NzSliderTrackStyle = {};
+  style: wySliderTrackStyle = {};
   constructor() { }
 
   ngOnInit() {
@@ -20,13 +20,13 @@ export class WySliderTrackComponent implements OnInit {
 
   
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.nzVertical || changes.nzLength) {
-      if (this.nzVertical) {
-        this.style.height = `${this.nzLength}%`;
+    if (changes.wyVertical || changes.wyLength) {
+      if (this.wyVertical) {
+        this.style.height = `${this.wyLength}%`;
         this.style.left = null;
         this.style.width = null;
       } else {
-        this.style.width = `${this.nzLength}%`;
+        this.style.width = `${this.wyLength}%`;
         this.style.bottom = null;
         this.style.height = null;
       }
