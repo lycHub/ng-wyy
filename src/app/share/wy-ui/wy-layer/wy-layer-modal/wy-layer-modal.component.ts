@@ -12,6 +12,9 @@ import { getModalVisible } from 'src/app/store/selectors/member.selector';
 import { ModalTypes } from 'src/app/store/reducers/member.reducer';
 import { getModalType } from '../../../../store/selectors/member.selector';
 import { MultipleReducersService } from 'src/app/store/multiple-reducers.service';
+import { WyLayerService, ModalForms } from '../wy-layer.service';
+import { WyLayerRegisterComponent } from '../wy-layer-register/wy-layer-register.component';
+import { WyLoginPhoneComponent } from '../wy-login-phone/wy-login-phone.component';
 
 type DomSize = { w: number; h: number };
 
@@ -58,6 +61,9 @@ export class WyLayerModalComponent implements OnInit {
   private overLayContainerEl: HTMLElement;
   private appStore$: Observable<AppStoreModule>;
 
+  private registerIns: WyLayerRegisterComponent;
+  private loginPhoneIns: WyLoginPhoneComponent;
+
   @ViewChild('modalContainer', { static: true }) modalContainer: ElementRef;
   @ViewChild('bodyContainer', { static: false, read: ViewContainerRef }) bodyContainer: ViewContainerRef;
 
@@ -70,13 +76,22 @@ export class WyLayerModalComponent implements OnInit {
     private multipleReducerServe: MultipleReducersService,
     private overLayContainerServe: OverlayContainer,
     @Inject(DOCUMENT) private doc: Document,
-    @Inject(WINDOW) private win: Window
+    @Inject(WINDOW) private win: Window,
+    private wyLayerServe: WyLayerService
   ) {
     this.overlayRef = this.overlay.create();
     this.scrollStrategy = this.overlay.scrollStrategies.block();
     this.appStore$ = this.store$.pipe(select('member'));
     this.appStore$.pipe(select(getModalVisible)).subscribe(visible => this.watchModalVisible(visible));
     this.appStore$.pipe(select(getModalType)).subscribe(type => this.watchModalType(type));
+
+    this.wyLayerServe.getIns().subscribe((ins: ModalForms) => {
+      if (ins instanceof WyLayerRegisterComponent) {
+        this.registerIns = ins;
+      }else {
+        this.loginPhoneIns = ins;
+      }
+    });
   }
 
   ngOnInit() {
@@ -149,6 +164,12 @@ export class WyLayerModalComponent implements OnInit {
   }
 
   hide() {
+    if (this.registerIns instanceof WyLayerRegisterComponent) {
+      this.registerIns.formModel.markAllAsTouched();
+      this.registerIns.showCode = false;
+    }else {
+      this.loginPhoneIns.formModel.markAllAsTouched();
+    }
     this.multipleReducerServe.controlModal(ModalTypes.Default, false);
   }
 

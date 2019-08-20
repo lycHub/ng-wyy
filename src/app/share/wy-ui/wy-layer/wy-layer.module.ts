@@ -13,6 +13,7 @@ import { WyLayerLikeComponent } from './wy-layer-like/wy-layer-like.component';
 import { WyLayerShareComponent } from './wy-layer-share/wy-layer-share.component';
 import { CheckCodeComponent } from '../check-code/check-code.component';
 import { CodeComponent } from '../check-code/code/code.component';
+import { WyLayerService } from './wy-layer.service';
 
 
 @NgModule({
@@ -32,7 +33,7 @@ import { CodeComponent } from '../check-code/code/code.component';
     NzIconModule,
     NzFormModule
   ],
-  providers: [OverlayContainer],
+  providers: [OverlayContainer, WyLayerService],
   exports: [WyLayerModalComponent, WyLoginPhoneComponent, WyLayerRegisterComponent, WyLoginDefaultComponent, WyLayerLikeComponent, WyLayerShareComponent, CheckCodeComponent, CodeComponent]
 })
 export class WyLayerModule { }

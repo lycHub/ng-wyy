@@ -1,7 +1,7 @@
-import { Component, Output, EventEmitter, Inject, OnChanges, SimpleChanges, Input } from '@angular/core';
+import { Component, Output, EventEmitter, OnChanges, SimpleChanges, Input } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { codeJson } from 'src/app/utils/base64';
-import { ModalTypes } from '../../../../store/reducers/member.reducer';
+import { WyLayerService } from '../wy-layer.service';
 
 
 export type LoginParams = {
@@ -21,9 +21,8 @@ export class WyLoginPhoneComponent implements OnChanges {
   @Input() wyUserLogin: LoginParams;
   @Output() onLogin = new EventEmitter<LoginParams>();
   @Output() onChangeModalType = new EventEmitter<string | void>();
-  constructor(private fb: FormBuilder) {
-    
-    
+  constructor(private fb: FormBuilder, private wyLayerServe: WyLayerService) {
+    this.wyLayerServe.setIns(this);
   }
 
 
