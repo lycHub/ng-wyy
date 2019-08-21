@@ -23,7 +23,7 @@ export class WyPlayerPanelComponent implements OnChanges {
   @Input() playing: boolean;
   @Input() show = false;
   
-  private currentIndex: number;
+  currentIndex: number;
   lyric: LyricParser | null;
   currentLyric: LyricItem[];
   currentLineIndex: number;
@@ -39,6 +39,11 @@ export class WyPlayerPanelComponent implements OnChanges {
 
   // 清空歌曲
   @Output() onClearSong = new EventEmitter<void>();
+
+  @Output() onLikeSong = new EventEmitter<string>();
+  @Output() onShareSong = new EventEmitter<Song>();
+
+  @Output() onToInfo = new EventEmitter<[string, number]>();
   
   @ViewChildren(WyScrollComponent) private wyScroll: QueryList<WyScrollComponent>;
   private lyricRefs: NodeList;

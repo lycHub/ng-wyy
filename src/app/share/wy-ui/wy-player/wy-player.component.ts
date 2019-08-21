@@ -2,7 +2,7 @@ import { AfterViewInit, Component, ElementRef, Inject, OnDestroy, ViewChild } fr
 import {fromEvent, Subscription, Observable, Subject} from "rxjs/index";
 import {DOCUMENT} from "@angular/common";
 import {shuffle} from "../../../utils/array";
-import {Song} from "../../../service/data-modals/common.models";
+import { Song, Singer } from '../../../service/data-modals/common.models';
 import { WyPlayerPanelComponent } from './wy-player-panel/wy-player-panel.component';
 import { Store, select } from '@ngrx/store';
 import { AppStoreModule } from 'src/app/store';
@@ -13,6 +13,7 @@ import { NzModalService } from 'ng-zorro-antd';
 import { trigger, state, style, transition, animate, AnimationEvent } from '@angular/animations';
 import { WINDOW } from '../../../core/inject-tokens';
 import { CurrentActions } from '../../../store/reducers/player.reducer';
+import { Router } from '@angular/router';
 
 // 播放模式
 export type PlayMode = {
@@ -117,7 +118,8 @@ export class WyPlayerComponent implements AfterViewInit {
     @Inject(WINDOW) private win: Window,
     private store$: Store<AppStoreModule>,
     private multipleReducerServe: MultipleReducersService,
-    private modalService: NzModalService
+    private modalService: NzModalService,
+    private router: Router
   ) {
     this.appStore$ = this.store$.pipe(select('player'));
     const arr = [{
@@ -413,5 +415,28 @@ export class WyPlayerComponent implements AfterViewInit {
         this.controlToolTip.title = '';
       }, 2000);
     }
+  }
+
+
+   // 分享
+   onShareSong(song: Song) {
+    const txt = this.makeTxt('单曲', song.name, song.ar);
+    this.multipleReducerServe.share({ id: song.id, type: 'song', txt });
+  }
+
+  private makeTxt(type: string, name: string, makeBy: Singer[]): string {
+    let makeByStr = makeBy.map(item => item.name).join('/');
+    return `${type}：${name} -- ${makeByStr}`;
+  }
+
+   // 收藏歌曲
+  onLikeSong(id: string) {
+    console.log('onLikeSong');
+    this.multipleReducerServe.likeSongs(id);
+  }
+
+  toInfo(path: [string, number]) {
+    this.showPanel = false;
+    this.router.navigate(path);
   }
 }

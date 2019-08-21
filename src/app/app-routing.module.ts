@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { SingerModule } from './pages/singer/singer.module';
 
 const routes: Routes = [
   {
@@ -32,10 +31,10 @@ const routes: Routes = [
     redirectTo: '/home',
     pathMatch: 'full'
   },
-  /* {
+  {
     path: '**',
     redirectTo: '/home'
-  } */
+  }
 ];
 
 @NgModule({

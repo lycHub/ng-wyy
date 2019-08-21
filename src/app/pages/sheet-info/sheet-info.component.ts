@@ -52,6 +52,7 @@ export class SheetInfoComponent implements OnDestroy{
     private store$: Store<AppStoreModule>
   ) {
     this.route.data.pipe(map(res => res.sheetInfo)).subscribe(res => {
+      console.log('res :', res);
       this.sheetInfo = res;
       this.hasLiked = res.subscribed;
       
@@ -142,7 +143,7 @@ export class SheetInfoComponent implements OnDestroy{
 
 
   // 分享
-  onShare(info: SongSheet | Song, type = 'song') {
+  onShareSong(info: SongSheet | Song, type = 'song') {
     let txt = '';
     if (type === 'playlist') {
       txt = this.makeTxt('歌单', info.name, (<SongSheet>info).creator.nickname);

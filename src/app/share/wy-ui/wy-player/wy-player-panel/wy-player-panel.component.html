@@ -25,19 +25,19 @@
           <i class="col arrow"></i>
           <div class="col name ellipsis">{{item.name}}</div>
           <div class="col icons">
-            <i class="ico like" title="收藏"></i>
-            <i class="ico share" title="分享"></i>
+            <i class="ico like" title="收藏" (click)="onLikeSong.emit(item.id.toString())"></i>
+            <i class="ico share" title="分享" (click)="onShareSong.emit(item)"></i>
             <i class="ico trush" title="删除" (click)="onDelete($event, item)"></i>
           </div>
           <div class="singers clearfix ellipsis">
             <div class="singer-item" *ngFor="let item of item.ar; last as isLast">
-              <a class="col ellipsis">{{item.name}}</a>
+              <a class="col ellipsis" (click)="onToInfo.emit(['/singer', item.id])">{{item.name}}</a>
               <span [hidden]="last || item.ar?.length <= 1">/</span>
             </div>
           </div>
           
           <div class="col duration">{{(item.dt / 1000) | FormatTime}}</div>
-          <div class="col link"></div>  
+          <div class="col link" (click)="onToInfo.emit(['/sheetInfo', item.al.id])"></div>
         </li>
       </ul>
     </app-wy-scroll>

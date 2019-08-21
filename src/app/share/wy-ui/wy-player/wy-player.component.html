@@ -1,17 +1,16 @@
 <div class="m-player"
-[@showHide]="showPlayer"
-(click)="selfClick = true"
-(mouseenter)="togglePlayer('show')"
-(mouseleave)="togglePlayer('hide')"
-(@showHide.start)="animating = true"
-(@showHide.done)="onAnimateDone($event)">
+  [@showHide]="showPlayer"
+  (click)="selfClick = true"
+  (mouseenter)="togglePlayer('show')"
+  (mouseleave)="togglePlayer('hide')"
+  (@showHide.start)="animating = true"
+  (@showHide.done)="onAnimateDone($event)">
   <div class="lock">
     <div class="left" (click)="lockPlayer = !lockPlayer">
       <i [class.locked]="lockPlayer"></i>
     </div>
   </div>
   <div class="hand"></div>
-
   <div class="container">
     <div class="wrap">
       <div class="btns">
@@ -20,23 +19,19 @@
         <i class="next" (click)="onNext(currentIndex + 1)"></i>
       </div>
       <div class="head">
-        <img appImgDefault [hidden]="currentSong" src="//s4.music.126.net/style/web2/img/default/default_album.jpg" />
+        <img appImgDefault (click)="toInfo(['/songInfo', currentSong.id])" [hidden]="currentSong" src="//s4.music.126.net/style/web2/img/default/default_album.jpg" />
         <img appImgDefault [hidden]="!currentSong" src="{{currentSong?.al.picUrl}}" alt="{{currentSong?.name}}" />
         <i class="mask"></i>
       </div>
       <div class="play">
         <div class="words clearfix" [class.hide]="!currentSong">
-          <p class="ellipsis">{{currentSong?.name}}</p>
+          <p class="ellipsis" (click)="toInfo(['/songInfo', currentSong.id])">{{currentSong?.name}}</p>
           <ul class="songs clearfix">
             <li *ngFor="let item of currentSong?.ar; last as isLast">
-              <a>{{item.name}}</a>
+              <a (click)="toInfo(['/singer', item.id])">{{item.name}}</a>
               <span [hidden]="isLast">/</span>
             </li>
           </ul>
-          <!-- <ng-container>
-            <span *ngFor="let item of currentSong?.ar">{{item.name}}</span>
-          </ng-container> -->
-          <!-- <i></i> -->
         </div>
         <div class="bar">
           <div class="slider-wrap">
@@ -49,8 +44,8 @@
       </div>
 
       <div class="oper">
-        <i class="like" title="收藏"></i>
-        <i class="share" title="分享"></i>
+        <i class="like" title="收藏" (click)="onLikeSong(currentSong.id)"></i>
+        <i class="share" title="分享" (click)="onShareSong(currentSong)"></i>
       </div>
       <div class="ctrl">
         <i class="volume" title="音量" (click)="toggleVolPanel($event)"></i>
@@ -74,7 +69,10 @@
         (onClose)="showPanel = false"
         (onChangeSong)="onChangeSong($event)"
         (onDeleteSong)="onDeleteSong($event)"
-        (onClearSong)="onClearSong()">
+        (onClearSong)="onClearSong()"
+        (onLikeSong)="onLikeSong($event)"
+        (onShareSong)="onShareSong($event)"
+        (onToInfo)="toInfo($event)">
       </app-wy-player-panel>
     </div>
   </div>

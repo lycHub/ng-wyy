@@ -15,10 +15,10 @@
           </div>
 
           <div class="user f-cb">
-            <a class="face" href="/user/home?id=450639585">
-              <img appImgDefault [src]="sheetInfo.creator.avatarUrl" [alt]="sheetInfo.creator.nickname">
+            <a class="face" [hidden]="!sheetInfo.creator" href="https://music.163.com/user/home?id=450639585">
+              <img appImgDefault [src]="sheetInfo.creator?.avatarUrl" [alt]="sheetInfo.creator?.nickname">
             </a>
-            <span class="name"><a [href]="'https://music.163.com/artist?id=' + sheetInfo.userId" class="s-fc7">{{sheetInfo.creator.nickname}}</a></span>
+            <span class="name"><a [href]="'https://music.163.com/artist?id=' + sheetInfo.userId" class="s-fc7">{{sheetInfo.creator?.nickname}}</a></span>
             <span class="time s-fc4">{{sheetInfo.createTime | date:'yyyy-MM-dd'}}&nbsp;创建</span>
           </div>
 
@@ -35,10 +35,10 @@
             <button nz-button class="btn share" (click)="onShare(sheetInfo, 'playlist')">
               <span>分享</span>({{sheetInfo.shareCount}})
             </button>
-            <button nz-button class="btn download">下载</button>
+            <!-- <button nz-button class="btn download">下载</button>
             <button nz-button class="comment">
               <span>评论</span>({{sheetInfo.commentCount}})
-            </button>
+            </button> -->
           </div>
 
           <div class="tags clearfix">
@@ -86,18 +86,17 @@
               <td class="first-col">
                 <span>{{i + 1}}</span>
                 <i class="ico play-song" [class.current]="currentIndex === i" title="播放" (click)="onAddSong(item, true)"></i>
-                <!-- <i nz-icon nzType="play-circle" nzTheme="outline"></i> -->
               </td>
               <td class="song-name">
-                  <a [routerLink]="['/songInfo', item.id]">{{item.name}}</a>
+                <a [routerLink]="['/songInfo', item.id]">{{item.name}}</a>
               </td>
               <td class="time-col">
                  <span>{{item.dt / 1000 | FormatTime}}</span>
                 <p class="icons">
                   <i class="ico add" title="添加" (click)="onAddSong(item)"></i>
                   <i class="ico like" title="收藏" (click)="onLikeSong(item.id.toString())"></i>
-                  <i class="ico share" title="分享" (click)="onShare(item)"></i>
-                  <i class="ico download" title="下载"></i>
+                  <i class="ico share" title="分享" (click)="onShareSong(item)"></i>
+                  <!-- <i class="ico download" title="下载"></i> -->
                 </p>
               </td>
               <td>
