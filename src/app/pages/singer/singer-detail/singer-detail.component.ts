@@ -61,7 +61,7 @@ export class SingerDetailComponent implements OnInit, OnDestroy {
 
    // 添加一首歌曲
    onAddSong(song: Song, play = false) {
-    if (!this.currentSong && this.currentSong.id !== song.id) {
+    if (!this.currentSong || this.currentSong.id !== song.id) {
       this.songServe.getSongList(song).subscribe(list => this.multipleReducerServe.insertSong(list[0], play));
     }
   }

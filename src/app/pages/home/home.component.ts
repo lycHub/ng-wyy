@@ -3,7 +3,6 @@ import {Banner, HotTag, SongSheet, Singer} from "../../service/data-modals/commo
 import {NzCarouselComponent} from "ng-zorro-antd";
 import {ActivatedRoute, Router} from "@angular/router";
 import {map, takeUntil} from "rxjs/internal/operators";
-import { SongService } from 'src/app/service/song.service';
 import { MultipleReducersService } from 'src/app/store/multiple-reducers.service';
 import { AppStoreModule } from 'src/app/store';
 import { Store, select } from '@ngrx/store';
@@ -37,7 +36,6 @@ export class HomeComponent implements OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private sheetServe: SheetService,
-    private songServe: SongService,
     private store$: Store<AppStoreModule>,
     private multipleReducerServe: MultipleReducersService) {
      this.route.data.pipe(map(res => res.homeDatas)).subscribe(([banners, hotTags, songSheetList, singers]) => {
@@ -58,13 +56,11 @@ export class HomeComponent implements OnDestroy {
     this.carouselActiveIndex = to;
   }
 
-  playSong(id: number) {
-    this.sheetServe.getSongSheetDetail(id).subscribe(sheet => {
-      this.songServe.getSongList(sheet.tracks).subscribe(list => {
-        if (list.length) {
-          this.multipleReducerServe.selectPlay(({ list, index: 0 }));
-        }
-      });
+  playSheet(id: number) {
+    this.sheetServe.playSheet(id).subscribe(list => {
+      if (list.length) {
+        this.multipleReducerServe.selectPlay(({ list, index: 0 }));
+      }
     });
   }
 

@@ -24,7 +24,7 @@
 
           <div class="btns">
             <nz-button-group class="btn">
-              <button nz-button nzType="primary" class="play" (click)="playSong(sheetInfo.id)">
+              <button nz-button nzType="primary" class="play" (click)="playSheet(sheetInfo.tracks)">
                 <i nz-icon nzType="play-circle" nzTheme="outline"></i>播放
               </button>
               <button nz-button nzType="primary" class="add" (click)="onAddSongs(sheetInfo.tracks)">+</button>
@@ -32,7 +32,7 @@
             <button nz-button class="btn like" [disabled]="hasLiked" (click)="onLikeSheet(sheetInfo.id)">
               <span>收藏</span>({{sheetInfo.subscribedCount}})
             </button>
-            <button nz-button class="btn share" (click)="onShare(sheetInfo, 'playlist')">
+            <button nz-button class="btn share" (click)="onShareSong(sheetInfo, 'playlist')">
               <span>分享</span>({{sheetInfo.shareCount}})
             </button>
             <!-- <button nz-button class="btn download">下载</button>
@@ -101,7 +101,7 @@
               </td>
               <td>
                 <ng-container *ngFor="let singer of item.ar; last as isLast">
-                  <a>{{singer.name}}</a>
+                  <a [routerLink]="['/singer', singer.id]">{{singer.name}}</a>
                   <em [hidden]="isLast">/</em>
                 </ng-container>
               </td>

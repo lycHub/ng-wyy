@@ -52,7 +52,6 @@ export class SheetInfoComponent implements OnDestroy{
     private store$: Store<AppStoreModule>
   ) {
     this.route.data.pipe(map(res => res.sheetInfo)).subscribe(res => {
-      console.log('res :', res);
       this.sheetInfo = res;
       this.hasLiked = res.subscribed;
       
@@ -78,13 +77,11 @@ export class SheetInfoComponent implements OnDestroy{
   }
 
 
-  playSong(id: number) {
-    this.sheetServe.getSongSheetDetail(id).subscribe(sheet => {
-      this.songServe.getSongList(sheet.tracks).subscribe(list => {
-        if (list.length) {
-          this.multipleReducerServe.selectPlay(({ list, index: 0 }));
-        }
-      });
+  playSheet(tracks: Song[]) {
+    this.songServe.getSongList(tracks).subscribe(list => {
+      if (list.length) {
+        this.multipleReducerServe.selectPlay(({ list, index: 0 }));
+      }
     });
   }
   

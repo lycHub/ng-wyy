@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SheetService, SheetParams } from 'src/app/service/sheet.service';
 import { SongSheet, playlistInfo } from '../../service/data-modals/common.models';
-import { SongService } from 'src/app/service/song.service';
 import { MultipleReducersService } from 'src/app/store/multiple-reducers.service';
 import {ActivatedRoute, Router} from '@angular/router';
 
@@ -24,7 +23,6 @@ export class SheetComponent implements OnInit {
   constructor(private router: Router,
     private route: ActivatedRoute,
     private sheetServe: SheetService,
-    private songServe: SongService,
     private multipleReducerServe: MultipleReducersService) {
     this.listParams.cat = this.route.snapshot.queryParamMap.get('cat') || '全部';
     this.getList();
@@ -44,13 +42,11 @@ export class SheetComponent implements OnInit {
     this.getList();
   }
 
-  playSong(id: number) {
-    this.sheetServe.getSongSheetDetail(id).subscribe(sheet => {
-      this.songServe.getSongList(sheet.tracks).subscribe(list => {
-        if (list.length) {
-          this.multipleReducerServe.selectPlay(({ list, index: 0 }));
-        }
-      });
+  playSheet(id: number) {
+    this.sheetServe.playSheet(id).subscribe(list => {
+      if (list.length) {
+        this.multipleReducerServe.selectPlay(({ list, index: 0 }));
+      }
     });
   }
 
