@@ -37,9 +37,6 @@ export class AppComponent {
   }, {
     title: '歌单',
     path: '/sheet'
-  }, {
-    title: '歌手',
-    path: ''
   }];
 
   routeTitle = '';
