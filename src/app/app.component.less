@@ -1,0 +1,45 @@
+@import '../assets/styles/varibles';
+@import '../assets/styles/mixins';
+#app .layout{
+  .header {
+    .wrap{
+      display: flex;
+      justify-content: space-between;
+      width: 1100px;
+      .left{
+        display: flex;
+        h1{
+          width: 157px;
+          color: @border-color-base;
+          font-size: @font-size-lgx;
+          margin-bottom: 0;
+          margin-right: 20px;
+          text-align: center;
+        }
+        ul{
+          height:64px;
+          line-height:64px;
+        }
+      }
+      .right{
+        display: flex;
+        .member{
+          display: flex;
+          align-items: center;
+          color: @white-color;
+        }
+      }
+    }
+  }
+  .content{
+    background-color: @body-color;
+  }
+  .footer{
+    text-align: center;
+  }
+}
+
+
+:host ::ng-deep .ant-back-top {
+  bottom: 80px;
+}
