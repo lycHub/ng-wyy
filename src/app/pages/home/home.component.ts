@@ -9,7 +9,6 @@ import { Banner } from '../../services/data-types/common.types';
 })
 export class HomeComponent implements OnInit {
   banners: Banner[];
-
   constructor(private homeServe: HomeService) {
     this.homeServe.getBanners().subscribe(banners => {
       this.banners = banners;
