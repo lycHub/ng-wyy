@@ -1,1 +1,11 @@
-<p>home works!</p>
+<div class="home">
+  <div class="carousel wrap">
+    <nz-carousel nzAutoPlay nzEffect="fade">
+      <div class="carousel-item" nz-carousel-content *ngFor="let item of banners">
+        <a [href]="item.url" target="_blank" class="banner-item">
+          <img [src]="item.imageUrl" />
+        </a>
+      </div>
+    </nz-carousel>
+  </div>
+</div>
