@@ -6,7 +6,7 @@
         <i class="icon erji"></i>
         <span>{{sheet.playCount | playCount}}</span>
       </div>
-      <i class="icon play"></i>
+      <i class="icon play" (click)="playSheet(sheet.id)"></i>
     </div>
   </a>
   <span class="dec">{{sheet.name}}</span>
