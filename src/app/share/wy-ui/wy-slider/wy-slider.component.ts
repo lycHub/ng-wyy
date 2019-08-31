@@ -3,7 +3,9 @@ import { fromEvent, merge, Observable } from 'rxjs';
 import { filter, tap, pluck, map, distinctUntilChanged, takeUntil } from 'rxjs/internal/operators';
 import { SliderEventObserverConfig } from './wy-slider-types';
 import { DOCUMENT } from '@angular/common';
-import { sliderEvent } from './wy-slider-helper';
+import { sliderEvent, getElementOffset } from './wy-slider-helper';
+import { inArray } from 'src/app/utils/array';
+import { limitNumberInRange } from 'src/app/utils/number';
 
 @Component({
   selector: 'app-wy-slider',
@@ -14,6 +16,10 @@ import { sliderEvent } from './wy-slider-helper';
 })
 export class WySliderComponent implements OnInit {
   @Input() wyVertical = false;
+  @Input() wyMin = 0;
+  @Input() wyMax = 100;
+
+
   private sliderDom: HTMLDivElement;
   @ViewChild('wySlider', { static: true }) private wySlider: ElementRef;
 
@@ -27,6 +33,7 @@ export class WySliderComponent implements OnInit {
   ngOnInit() {
     this.sliderDom = this.wySlider.nativeElement;
     this.createDraggingObservables();
+    this.subscribeDrag(['start']);
   }
 
   private createDraggingObservables() {
@@ -73,5 +80,52 @@ export class WySliderComponent implements OnInit {
     this.dragStart$ = merge(mouse.startPlucked$, touch.startPlucked$);
     this.dragMove$ = merge(mouse.moveResolved$, touch.moveResolved$);
     this.dragEnd$ = merge(mouse.end$, touch.end$);
+  }
+
+
+  private subscribeDrag(events: string[] = ['start', 'move', 'end']) {
+    if (inArray(events, 'start') && this.dragStart$) {
+      this.dragStart$.subscribe(this.onDragStart.bind(this));
+    }
+    if (inArray(events, 'move') && this.dragMove$) {
+      this.dragMove$.subscribe(this.onDragMove.bind(this));
+    }
+    if (inArray(events, 'end') && this.dragEnd$) {
+      this.dragEnd$.subscribe(this.onDragEnd.bind(this));
+    }
+  }
+
+  private onDragStart(value: number) {
+    console.log('value :', value);
+  }
+  private onDragMove(value: number) {
+
+  }
+  private onDragEnd() {
+
+  }
+
+
+  private findClosestValue(position: number): number {
+    // 获取滑块总长
+    const sliderLength = this.getSliderLength();
+
+    // 滑块(左, 上)端点位置
+    const sliderStart = this.getSliderStartPosition();
+
+    // 滑块当前位置 / 滑块总长
+    const ratio = limitNumberInRange((position - sliderStart) / sliderLength, 0, 1);
+    const ratioTrue = this.wyVertical ? 1 - ratio : ratio;
+    return ratioTrue * (this.wyMax - this.wyMin) + this.wyMin;
+  }
+
+
+  private getSliderLength(): number {
+    return this.wyVertical ? this.sliderDom.clientHeight : this.sliderDom.clientWidth;
+  }
+
+  private getSliderStartPosition(): number {
+    const offset = getElementOffset(this.sliderDom);
+    return this.wyVertical ? offset.top : offset.left;
   }
 }
