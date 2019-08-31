@@ -24,6 +24,7 @@ export class WySliderComponent implements OnInit, OnDestroy, ControlValueAccesso
   @Input() wyVertical = false;
   @Input() wyMin = 0;
   @Input() wyMax = 100;
+  @Input() bufferOffset: SliderValue = 0;
 
 
   private sliderDom: HTMLDivElement;

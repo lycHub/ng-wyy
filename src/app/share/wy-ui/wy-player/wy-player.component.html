@@ -28,7 +28,7 @@
         </div>
         <div class="bar">
           <div class="slider-wrap">
-            <app-wy-slider [(ngModel)]="sliderValue"></app-wy-slider>
+            <app-wy-slider [bufferOffset]="bufferOffset" [(ngModel)]="sliderValue"></app-wy-slider>
           </div>
           <span class="time">
             <em>02:11</em> / 04:35
@@ -46,6 +46,10 @@
         <p class="open">
           <span></span>
         </p>
+
+        <div class="control-vol">
+          <app-wy-slider [wyVertical]="true"></app-wy-slider>
+        </div>
       </div>
     </div>
   </div>
