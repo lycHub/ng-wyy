@@ -19,6 +19,8 @@
     "@angular/platform-browser": "~8.2.3",
     "@angular/platform-browser-dynamic": "~8.2.3",
     "@angular/router": "~8.2.3",
+    "@ngrx/store": "^8.3.0",
+    "@ngrx/store-devtools": "^8.3.0",
     "minireset.css": "0.0.5",
     "ng-zorro-antd": "^8.1.2",
     "rxjs": "~6.4.0",
