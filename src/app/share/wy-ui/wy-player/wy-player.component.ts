@@ -1,10 +1,12 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, Inject } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppStoreModule } from '../../../store/index';
 import { getSongList, getPlayList, getCurrentIndex, getPlayMode, getCurrentSong } from '../../../store/selectors/player.selector';
 import { Song } from '../../../services/data-types/common.types';
 import { PlayMode } from './player-type';
 import { SetCurrentIndex } from 'src/app/store/actions/player.actions';
+import { Subscription, fromEvent } from 'rxjs';
+import { DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'app-wy-player',
@@ -30,12 +32,24 @@ export class WyPlayerComponent implements OnInit {
   // 是否可以播放
   songReady = false;
 
+  // 音量
+  volume = 60;
+
+  // 是否显示音量面板
+  showVolumnPanel = false;
+
+  // 是否点击的是音量面板本身
+  selfClick = false;
+
+  private winClick: Subscription;
+
   @ViewChild('audio', { static: true }) private audio: ElementRef;
   private audioEl: HTMLAudioElement;
 
 
   constructor(
-    private store$: Store<AppStoreModule>
+    private store$: Store<AppStoreModule>,
+    @Inject(DOCUMENT) private doc: Document
   ) {
     const appStore$ = this.store$.pipe(select('player'));
     const stateArr = [{
@@ -88,8 +102,53 @@ export class WyPlayerComponent implements OnInit {
   }
 
 
-  onPercentChange(per) {
-    this.audioEl.currentTime = this.duration * (per / 100);
+  onPercentChange(per: number) {
+    if (this.currentSong) {
+      this.audioEl.currentTime = this.duration * (per / 100);
+    }
+  }
+
+  // 控制音量
+  onVolumeChange(per: number) {
+    this.audioEl.volume = per / 100;
+  }
+
+  // 控制音量面板
+  toggleVolPanel(evt: MouseEvent) {
+    // evt.stopPropagation();
+    this.togglePanel();
+  }
+
+
+  
+  togglePanel() {
+    this.showVolumnPanel = !this.showVolumnPanel;
+    if (this.showVolumnPanel) {
+      this.bindDocumentClickListener();
+    }else {
+      this.unbindDocumentClickListener();
+    }
+  }
+
+
+  private bindDocumentClickListener() {
+    if (!this.winClick) {
+      this.winClick = fromEvent(this.doc, 'click').subscribe(() => {
+        if (!this.selfClick) {  // 说明点击了播放器以外的部分
+          this.showVolumnPanel = false;
+          this.unbindDocumentClickListener();
+        }
+        this.selfClick = false;
+      });
+    }
+  }
+
+
+  private unbindDocumentClickListener() {
+    if (this.winClick) {
+      this.winClick.unsubscribe();
+      this.winClick = null;
+    }
   }
 
 
