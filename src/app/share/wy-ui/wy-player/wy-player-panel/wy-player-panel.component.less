@@ -1,0 +1,240 @@
+@import "../../../../../assets/styles/varibles";
+@import "../../../../../assets/styles/mixins";
+.play-panel{
+  display: none;
+  position: absolute;
+  left:0;
+  bottom: 70px;
+  width: 100%;
+  height: 300px;
+  background-color: @play-bg-color;
+  overflow: hidden;
+  &.show{
+    display: block;
+  }
+  .hd{
+    background: url(../../../../../assets/images/playlist_bg.png) no-repeat;
+    .hdc{
+      position: relative;
+      height:40px;
+      h4{
+        position: absolute;
+        left: 25px;
+        top: 0;
+        height: 39px;
+        line-height: 39px;
+        font-size: @font-size-base;
+        color: @wy-text-color;
+      }
+      .add-all, .clear-all{
+        position: absolute;
+        left: 398px;
+        top: 12px;
+        height: 15px;
+        line-height: 15px;
+        cursor: pointer;
+        color: @wy-text-prev-color;
+        font-size: @font-size-sm;
+        &:hover{
+          color: @wy-text-color;
+          .icon{
+            background-position: -88px -189px;
+          }
+        }
+        .icon{
+          .icon('../images/playbar.png', 25px, 25px);
+          background-position: -88px -163px;
+          vertical-align: middle;
+          /*&:hover{
+            background-position: -88px -189px;
+          }*/
+        }
+      }
+      .line{
+        position: absolute;
+        top: 15px;
+        left: 482px;
+        height: 15px;
+        border-left: 1px solid #000;
+        border-right: 1px solid #2c2c2c;
+      }
+      .clear-all{
+        left:490px;
+        top:15px;
+        &:hover{
+          .trush{
+            background-position: -51px -20px;
+          }
+        }
+        .trush{
+          width: 13px;
+          height:16px;
+          background-image: url('../../../../../assets/images/playlist.png');
+          background-position: -51px 0;
+        }
+      }
+
+      .playing-name{
+        position: absolute;
+        left: 595px;
+        top: 0;
+        width: 346px;
+        text-align: center;
+        height: 39px;
+        line-height: 39px;
+        color: @white-color;
+        font-size: @font-size-base;
+      }
+      .close{
+        position: absolute;
+        top: 6px;
+        right: 8px;
+        .icon('../images/playlist.png', 30px, 30px);
+        background-position: -195px 9px;
+        &:hover{
+          background-position: -195px -20px;
+        }
+      }
+    }
+  }
+
+  .bd{
+    position: relative;
+    .icon('../images/playlist_bg.png', 976px, 260px);
+    background-position: -1014px 0;
+    background-repeat: repeat-y;
+
+    .imgbg{
+      position: absolute;
+      left: 2px;
+      top: 0;
+      width: 980px;
+      height: auto;
+      opacity: .2;
+    }
+    .msk{
+      position: absolute;
+      left: 2px;
+      top: 0;
+      z-index: 2;
+      width: 558px;
+      height: 260px;
+      background-color: #121212;
+      opacity: .5;
+    }
+    .list-wrap{
+      position: absolute;
+      left: 2px;
+      top: 0;
+      z-index: 3;
+      height: 260px;
+      width: 553px;
+      color: @wy-text-prev-color;
+      ul{
+        li{
+          overflow: hidden;
+          padding: 10px 0;
+          .col{
+            float: left;
+          }
+
+          .arrow{
+            .icon('../images/playlist.png', 10px, 13px);
+            background-position: -182px 0;
+            margin: 6px 10px 0 10px;
+            visibility: hidden;
+          }
+          .name{
+            width: 280px;
+          }
+          .singers{
+            width: 70px;
+            margin: 0 10px;
+            float: left;
+            height: 20px;
+            .singer-item{
+              float: left;
+            }
+          }
+          .duration{
+            margin: 0 10px;
+          }
+          .link{
+            .icon('../images/playlist.png', 14px, 16px);
+            background-position: -80px 0;
+            margin-top: 4px;
+            &:hover{
+              background-position: -80px -20px;
+            }
+          }
+          .icons{
+            margin-top: 4px;
+            visibility: hidden;
+            overflow: hidden;
+            .ico{
+              float: left;
+              margin: 0 3px;
+              .icon('../images/playlist.png', 16px, 16px);
+              &.like{
+                background-position: -24px 0;
+                &:hover{
+                  background-position: -24px -20px;
+                }
+              }
+              &.share{
+                background-position: 0 0;
+                &:hover{
+                  background-position:0 -20px;
+                }
+              }
+              &.trush{
+                background-position: -51px 0;
+                &:hover{
+                  background-position: -51px -20px;
+                }
+              }
+            }
+          }
+
+          &:hover{
+            color: @white-color;
+            background-color: @black-color;
+            .icons{
+              visibility: visible;
+            }
+          }
+        }
+        .current{
+          background-color: @black-color;
+          .arrow{
+            visibility: visible;
+          }
+        }
+      }
+    }
+
+    .list-lyric{
+      position: absolute;
+      right: 2px;
+      top: 0;
+      // z-index: 3;
+      margin: 21px 0 20px 0;
+      height: 219px;
+      width: 414px;
+      ul{
+        li{
+          color: @prev-color;
+          word-wrap: break-word;
+          text-align: center;
+          line-height: 32px;
+          //height: 32px;
+          transition: color .3s;
+          font-size: @font-size-sm;
+          &.current{
+            color: @white-color;
+          }
+        }
+      }
+    }
+  }
+}
