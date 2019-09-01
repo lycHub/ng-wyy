@@ -20,6 +20,9 @@ export class WyPlayerComponent implements OnInit {
   currentIndex: number;
   currentSong: Song;
 
+  duration: number;
+  currentTime: number;
+
   @ViewChild('audio', { static: true }) private audio: ElementRef;
   private audioEl: HTMLAudioElement;
 
@@ -70,8 +73,11 @@ export class WyPlayerComponent implements OnInit {
   }
 
   private watchCurrentSong(song: Song) {
-    this.currentSong = song;
-    console.log('song :', song);
+    if (song) {
+      this.currentSong = song;
+      this.duration = song.dt / 1000;
+      console.log('song :', song);
+    }
   }
 
 
@@ -79,7 +85,17 @@ export class WyPlayerComponent implements OnInit {
     this.play();
   }
 
+
+  onTimeUpdate(e: Event) {
+    this.currentTime = (<HTMLAudioElement>e.target).currentTime;
+  }
+
   private play() {
     this.audioEl.play();
+  }
+
+
+  get picUrl(): string {
+    return this.currentSong ? this.currentSong.al.picUrl : '//s4.music.126.net/style/web2/img/default/default_album.jpg';
   }
 }
