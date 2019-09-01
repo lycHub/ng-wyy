@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation, ChangeDetectionStrategy, ElementRef, ViewChild, Input, Inject, ChangeDetectorRef, OnDestroy, forwardRef } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, ChangeDetectionStrategy, ElementRef, ViewChild, Input, Inject, ChangeDetectorRef, OnDestroy, forwardRef, Output, EventEmitter } from '@angular/core';
 import { fromEvent, merge, Observable, Subscription } from 'rxjs';
 import { filter, tap, pluck, map, distinctUntilChanged, takeUntil } from 'rxjs/internal/operators';
 import { SliderEventObserverConfig, SliderValue } from './wy-slider-types';
@@ -26,6 +26,7 @@ export class WySliderComponent implements OnInit, OnDestroy, ControlValueAccesso
   @Input() wyMax = 100;
   @Input() bufferOffset: SliderValue = 0;
 
+  @Output() wyOnAfterChange = new EventEmitter<SliderValue>();
 
   private sliderDom: HTMLDivElement;
   @ViewChild('wySlider', { static: true }) private wySlider: ElementRef;
@@ -138,6 +139,7 @@ export class WySliderComponent implements OnInit, OnDestroy, ControlValueAccesso
     }
   }
   private onDragEnd() {
+    this.wyOnAfterChange.emit(this.value);
     this.toggleDragMoving(false);
     this.cdr.markForCheck();
   }
