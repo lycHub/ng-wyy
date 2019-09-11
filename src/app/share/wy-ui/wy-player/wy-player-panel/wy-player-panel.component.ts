@@ -17,6 +17,8 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
   @Output() onClose = new EventEmitter<void>();
   @Output() onChangeSong = new EventEmitter<Song>();
 
+  scrollY = 0;
+
   @ViewChildren(WyScrollComponent) private wyScroll: QueryList<WyScrollComponent>;
   
   constructor() { }
@@ -29,7 +31,13 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
       console.log('songList :', this.songList);
     }
     if (changes['currentSong']) {
-      console.log('currentSong :', this.currentSong);
+      if (this.currentSong) {
+        if (this.show) {
+          this.scrollToCurrent();
+        }
+      }else {
+
+      }
     }
 
 
@@ -37,6 +45,26 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
       if (!changes['show'].firstChange && this.show) {
         console.log('wyScroll :', this.wyScroll);
         this.wyScroll.first.refreshScroll();
+        setTimeout(() => {
+          if (this.currentSong) {
+            this.scrollToCurrent();
+          }
+        }, 80);
+      }
+    }
+  }
+
+
+  private scrollToCurrent() {
+    const songListRefs = this.wyScroll.first.el.nativeElement.querySelectorAll('ul li');
+    if (songListRefs.length) {
+      const currentLi = <HTMLElement>songListRefs[this.currentIndex || 0];
+      const offsetTop = currentLi.offsetTop;
+      const offsetHeight = currentLi.offsetHeight;
+      console.log('scrollY :', this.scrollY);
+      console.log('offsetTop :', offsetTop);
+      if (((offsetTop - Math.abs(this.scrollY)) > offsetHeight * 5) || (offsetTop < Math.abs(this.scrollY))) {
+        this.wyScroll.first.scrollToElement(currentLi, 300, false, false);
       }
     }
   }
