@@ -1,7 +1,9 @@
-import { Component, OnInit, ViewEncapsulation, ChangeDetectionStrategy, ViewChild, ElementRef, AfterViewInit, Input, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, ChangeDetectionStrategy, ViewChild, ElementRef, AfterViewInit, Input, OnChanges, SimpleChanges, Output, EventEmitter, Inject } from '@angular/core';
 import BScroll from '@better-scroll/core';
 import ScrollBar from '@better-scroll/scroll-bar';
 import MouseWheel from '@better-scroll/mouse-wheel';
+import { timer } from 'rxjs';
+
 BScroll.use(MouseWheel);
 BScroll.use(ScrollBar);
 
@@ -56,8 +58,8 @@ export class WyScrollComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   refreshScroll() {
-    setTimeout(() => {
+    timer(this.refreshDelay).subscribe(() => {
       this.refresh();
-    }, this.refreshDelay);
+    });
   }
 }
