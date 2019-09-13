@@ -1,6 +1,6 @@
 import { Lyric } from '../../../../services/data-types/common.types';
 import { findIndex } from '../../../../utils/array';
-import { from, zip } from 'rxjs';
+import { from, zip, Subject } from 'rxjs';
 import { skip } from 'rxjs/internal/operators';
 // [00:34.940]
 const timeExp = /\[(\d{2}):(\d{2})\.(\d{2,3})\]/;
@@ -15,11 +15,26 @@ interface LyricLine extends BaseLyricLine {
   time: number;
 }
 
+interface Handler extends BaseLyricLine {
+  lineNum: number;
+}
+
 
 
 export class WyLyric {
   private lrc: Lyric;
   lines: LyricLine[] = [];
+
+  private playing = false;
+
+  private curNum: number;
+  private startStamp: number;
+  private pauseStamp: number;
+
+  handler = new Subject<Handler>();
+
+  private timer: any;
+
   constructor(lrc: Lyric) {
     this.lrc = lrc;
     this.init();
@@ -43,8 +58,8 @@ export class WyLyric {
   private generTLyric() {
     const lines = this.lrc.lyric.split('\n');
     const tlines = this.lrc.tlyric.split('\n').filter(item => timeExp.exec(item) !== null);
-    console.log('lines :', lines);
-    console.log('tlines :', tlines);
+    // console.log('lines :', lines);
+    // console.log('tlines :', tlines);
 
     const moreLine = lines.length - tlines.length;
 
@@ -97,5 +112,68 @@ export class WyLyric {
         this.lines.push({ txt, txtCn, time });
       }
     }
+  }
+
+  play(startTime = 0) {
+    if (!this.lines.length) return;
+    if (!this.playing) {
+      this.playing = true;
+    }
+
+    this.curNum = this.findCurNum(startTime);
+    console.log('curNum :', this.curNum);
+    this.startStamp = Date.now() - startTime;
+    // this.callHandler()
+
+    if (this.curNum < this.lines.length) {
+      clearTimeout(this.timer);
+      this.playReset();
+    }
+
+  }
+
+  private playReset() {
+    let line = this.lines[this.curNum];
+    const delay = line.time - (Date.now() - this.startStamp);
+    this.timer = setTimeout(() => {
+      this.callHandler(this.curNum++);
+      if (this.curNum < this.lines.length && this.playing) {
+        this.playReset();
+      }
+    }, delay);
+  }
+
+
+  private callHandler(i: number) {
+    this.handler.next({
+      txt: this.lines[i].txt,
+      txtCn: this.lines[i].txtCn,
+      lineNum: i
+    });
+  }
+
+
+  private findCurNum(time: number): number {
+    const index = this.lines.findIndex(item => time <= item.time);
+    return index === -1 ? this.lines.length - 1 : index;
+  }
+
+  togglePlay(playing: boolean) {
+    const now  = Date.now();
+    this.playing = playing;
+    if (playing) {
+      const startTime = (this.pauseStamp || now) - (this.startStamp || now);
+      this.play(startTime);
+    }else {
+      this.stop();
+      this.pauseStamp = now;
+    }
+  }
+
+  private stop() {
+    if (this.playing) {
+      this.playing = false;
+    }
+    clearTimeout(this.timer);
   }
 }

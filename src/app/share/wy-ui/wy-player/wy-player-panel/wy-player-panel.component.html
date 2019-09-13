@@ -42,7 +42,7 @@
 
     <app-wy-scroll class="list-lyric">
       <ul>
-        <li *ngFor="let item of currentLyric">
+        <li *ngFor="let item of currentLyric; index as i" [class.current]="currentLineNum === i">
           {{item.txt}} <br /> {{item.txtCn}}
         </li>
       </ul>
