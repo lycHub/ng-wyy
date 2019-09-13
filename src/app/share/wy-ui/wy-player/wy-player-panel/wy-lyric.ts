@@ -170,7 +170,7 @@ export class WyLyric {
     }
   }
 
-  private stop() {
+  stop() {
     if (this.playing) {
       this.playing = false;
     }
