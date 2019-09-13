@@ -3,6 +3,7 @@ import { Song } from 'src/app/services/data-types/common.types';
 import { WyScrollComponent } from '../wy-scroll/wy-scroll.component';
 import { findIndex } from 'src/app/utils/array';
 import { timer } from 'rxjs';
+import { SongService } from '../../../../services/song.service';
 
 @Component({
   selector: 'app-wy-player-panel',
@@ -23,7 +24,7 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
 
   @ViewChildren(WyScrollComponent) private wyScroll: QueryList<WyScrollComponent>;
   
-  constructor() { }
+  constructor(private songServe: SongService) { }
 
   ngOnInit() {
   }
@@ -37,6 +38,7 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
     if (changes['currentSong']) {
       if (this.currentSong) {
         this.currentIndex = findIndex(this.songList, this.currentSong);
+        this.updateLyric();
         if (this.show) {
           this.scrollToCurrent();
         }
@@ -57,6 +59,13 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
         });
       }
     }
+  }
+
+
+  private updateLyric() {
+    this.songServe.getLyric(this.currentSong.id).subscribe(res => {
+      console.log('res :', res);
+    });
   }
 
 
