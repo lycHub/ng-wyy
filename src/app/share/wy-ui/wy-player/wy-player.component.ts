@@ -11,6 +11,7 @@ import { SetPlayMode, SetPlayList, SetSongList } from '../../../store/actions/pl
 import { shuffle, findIndex } from 'src/app/utils/array';
 import { WyPlayerPanelComponent } from './wy-player-panel/wy-player-panel.component';
 import { NzModalService } from 'ng-zorro-antd';
+import { BatchActionsService } from 'src/app/store/batch-actions.service';
 
 
 const modeTypes: PlayMode[] = [{
@@ -75,7 +76,8 @@ export class WyPlayerComponent implements OnInit {
   constructor(
     private store$: Store<AppStoreModule>,
     @Inject(DOCUMENT) private doc: Document,
-    private nzModalServe: NzModalService
+    private nzModalServe: NzModalService,
+    private batchActionsServe: BatchActionsService
   ) {
     const appStore$ = this.store$.pipe(select('player'));
     const stateArr = [{
@@ -316,21 +318,7 @@ export class WyPlayerComponent implements OnInit {
 
   // 删除歌曲
   onDeleteSong(song: Song) {
-    const songList = this.songList.slice();
-    const playList = this.playList.slice();
-    let currentIndex = this.currentIndex;
-    const sIndex = findIndex(songList, song);
-    songList.splice(sIndex, 1);
-    const pIndex = findIndex(playList, song);
-    playList.splice(pIndex, 1);
-
-    if (currentIndex > pIndex || currentIndex === playList.length) {
-      currentIndex--;
-    }
-
-    this.store$.dispatch(SetSongList({ songList }));
-    this.store$.dispatch(SetPlayList({ playList }));
-    this.store$.dispatch(SetCurrentIndex({ currentIndex }));
+    this.batchActionsServe.deleteSong(song);
   }
 
   // 清空歌曲
@@ -338,9 +326,7 @@ export class WyPlayerComponent implements OnInit {
     this.nzModalServe.confirm({
       nzTitle: '确认清空列表?',
       nzOnOk: () => {
-        this.store$.dispatch(SetSongList({ songList: [] }));
-        this.store$.dispatch(SetPlayList({ playList: [] }));
-        this.store$.dispatch(SetCurrentIndex({ currentIndex: -1 }));
+        this.batchActionsServe.clearSong();
       }
     });
   }

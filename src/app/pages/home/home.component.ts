@@ -4,11 +4,7 @@ import { NzCarouselComponent } from 'ng-zorro-antd';
 import { ActivatedRoute } from '@angular/router';
 import { map } from 'rxjs/internal/operators';
 import { SheetService } from 'src/app/services/sheet.service';
-import { Store, select } from '@ngrx/store';
-import { AppStoreModule } from '../../store/index';
-import { SetSongList, SetPlayList, SetCurrentIndex } from '../../store/actions/player.actions';
-import { PlayState } from 'src/app/store/reducers/player.reducer';
-import { findIndex, shuffle } from '../../utils/array';
+import { BatchActionsService } from '../../store/batch-actions.service';
 
 @Component({
   selector: 'app-home',
@@ -22,14 +18,12 @@ export class HomeComponent implements OnInit {
   songSheetList: SongSheet[];
   singers: Singer[];
 
-  private playerState: PlayState;
-
   @ViewChild(NzCarouselComponent, { static: true }) private nzCarousel: NzCarouselComponent;
 
   constructor(
     private route: ActivatedRoute,
     private sheetServe: SheetService,
-    private store$: Store<AppStoreModule>
+    private batchActionsServe: BatchActionsService
   ) {
     this.route.data.pipe(map(res => res.homeDatas)).subscribe(([banners, hotTags, songSheetList, singers]) => {
       this.banners = banners;
@@ -37,8 +31,7 @@ export class HomeComponent implements OnInit {
       this.songSheetList = songSheetList;
       this.singers = singers;
     });
-
-    this.store$.pipe(select('player')).subscribe(res => this.playerState = res)
+    
   }
 
   ngOnInit() {
@@ -54,20 +47,8 @@ export class HomeComponent implements OnInit {
 
 
   onPlaySheet(id: number) {
-    console.log('id :', id);
     this.sheetServe.playSheet(id).subscribe(list => {
-      this.store$.dispatch(SetSongList({ songList: list }));
-
-      let trueIndex = 0;
-      let trueList = list.slice();
-
-      if (this.playerState.playMode.type === 'random') {
-        trueList = shuffle(list || []);
-        trueIndex = findIndex(trueList, list[trueIndex]);
-      }
-
-      this.store$.dispatch(SetPlayList({ playList: trueList }));
-      this.store$.dispatch(SetCurrentIndex({ currentIndex: trueIndex }));
+      this.batchActionsServe.selectPlayList({ list, index: 0});
     });
   }
 
