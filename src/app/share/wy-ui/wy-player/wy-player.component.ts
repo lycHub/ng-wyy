@@ -7,9 +7,10 @@ import { PlayMode } from './player-type';
 import { SetCurrentIndex } from 'src/app/store/actions/player.actions';
 import { Subscription, fromEvent } from 'rxjs';
 import { DOCUMENT } from '@angular/common';
-import { SetPlayMode, SetPlayList } from '../../../store/actions/player.actions';
+import { SetPlayMode, SetPlayList, SetSongList } from '../../../store/actions/player.actions';
 import { shuffle, findIndex } from 'src/app/utils/array';
 import { WyPlayerPanelComponent } from './wy-player-panel/wy-player-panel.component';
+import { NzModalService } from 'ng-zorro-antd';
 
 
 const modeTypes: PlayMode[] = [{
@@ -73,7 +74,8 @@ export class WyPlayerComponent implements OnInit {
 
   constructor(
     private store$: Store<AppStoreModule>,
-    @Inject(DOCUMENT) private doc: Document
+    @Inject(DOCUMENT) private doc: Document,
+    private nzModalServe: NzModalService
   ) {
     const appStore$ = this.store$.pipe(select('player'));
     const stateArr = [{
@@ -309,5 +311,37 @@ export class WyPlayerComponent implements OnInit {
   // 改变歌曲
   onChangeSong(song: Song) {
     this.updateCurrentIndex(this.playList, song);
+  }
+
+
+  // 删除歌曲
+  onDeleteSong(song: Song) {
+    const songList = this.songList.slice();
+    const playList = this.playList.slice();
+    let currentIndex = this.currentIndex;
+    const sIndex = findIndex(songList, song);
+    songList.splice(sIndex, 1);
+    const pIndex = findIndex(playList, song);
+    playList.splice(pIndex, 1);
+
+    if (currentIndex > pIndex || currentIndex === playList.length) {
+      currentIndex--;
+    }
+
+    this.store$.dispatch(SetSongList({ songList }));
+    this.store$.dispatch(SetPlayList({ playList }));
+    this.store$.dispatch(SetCurrentIndex({ currentIndex }));
+  }
+
+  // 清空歌曲
+  onClearSong() {
+    this.nzModalServe.confirm({
+      nzTitle: '确认清空列表?',
+      nzOnOk: () => {
+        this.store$.dispatch(SetSongList({ songList: [] }));
+        this.store$.dispatch(SetPlayList({ playList: [] }));
+        this.store$.dispatch(SetCurrentIndex({ currentIndex: -1 }));
+      }
+    });
   }
 }
