@@ -114,17 +114,18 @@ export class WyLyric {
     }
   }
 
-  play(startTime = 0) {
+  play(startTime = 0, skip = false) {
     if (!this.lines.length) return;
     if (!this.playing) {
       this.playing = true;
     }
 
     this.curNum = this.findCurNum(startTime);
-    console.log('curNum :', this.curNum);
     this.startStamp = Date.now() - startTime;
-    // this.callHandler()
-
+    if (!skip) {
+      this.callHandler(this.curNum - 1);
+    }
+    
     if (this.curNum < this.lines.length) {
       clearTimeout(this.timer);
       this.playReset();
@@ -145,11 +146,13 @@ export class WyLyric {
 
 
   private callHandler(i: number) {
-    this.handler.next({
-      txt: this.lines[i].txt,
-      txtCn: this.lines[i].txtCn,
-      lineNum: i
-    });
+    if (i > 0) {
+      this.handler.next({
+        txt: this.lines[i].txt,
+        txtCn: this.lines[i].txtCn,
+        lineNum: i
+      });
+    }
   }
 
 
@@ -163,7 +166,7 @@ export class WyLyric {
     this.playing = playing;
     if (playing) {
       const startTime = (this.pauseStamp || now) - (this.startStamp || now);
-      this.play(startTime);
+      this.play(startTime, true);
     }else {
       this.stop();
       this.pauseStamp = now;
@@ -175,5 +178,9 @@ export class WyLyric {
       this.playing = false;
     }
     clearTimeout(this.timer);
+  }
+
+  seek(time: number) {
+    this.play(time);
   }
 }
