@@ -1,6 +1,6 @@
 import { Lyric } from '../../../../services/data-types/common.types';
 import { findIndex } from '../../../../utils/array';
-import { from, zip, Subject } from 'rxjs';
+import { from, zip, Subject, Subscription, timer } from 'rxjs';
 import { skip } from 'rxjs/internal/operators';
 // [00:34.940]
 const timeExp = /\[(\d{2}):(\d{2})\.(\d{2,3})\]/;
@@ -33,7 +33,7 @@ export class WyLyric {
 
   handler = new Subject<Handler>();
 
-  private timer: any;
+  private timer$: Subscription;
 
   constructor(lrc: Lyric) {
     this.lrc = lrc;
@@ -127,7 +127,7 @@ export class WyLyric {
     }
     
     if (this.curNum < this.lines.length) {
-      clearTimeout(this.timer);
+      this.clearTimer();
       this.playReset();
     }
 
@@ -136,12 +136,22 @@ export class WyLyric {
   private playReset() {
     let line = this.lines[this.curNum];
     const delay = line.time - (Date.now() - this.startStamp);
-    this.timer = setTimeout(() => {
+    this.timer$ = timer(delay).subscribe(() => {
       this.callHandler(this.curNum++);
       if (this.curNum < this.lines.length && this.playing) {
         this.playReset();
       }
-    }, delay);
+    });
+   /*  this.timer$ = setTimeout(() => {
+      this.callHandler(this.curNum++);
+      if (this.curNum < this.lines.length && this.playing) {
+        this.playReset();
+      }
+    }, delay); */
+  }
+
+  private clearTimer() {
+    this.timer$ && this.timer$.unsubscribe();
   }
 
 
@@ -177,7 +187,7 @@ export class WyLyric {
     if (this.playing) {
       this.playing = false;
     }
-    clearTimeout(this.timer);
+    this.clearTimer();
   }
 
   seek(time: number) {
