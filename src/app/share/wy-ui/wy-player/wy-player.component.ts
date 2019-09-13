@@ -59,14 +59,15 @@ export class WyPlayerComponent implements OnInit {
   // 是否显示列表面板
   showPanel = false;
 
-  // 是否点击的是音量面板本身
-  selfClick = false;
+  // 是否绑定document click事件
+  bindFlag = false;
 
   private winClick: Subscription;
 
   // 当前模式
   currentMode: PlayMode;
   modeCount = 0;
+
 
   @ViewChild('audio', { static: true }) private audio: ElementRef;
   @ViewChild(WyPlayerPanelComponent, { static: false }) private playerPanel: WyPlayerPanelComponent;
@@ -106,6 +107,7 @@ export class WyPlayerComponent implements OnInit {
   ngOnInit() {
     this.audioEl = this.audio.nativeElement;
   }
+
 
 
 
@@ -150,6 +152,13 @@ export class WyPlayerComponent implements OnInit {
     this.store$.dispatch(SetPlayMode({ playMode: modeTypes[++this.modeCount % 3] }))
   }
 
+  onClickOutSide() {
+    console.log('onClickOutSide');
+    this.showVolumnPanel = false;
+    this.showPanel = false;
+    this.bindFlag = false;
+  }
+
 
   onPercentChange(per: number) {
     if (this.currentSong) {
@@ -183,25 +192,7 @@ export class WyPlayerComponent implements OnInit {
   
   togglePanel(type: string) {
     this[type] = !this[type];
-    if (this.showVolumnPanel || this.showPanel) {
-      this.bindDocumentClickListener();
-    }else {
-      this.unbindDocumentClickListener();
-    }
-  }
-
-
-  private bindDocumentClickListener() {
-    if (!this.winClick) {
-      this.winClick = fromEvent(this.doc, 'click').subscribe(() => {
-        if (!this.selfClick) {  // 说明点击了播放器以外的部分
-          this.showVolumnPanel = false;
-          this.showPanel = false;
-          this.unbindDocumentClickListener();
-        }
-        this.selfClick = false;
-      });
-    }
+    this.bindFlag = (this.showVolumnPanel || this.showPanel);
   }
 
 
