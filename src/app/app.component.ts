@@ -6,5 +6,11 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.less']
 })
 export class AppComponent {
-  title = 'ng-wyy';
+  menu = [{
+    label: '发现',
+    path: '/home'
+  }, {
+    label: '歌单',
+    path: '/sheet'
+  }]
 }

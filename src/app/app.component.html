@@ -5,8 +5,7 @@
         <div class="left">
           <h1>Music</h1>
           <ul nz-menu nzTheme="dark" nzMode="horizontal">
-            <li nz-menu-item>发现</li>
-            <li nz-menu-item>歌单</li>
+            <li nz-menu-item *ngFor="let item of menu" [routerLink]="item.path">{{item.label}}</li>
           </ul>
         </div>
         <div class="right">

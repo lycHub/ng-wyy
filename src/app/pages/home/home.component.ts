@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Banner, HotTag, SongSheet, Singer } from '../../services/data-types/common.types';
 import { NzCarouselComponent } from 'ng-zorro-antd';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { map } from 'rxjs/internal/operators';
 import { SheetService } from 'src/app/services/sheet.service';
 import { BatchActionsService } from '../../store/batch-actions.service';
@@ -22,6 +22,7 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private sheetServe: SheetService,
     private batchActionsServe: BatchActionsService
   ) {
@@ -52,4 +53,7 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  toInfo(id: number) {
+    this.router.navigate(['/sheetInfo', id]);
+  }
 }
