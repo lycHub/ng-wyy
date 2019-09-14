@@ -108,7 +108,7 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
     this.lyric.handler.subscribe(({ lineNum }) => {
       if (!this.lyricRefs) {
         this.lyricRefs = this.wyScroll.last.el.nativeElement.querySelectorAll('ul li');
-        console.log('lyricRefs :', this.lyricRefs);
+        // console.log('lyricRefs :', this.lyricRefs);
       }
 
       

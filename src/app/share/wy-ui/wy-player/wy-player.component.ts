@@ -126,9 +126,9 @@ export class WyPlayerComponent implements OnInit {
       let list = this.songList.slice();
       if (mode.type === 'random') {
         list = shuffle(this.songList);
-        this.updateCurrentIndex(list, this.currentSong);
-        this.store$.dispatch(SetPlayList({ playList: list }));
       }
+      this.updateCurrentIndex(list, this.currentSong);
+      this.store$.dispatch(SetPlayList({ playList: list }));
     }
     
   }
@@ -137,7 +137,7 @@ export class WyPlayerComponent implements OnInit {
     if (song) {
       this.currentSong = song;
       this.duration = song.dt / 1000;
-      console.log('song :', song);
+      // console.log('song :', song);
     }
   }
 

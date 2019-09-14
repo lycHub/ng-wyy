@@ -1,9 +1,9 @@
 import { Lyric } from '../../../../services/data-types/common.types';
-import { findIndex } from '../../../../utils/array';
 import { from, zip, Subject, Subscription, timer } from 'rxjs';
 import { skip } from 'rxjs/internal/operators';
-// [00:34.940]
-const timeExp = /\[(\d{2}):(\d{2})\.(\d{2,3})\]/;
+// [00:34.940]  [00:34]
+// const timeExp = /\[(\d{2}):(\d{2})\.(\d{2,3})\]/;
+const timeExp = /\[(\d{2}):(\d{2})(\.\d{2,3})?\]/;
 
 
 export interface BaseLyricLine {
@@ -58,8 +58,6 @@ export class WyLyric {
   private generTLyric() {
     const lines = this.lrc.lyric.split('\n');
     const tlines = this.lrc.tlyric.split('\n').filter(item => timeExp.exec(item) !== null);
-    // console.log('lines :', lines);
-    // console.log('tlines :', tlines);
 
     const moreLine = lines.length - tlines.length;
 
@@ -142,12 +140,6 @@ export class WyLyric {
         this.playReset();
       }
     });
-   /*  this.timer$ = setTimeout(() => {
-      this.callHandler(this.curNum++);
-      if (this.curNum < this.lines.length && this.playing) {
-        this.playReset();
-      }
-    }, delay); */
   }
 
   private clearTimer() {
