@@ -56,3 +56,10 @@ export type Lyric = {
   lyric: string;
   tlyric: string;
 }
+
+
+// 歌单列表
+export type SheetList = {
+  playlists: SongSheet[];
+  total: number;
+}
