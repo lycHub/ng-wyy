@@ -48,6 +48,14 @@ export type SongSheet = {
   picUrl: string;
   coverImgUrl: string;
   playCount: number;
+  tags: string[];
+  createTime: number;
+  creator: { nickname: string; avatarUrl: string; };
+  description: string;
+  subscribedCount: number;
+  shareCount: number;
+  commentCount: number;
+  subscribed: boolean;
   tracks: Song[];
 }
 
