@@ -100,7 +100,7 @@
               <i class="ico play-song" title="播放" [class.current]="currentIndex === i" (click)="onAddSong(item, true)"></i>
             </td>
             <td class="song-name">
-              <a>{{item.name}}</a>
+              <a [routerLink]="['/songInfo', item.id]">{{item.name}}</a>
             </td>
             <td class="time-col">
               <span>{{item.dt / 1000 | formatTime}}</span>
