@@ -3,7 +3,8 @@ import { from, zip, Subject, Subscription, timer } from 'rxjs';
 import { skip } from 'rxjs/internal/operators';
 // [00:34.940]  [00:34]
 // const timeExp = /\[(\d{2}):(\d{2})\.(\d{2,3})\]/;
-const timeExp = /\[(\d{2}):(\d{2})(\.\d{2,3})?\]/;
+// const timeExp = /\[(\d{2}):(\d{2})(\.\d{2,3})?\]/;
+const timeExp = /\[(\d{2}):(\d{2})(?:\.(\d{2,3}))?\]/;
 
 
 export interface BaseLyricLine {
@@ -69,7 +70,6 @@ export class WyLyric {
     }
 
     const first = timeExp.exec(tempArr[1][0])[0];
-    console.log('first :', first);
 
     const skipIndex = tempArr[0].findIndex(item => {
       const exec = timeExp.exec(item);

@@ -93,7 +93,7 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
       this.lyric = new WyLyric(res);
       this.currentLyric = this.lyric.lines;
       // console.log('currentLyric :', this.currentLyric);
-      this.startLine = res.tlyric ? 1 : 2;
+      this.startLine = res.tlyric ? 1 : 3;
       this.handleLyric();
       this.wyScroll.last.scrollTo(0, 0);
      

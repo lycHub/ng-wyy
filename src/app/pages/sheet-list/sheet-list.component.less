@@ -1,0 +1,35 @@
+@import "../../../assets/styles/varibles";
+@import "../../../assets/styles/mixins";
+
+.sheet{
+  .list-r{
+    padding: 40px;
+    .top{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid @red-color;
+      padding-bottom: 10px;
+      span{
+        font-size: 24px;
+        color: @black-color;
+      }
+    }
+    .list{
+      display: flex;
+      flex-wrap: wrap;
+      padding: 30px 0;
+      .sheet-item{
+        width: 140px;
+        height:204px;
+        margin-right: 49.4px;
+        &:nth-of-type(5n){
+          margin-right: 0;
+        }
+      }
+    }
+    .pagination{
+      text-align: center;
+    }
+  }
+}
