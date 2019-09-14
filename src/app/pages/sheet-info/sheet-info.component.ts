@@ -1,14 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { map } from 'rxjs/internal/operators';
-import { SongSheet } from '../../services/data-types/common.types';
+import { map, takeUntil } from 'rxjs/internal/operators';
+import { SongSheet, Song } from '../../services/data-types/common.types';
+import { AppStoreModule } from '../../store/index';
+import { Store, select } from '@ngrx/store';
+import { Observable, Subject } from 'rxjs';
+import { getCurrentSong } from '../../store/selectors/player.selector';
+import { SongService } from '../../services/song.service';
+import { BatchActionsService } from '../../store/batch-actions.service';
 
 @Component({
   selector: 'app-sheet-info',
   templateUrl: './sheet-info.component.html',
   styleUrls: ['./sheet-info.component.less']
 })
-export class SheetInfoComponent implements OnInit {
+export class SheetInfoComponent implements OnInit, OnDestroy {
   sheetInfo: SongSheet;
 
   description = {
@@ -22,16 +28,35 @@ export class SheetInfoComponent implements OnInit {
     iconCls: 'down'
   }
 
-  constructor(private route: ActivatedRoute) {
+  currentSong: Song;
+  private appStore$: Observable<AppStoreModule>;
+  private destroy$ = new Subject<void>();
+
+  constructor(
+    private route: ActivatedRoute,
+    private store$: Store<AppStoreModule>,
+    private songServe: SongService,
+    private batchActionServe: BatchActionsService
+  ) {
     this.route.data.pipe(map(res => res.sheetInfo)).subscribe(res => {
       this.sheetInfo = res;
       if (res.description) {
         this.changeDesc(res.description);
       }
+      this.listenCurrent();
     });
   }
 
   ngOnInit() {
+  }
+
+  private listenCurrent() {
+    this.store$
+    .pipe(select('player'), select(getCurrentSong), takeUntil(this.destroy$))
+    .subscribe(song => {
+      console.log('song :', song);
+      this.currentSong = song;
+    });
   }
 
   private changeDesc(desc: string) {
@@ -66,4 +91,24 @@ export class SheetInfoComponent implements OnInit {
     }
   }
 
+
+  // 添加一首歌曲
+  onAddSong(song: Song, isPlay = false) {
+    if (!this.currentSong || this.currentSong.id !== song.id) {
+      this.songServe.getSongList(song)
+      .subscribe(list => {
+        if (list.length) {
+          this.batchActionServe.insertSong(list[0], isPlay);
+        }else {
+          alert('无url');
+        }
+      });
+    }
+  }
+
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 }

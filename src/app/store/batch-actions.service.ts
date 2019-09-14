@@ -29,6 +29,34 @@ export class BatchActionsService {
   }
 
 
+  // 添加歌曲
+  insertSong(song: Song, isPlay: boolean) {
+    const songList = this.playerState.songList.slice();
+    const playList = this.playerState.playList.slice();
+    let insertIndex = this.playerState.currentIndex;
+    console.log('insertSong :', song);
+    const pIndex = findIndex(playList, song);
+    if (pIndex > -1) {
+      // 歌曲已经存在
+      if (isPlay) {
+        insertIndex = pIndex;
+      }
+    }else {
+      songList.push(song);
+      playList.push(song);
+      if (isPlay) {
+        insertIndex = songList.length - 1;
+      }
+      this.store$.dispatch(SetSongList({ songList }));
+      this.store$.dispatch(SetPlayList({ playList }));
+    }
+
+    if (insertIndex !== this.playerState.currentIndex) {
+      this.store$.dispatch(SetCurrentIndex({ currentIndex: insertIndex }));
+    }
+  }
+
+
   // 删除歌曲
   deleteSong(song: Song) {
     const songList = this.playerState.songList.slice();
