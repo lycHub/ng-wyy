@@ -61,5 +61,65 @@
         </div>
       </div>
     </div>
+
+    <div class="wy-sec">
+      <div class="u-title wy-sec-wrap clearfix">
+        <h3 class="wy-sec-tit">
+          <span class="f-ff2">歌曲列表</span>
+        </h3>
+        <span class="sub s-fc3">
+          {{sheetInfo.tracks.length}} 首歌
+        </span>
+        <div class="more s-fc3">
+          播放：
+          <strong class="s-fc6">{{sheetInfo.playCount}}</strong>
+          次
+        </div>
+      </div>
+
+      <nz-table
+        class="wy-table"
+        #basicTable
+        [nzData]="sheetInfo.tracks"
+        [nzFrontPagination]="false"
+        nzBordered
+        nzNoResult="暂无音乐！">
+        <thead>
+          <tr>
+            <th nzWidth="80px"></th>
+            <th>标题</th>
+            <th nzWidth="120px">时长</th>
+            <th nzWidth="80px">歌手</th>
+            <th>专辑</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of basicTable.data; index as i">
+            <td class="first-col">
+              <span>{{i + 1}}</span>
+              <i class="ico play-song" title="播放"></i>
+            </td>
+            <td class="song-name">
+              <a>{{item.name}}</a>
+            </td>
+            <td class="time-col">
+              <span>{{item.dt / 1000 | formatTime}}</span>
+              <p class="icons">
+                <i class="ico add" title="添加"></i>
+                <i class="ico like" title="收藏"></i>
+                <i class="ico share" title="分享"></i>
+              </p>
+            </td>
+            <td>
+              <ng-container *ngFor="let singer of item.ar; last as isLast">
+                <a>{{singer.name}}</a>
+                <em [hidden]="isLast">/</em>
+              </ng-container>
+            </td>
+            <td>{{item.al.name}}</td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </div>
   </div>
 </div>
