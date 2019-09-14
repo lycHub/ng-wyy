@@ -1,0 +1,136 @@
+@import "../../../assets/styles/varibles";
+@import "../../../assets/styles/mixins";
+.sheet-info{
+  .g-wrap6{
+    padding: 47px 30px 40px 39px;
+    .m-info{
+      .cover{
+        float: left;
+        position: relative;
+        display: inline;
+        width: 200px;
+        height: 200px;
+        margin-right: -220px;
+        img{
+          height:100%;
+        }
+        .mask{
+          position: absolute;
+          width: 208px;
+          height: 208px;
+          top: -4px;
+          left: -4px;
+          overflow: hidden;
+          background: url('../../../assets/images/coverall.png') 0 -1285px;
+        }
+      }
+
+      .cnt{
+        float: right;
+        width: 100%;
+        .cntc{
+          margin-left: 230px;
+          .hd{
+            position: relative;
+            margin: 0 0 12px;
+            line-height: 24px;
+
+            .f-pr{
+              position: relative;
+              zoom: 1;
+              float: left;
+              .icon('../images/icon.png', 54px, 24px);
+              background-position: 0 -243px;
+            }
+
+            .tit{
+              margin-left: 64px;
+              position: relative;
+              .f-ff2{
+                line-height: 24px;
+                font-size: 20px;
+                font-weight: normal;
+              }
+            }
+          }
+
+          .user{
+            margin: 0 0 20px;
+            line-height: 35px;
+            .face{
+              img{
+                float: left;
+                width: 35px;
+                height: 35px;
+              }
+            }
+            .name{
+              float: left;
+              margin-left: 10px;
+              .s-fc7{
+                color: @link-color;
+              }
+            }
+            .time{
+              margin-left: 15px;
+              color: @wy-text-prev-color;
+            }
+          }
+
+          .btns{
+            margin-bottom: 25px;
+            margin-right: -10px;
+            .btn{
+              margin-right: 10px;
+            }
+          }
+          .tags{
+            margin: 25px 0 5px;
+            line-height: 22px;
+            span{
+              float: left;
+            }
+            .tag-wrap{
+              float: left;
+              margin-left: 15px;
+            }
+          }
+
+          .intr{
+            margin-top: 10px;
+            line-height: 18px;
+            color: #666;
+            &.f-hide{
+              display: none;
+            }
+          }
+
+          .expand{
+            text-align: right;
+            span{
+              color: @link-color;
+              cursor: pointer;
+            }
+          }
+        }
+      }
+    }
+
+    .u-title{
+      h3{
+        float: left;
+      }
+      .sub{
+        float: left;
+        margin: 9px 0 0 20px;
+      }
+      .more{
+        float: right;
+        margin-top: 5px;
+        strong{
+          color: @red-color;
+        }
+      }
+    }
+  }
+}

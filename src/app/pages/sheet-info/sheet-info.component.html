@@ -1,1 +1,65 @@
-<p>sheet-info works!</p>
+<div class="sheet-info wrap feature-wrap">
+  <div class="g-wrap6">
+    <div class="m-info clearfix">
+      <div class="cover">
+        <img [src]="sheetInfo.coverImgUrl" [alt]="sheetInfo.name">
+        <div class="mask"></div>
+      </div>
+      <div class="cnt">
+        <div class="cntc">
+          <div class="hd clearfix">
+            <i class="f-pr"></i>
+            <div class="tit">
+              <h2 class="f-ff2 f-brk">{{sheetInfo.name}}</h2>
+            </div>
+          </div>
+
+          <div class="user f-cb">
+            <a class="face" [hidden]="!sheetInfo.creator" [href]="'//music.163.com/artist?id=' + sheetInfo.userId">
+              <img [src]="sheetInfo.creator?.avatarUrl" [alt]="sheetInfo.creator?.nickname">
+            </a>
+            <span class="name">
+              <a [href]="'//music.163.com/artist?id=' + sheetInfo.userId" class="s-fc7">{{sheetInfo.creator?.nickname}}</a>
+            </span>
+            <span class="time s-fc4">{{sheetInfo.createTime | date: 'yyyy-MM-dd'}} 创建</span>
+          </div>
+
+          <div class="btns">
+            <nz-button-group class="btn">
+              <button class="play" nz-button nzType="primary">
+                <i nz-icon nzType="play-circle" nzTheme="outline"></i>播放
+              </button>
+              <button class="add" nz-button nzType="primary">+</button>
+            </nz-button-group>
+            <button class="btn like" nz-button>
+              <span>收藏</span>({{sheetInfo.subscribedCount}})
+            </button>
+            <button class="btn share" nz-button>
+              <span>分享</span>({{sheetInfo.shareCount}})
+            </button>
+          </div>
+
+          <div class="tags clearfix">
+            <span>标签</span>
+            <div class="tag-wrap">
+              <nz-tag *ngFor="let item of sheetInfo.tags">{{item}}</nz-tag>
+            </div>
+          </div>
+
+          <div class="intr f-brk" [class.f-hide]="controlDesc.isExpand">
+            <p [innerHTML]="description.short"></p>
+          </div>
+
+          <div class="intr f-brk" [class.f-hide]="!controlDesc.isExpand">
+            <p [innerHTML]="description.long"></p>
+          </div>
+
+          <div class="expand" (click)="toggleDesc()" *ngIf="description.long">
+            <span>{{controlDesc.label}}</span>
+            <i nz-icon [nzType]="controlDesc.iconCls" nzTheme="outline"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
