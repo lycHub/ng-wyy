@@ -1,1 +1,62 @@
-<p>song-info works!</p>
+<div class="song-info wrap feature-wrap">
+  <div class="g-wrap6">
+    <div class="m-info clearfix">
+      <div class="cover">
+        <img [src]="song.al.picUrl" [alt]="song.name">
+        <div class="mask"></div>
+      </div>
+      <div class="cnt">
+        <div class="cntc">
+          <div class="hd clearfix">
+            <i class="f-pr"></i>
+            <div class="tit">
+              <h2 class="f-ff2 f-brk">{{song.name}}</h2>
+            </div>
+          </div>
+
+          <div class="user f-cb">
+            <div class="singers clearfix">
+              <span>歌手：</span>
+              <ul class="clearfix">
+                <li *ngFor="let singer of song.ar; last as isLast">
+                  <a [href]="'//music.163.com/artist?id=' + singer.id">{{singer.name}}</a>
+                  <i [hidden]="isLast">/</i>
+                </li>
+              </ul>
+            </div>
+
+            <div class="al">
+              <span>所属专辑：</span>
+              <span class="al-name">{{song.al.name}}</span>
+            </div>
+          </div>
+
+          <div class="btns">
+            <nz-button-group class="btn">
+              <button class="play" nz-button nzType="primary">
+                <i nz-icon nzType="play-circle" nzTheme="outline"></i>播放
+              </button>
+              <button class="add" nz-button nzType="primary">+</button>
+            </nz-button-group>
+            <button class="btn like" nz-button><span>收藏</span></button>
+            <button class="btn share" nz-button><span>分享</span></button>
+          </div>
+
+          <div class="lyric-info f-brk">
+            <div class="lyric-content" [class.expand]="controlLyric.isExpand">
+              <div class="lyric-line" *ngFor="let item of lyric">
+                <p>{{item.txt}}</p>
+                <p>{{item.txtCn}}</p>
+              </div>
+            </div>
+
+            <div class="toggle-expand" (click)="toggleLyric()">
+              <span>{{controlLyric.label}}</span>
+              <i nz-icon [nzType]="controlLyric.iconCls" nzTheme="outline"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

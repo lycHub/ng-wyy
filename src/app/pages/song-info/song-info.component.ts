@@ -12,15 +12,31 @@ import { Song } from 'src/app/services/data-types/common.types';
 export class SongInfoComponent implements OnInit {
   song: Song;
   lyric: BaseLyricLine[];
+
+  controlLyric = {
+    isExpand: false,
+    label: '展开',
+    iconCls: 'down'
+  }
+
   constructor(private route: ActivatedRoute) {
     this.route.data.pipe(map(res => res.songInfo)).subscribe(([song, lyric]) => {
       this.song = song;
       this.lyric = new WyLyric(lyric).lines;
-      console.log('lyric :', this.lyric);
     });
   }
 
   ngOnInit() {
   }
 
+  toggleLyric() {
+    this.controlLyric.isExpand = !this.controlLyric.isExpand;
+    if (this.controlLyric.isExpand) {
+      this.controlLyric.label = '收起';
+      this.controlLyric.iconCls = 'up';
+    }else {
+      this.controlLyric.label = '展开';
+      this.controlLyric.iconCls = 'down';
+    }
+  }
 }

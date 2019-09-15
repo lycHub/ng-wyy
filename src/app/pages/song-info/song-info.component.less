@@ -1,0 +1,111 @@
+@import "../../../assets/styles/varibles";
+@import "../../../assets/styles/mixins";
+.song-info{
+  .g-wrap6{
+    padding: 47px 30px 40px 39px;
+    .m-info{
+      .cover{
+        float: left;
+        position: relative;
+        display: inline;
+        width: 200px;
+        height: 200px;
+        margin-right: -220px;
+        img{
+          height:100%;
+        }
+        .mask{
+          position: absolute;
+          width: 208px;
+          height: 208px;
+          top: -4px;
+          left: -4px;
+          overflow: hidden;
+          background: url('../../../assets/images/coverall.png') 0 -1285px;
+        }
+      }
+
+      .cnt{
+        float: right;
+        width: 100%;
+        .cntc{
+          margin-left: 230px;
+          .hd{
+            position: relative;
+            margin: 0 0 12px;
+            line-height: 24px;
+
+            .f-pr{
+              position: relative;
+              zoom: 1;
+              float: left;
+              .icon('../images/icon.png', 54px, 24px);
+              background-position: 0 -243px;
+            }
+
+            .tit{
+              margin-left: 64px;
+              position: relative;
+              .f-ff2{
+                line-height: 24px;
+                font-size: 20px;
+                font-weight: normal;
+              }
+            }
+          }
+
+          .user{
+            margin: 0 0 12px;
+            .singers{
+              span{
+                float: left;
+              }
+              ul{
+                float: left;
+                li{
+                  float: left;
+                  .s-fc7{
+                    color: @link-color;
+                  }
+                }
+              }
+            }
+            .al{
+              .al-name{
+                color: @wy-text-prev-color;
+              }
+            }
+          }
+
+          .btns{
+            margin-bottom: 25px;
+            margin-right: -10px;
+            .btn{
+              margin-right: 10px;
+            }
+          }
+        }
+      }
+    }
+    .lyric-info{
+      // width: 144px;
+      line-height: 23px;
+      .lyric-content{
+        height: 327px;
+        overflow: hidden;
+        &.expand{
+          height: auto;
+        }
+        .lyric-line p{
+          margin-bottom: 0;
+        }
+      }
+      .toggle-expand{
+        cursor: pointer;
+        span{
+          color: @link-color;
+        }
+      }
+    }
+  }
+}
