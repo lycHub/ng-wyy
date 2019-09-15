@@ -29,12 +29,12 @@
           </div>
           <div class="singers clearfix ellipsis">
             <div class="singer-item" *ngFor="let singer of item.ar; last as isLast">
-              <a class="col ellipsis">{{singer.name}}</a>
+              <a class="col ellipsis" (click)="toInfo($event, ['/singer', singer.id])">{{singer.name}}</a>
               <span [hidden]="isLast">/</span>
             </div>
           </div>
           <div class="col duration">{{(item.dt / 1000) | formatTime}}</div>
-          <div class="col link"></div>
+          <div class="col link" (click)="toInfo($event, ['/songInfo', item.id])"></div>
         </li>
       </ul>
     </app-wy-scroll>

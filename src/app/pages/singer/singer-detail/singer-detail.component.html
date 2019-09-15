@@ -15,10 +15,10 @@
       <div class="top-50">
         <div class="btns clearfix">
           <nz-button-group class="btn">
-            <button class="play" nz-button nzType="primary">
+            <button class="play" nz-button nzType="primary" (click)="onAddSongs(singerDetail.hotSongs, true)">
               <i nz-icon nzType="play-circle" nzTheme="outline"></i>播放
             </button>
-            <button class="add" nz-button nzType="primary">+</button>
+            <button class="add" nz-button nzType="primary" (click)="onAddSongs(singerDetail.hotSongs)">+</button>
           </nz-button-group>
           <button class="btn like" nz-button><span>收藏</span>{{singerDetail.hotSongs.length}}</button>
         </div>
@@ -43,7 +43,7 @@
           <tr *ngFor="let item of basicTable.data; index as i">
             <td class="first-col">
               <span>{{i + 1}}</span>
-              <i class="ico play-song" title="播放"></i>
+              <i class="ico play-song" title="播放" [class.current]="currentIndex === i" (click)="onAddSong(item, true)"></i>
             </td>
             <td class="song-name">
               <a [routerLink]="['/songInfo', item.id]">{{item.name}}</a>
@@ -51,7 +51,7 @@
             <td class="time-col">
               <span>{{item.dt / 1000 | formatTime}}</span>
               <p class="icons">
-                <i class="ico add" title="添加"></i>
+                <i class="ico add" title="添加" (click)="onAddSong(item)"></i>
                 <i class="ico like" title="收藏"></i>
                 <i class="ico share" title="分享"></i>
               </p>
