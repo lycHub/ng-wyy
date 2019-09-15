@@ -23,6 +23,12 @@ export type Singer = {
 }
 
 
+export type SingerDetail = {
+  artist: Singer;
+  hotSongs: Song[];
+}
+
+
 // 歌曲
 export type Song = {
   id: number;
