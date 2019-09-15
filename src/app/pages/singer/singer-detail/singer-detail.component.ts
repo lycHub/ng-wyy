@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { map } from 'rxjs/internal/operators';
+import { SingerDetail } from '../../../services/data-types/common.types';
 
 @Component({
   selector: 'app-singer-detail',
@@ -8,10 +9,10 @@ import { map } from 'rxjs/internal/operators';
   styleUrls: ['./singer-detail.component.less']
 })
 export class SingerDetailComponent implements OnInit {
-
+  singerDetail: SingerDetail;
   constructor(private route: ActivatedRoute) {
-    this.route.data.pipe(map(res => res.singerDetail)).subscribe(res => {
-      console.log('res :', res);
+    this.route.data.pipe(map(res => res.singerDetail)).subscribe(detail => {
+      this.singerDetail = detail;
     });
   }
 

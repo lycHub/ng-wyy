@@ -1,0 +1,97 @@
+@import "../../../../assets/styles/varibles.less";
+@import "../../../../assets/styles/mixins.less";
+
+.singer-detail{
+  .dt-left{
+    float: left;
+    max-width: 710px;
+    .left-wrap{
+      padding: 47px 30px 40px 39px;
+      .n-artist{
+        position: relative;
+        .names{
+          h2{
+            float: left;
+            max-width: 75%;
+            height: 34px;
+            line-height: 24px;
+            font-size: 24px;
+            color: #333;
+          }
+          h3{
+            float: left;
+            max-width: 23%;
+            padding-left: 10px;
+            font-size: 14px;
+            line-height: 32px;
+            color: #999;
+            font-weight: normal;
+          }
+        }
+        .cover-img{
+          width: 640px;
+        }
+
+        .btn{
+          position: absolute;
+          bottom: 18px;
+          right: 20px;
+          .icon('../images/iconall.png', 76px, 32px);
+          border: none;
+        }
+        .btn-like{
+          background-position: 0 -502px;
+        }
+        .btn-liked{
+          background-position: 0 -735px;
+          &:hover{
+            background-position: 0 -781px;
+          }
+        }
+      }
+
+      .top-50{
+        .btns{
+          margin: 20px 0;
+          .btn{
+            float: left;
+            margin-right: 10px;
+          }
+        }
+      }
+    }
+  }
+  .dt-right{
+    float: right;
+    width: 268px;
+    .right-wrap{
+      padding: 20px 40px 40px 30px;
+      h3{
+        height: 23px;
+        margin-bottom: 20px;
+        border-bottom: 1px solid #ccc;
+        color: #333;
+      }
+      ul{
+        li{
+          width: 50px;
+          float: left;
+          font-size: @font-size-sm;
+          margin-right: 24px;
+          cursor: pointer;
+          &:nth-of-type(3n) {
+            margin-right: 0;
+          }
+          .pic{
+            width: 100%;
+            height: 50px;
+          }
+          p{
+            margin-top: 8px;
+            text-align: center;
+          }
+        }
+      }
+    }
+  }
+}
