@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { SearchService } from './services/search.service';
 
 @Component({
   selector: 'app-root',
@@ -12,5 +13,21 @@ export class AppComponent {
   }, {
     label: '歌单',
     path: '/sheet'
-  }]
+  }];
+
+  constructor(
+    private searchServe: SearchService
+  ) {
+
+  }
+  onSearch(keywords: string) {
+    console.log('keywords :', keywords);
+    if (keywords) {
+      this.searchServe.search(keywords).subscribe(res => {
+        console.log('res :', res);
+      });
+    }else {
+      
+    }
+  }
 }
