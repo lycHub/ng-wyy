@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { AppStoreModule } from './index';
 import { Song } from '../services/data-types/common.types';
 import { Store, select } from '@ngrx/store';
-import { PlayState } from './reducers/player.reducer';
-import { SetSongList, SetPlayList, SetCurrentIndex } from './actions/player.actions';
+import { PlayState, CurrentActions } from './reducers/player.reducer';
+import { SetSongList, SetPlayList, SetCurrentIndex, SetCurrentAction } from './actions/player.actions';
 import { shuffle, findIndex } from '../utils/array';
 
 @Injectable({
@@ -26,6 +26,7 @@ export class BatchActionsService {
       }
       this.store$.dispatch(SetPlayList({ playList: trueList }));
       this.store$.dispatch(SetCurrentIndex({ currentIndex: trueIndex }));
+      this.store$.dispatch(SetCurrentAction({ currentAction: CurrentActions.Play }));
   }
 
 
@@ -34,7 +35,6 @@ export class BatchActionsService {
     const songList = this.playerState.songList.slice();
     const playList = this.playerState.playList.slice();
     let insertIndex = this.playerState.currentIndex;
-    console.log('insertSong :', song);
     const pIndex = findIndex(playList, song);
     if (pIndex > -1) {
       // 歌曲已经存在
@@ -53,6 +53,9 @@ export class BatchActionsService {
 
     if (insertIndex !== this.playerState.currentIndex) {
       this.store$.dispatch(SetCurrentIndex({ currentIndex: insertIndex }));
+      this.store$.dispatch(SetCurrentAction({ currentAction: CurrentActions.Play }));
+    }else {
+      this.store$.dispatch(SetCurrentAction({ currentAction: CurrentActions.Add }));
     }
   }
 
@@ -70,6 +73,7 @@ export class BatchActionsService {
     });
     this.store$.dispatch(SetSongList({ songList }));
     this.store$.dispatch(SetPlayList({ playList }));
+    this.store$.dispatch(SetCurrentAction({ currentAction: CurrentActions.Add }));
   }
 
 
@@ -90,6 +94,7 @@ export class BatchActionsService {
     this.store$.dispatch(SetSongList({ songList }));
     this.store$.dispatch(SetPlayList({ playList }));
     this.store$.dispatch(SetCurrentIndex({ currentIndex }));
+    this.store$.dispatch(SetCurrentAction({ currentAction: CurrentActions.Delete }));
   }
 
   // 清空歌曲
@@ -97,5 +102,6 @@ export class BatchActionsService {
     this.store$.dispatch(SetSongList({ songList: [] }));
     this.store$.dispatch(SetPlayList({ playList: [] }));
     this.store$.dispatch(SetCurrentIndex({ currentIndex: -1 }));
+    this.store$.dispatch(SetCurrentAction({ currentAction: CurrentActions.Clear }));
   }
 }

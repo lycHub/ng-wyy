@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, Inject } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppStoreModule } from '../../../store/index';
-import { getSongList, getPlayList, getCurrentIndex, getPlayMode, getCurrentSong } from '../../../store/selectors/player.selector';
+import { getSongList, getPlayList, getCurrentIndex, getPlayMode, getCurrentSong, getCurrentAction } from '../../../store/selectors/player.selector';
 import { Song } from '../../../services/data-types/common.types';
 import { PlayMode } from './player-type';
-import { SetCurrentIndex } from 'src/app/store/actions/player.actions';
+import { SetCurrentIndex, SetCurrentAction } from 'src/app/store/actions/player.actions';
 import { Subscription, fromEvent } from 'rxjs';
 import { DOCUMENT } from '@angular/common';
 import { SetPlayMode, SetPlayList, SetSongList } from '../../../store/actions/player.actions';
@@ -14,6 +14,7 @@ import { NzModalService } from 'ng-zorro-antd';
 import { BatchActionsService } from 'src/app/store/batch-actions.service';
 import { Router } from '@angular/router';
 import { trigger, style, transition, animate, state } from '@angular/animations';
+import { CurrentActions } from '../../../store/reducers/player.reducer';
 
 
 const modeTypes: PlayMode[] = [{
@@ -110,6 +111,9 @@ export class WyPlayerComponent implements OnInit {
     }, {
       type: getCurrentSong,
       cb: song => this.watchCurrentSong(song)
+    }, {
+      type: getCurrentAction,
+      cb: action => this.watchCurrentAction(action)
     }];
 
     stateArr.forEach(item => {
@@ -153,6 +157,11 @@ export class WyPlayerComponent implements OnInit {
       this.duration = song.dt / 1000;
       // console.log('song :', song);
     }
+  }
+
+  private watchCurrentAction(action: CurrentActions) {
+    console.log('action :', CurrentActions[action]);
+    this.store$.dispatch(SetCurrentAction({ currentAction: CurrentActions.Other }));
   }
 
 
