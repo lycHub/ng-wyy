@@ -1,10 +1,15 @@
 <div class="m-player"
+  [@showHide]="showPlayer"
   appClickoutside
   [bindFlag]="bindFlag"
   (onClickOutSide)="onClickOutSide()"
+  (mouseenter)="togglePlayer('show')"
+  (mouseleave)="togglePlayer('hide')"
+  (@showHide.start)="animating = true"
+  (@showHide.done)="animating = false"
 >
-  <div class="lock">
-    <div class="left"><i></i></div>
+  <div class="lock" (click)="isLocked = !isLocked">
+    <div class="left"><i [class.locked]="isLocked"></i></div>
   </div>
   <div class="hand"></div>
   <div class="container">
