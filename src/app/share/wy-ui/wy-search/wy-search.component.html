@@ -1,7 +1,7 @@
 <ng-template #defaultView>
-  <div class="search">
+  <div class="search" #search>
     <nz-input-group nzSuffixIcon="search">
-      <input type="text" #nzInput nz-input placeholder="歌单/歌手/歌曲" />
+      <input type="text" #nzInput nz-input placeholder="歌单/歌手/歌曲" (focus)="onFocus()" />
     </nz-input-group>
   </div>
 </ng-template>

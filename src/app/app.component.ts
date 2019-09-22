@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { SearchService } from './services/search.service';
+import { SearchResult } from './services/data-types/common.types';
 
 @Component({
   selector: 'app-root',
@@ -15,6 +16,8 @@ export class AppComponent {
     path: '/sheet'
   }];
 
+  searchResult: SearchResult;
+
   constructor(
     private searchServe: SearchService
   ) {
@@ -24,10 +27,10 @@ export class AppComponent {
     console.log('keywords :', keywords);
     if (keywords) {
       this.searchServe.search(keywords).subscribe(res => {
-        console.log('res :', res);
+        this.searchResult = res;
       });
     }else {
-      
+      this.searchResult = {};
     }
   }
 }
