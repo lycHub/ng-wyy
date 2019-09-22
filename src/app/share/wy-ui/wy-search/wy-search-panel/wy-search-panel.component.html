@@ -7,7 +7,7 @@
         <span>单曲</span>
       </div>
       <ul>
-        <li class="ellipsis" *ngFor="let item of searchResult?.songs" (mousedown)="toInfo(['/songInfo', item.id])">{{item.name}}</li>
+        <li class="ellipsis" *ngFor="let item of searchResult?.songs" (mousedown)="toInfo(['/songInfo', item.id])" [innerHTML]="item.name"></li>
       </ul>
     </div>
 
@@ -18,7 +18,7 @@
         <span>歌手</span>
       </div>
       <ul>
-        <li class="ellipsis" *ngFor="let item of searchResult?.artists" (mousedown)="toInfo(['/singer', item.id])">{{item.name}}</li>
+        <li class="ellipsis" *ngFor="let item of searchResult?.artists" (mousedown)="toInfo(['/singer', item.id])" [innerHTML]="item.name"></li>
       </ul>
     </div>
 
@@ -29,7 +29,7 @@
         <span>歌单</span>
       </div>
       <ul>
-        <li class="ellipsis" *ngFor="let item of searchResult?.playlists" (mousedown)="toInfo(['/sheetInfo', item.id])">{{item.name}}</li>
+        <li class="ellipsis" *ngFor="let item of searchResult?.playlists" (mousedown)="toInfo(['/sheetInfo', item.id])" [innerHTML]="item.name"></li>
       </ul>
     </div>
   </div>
