@@ -5,7 +5,7 @@ import { getSongList, getPlayList, getCurrentIndex, getPlayMode, getCurrentSong,
 import { Song } from '../../../services/data-types/common.types';
 import { PlayMode } from './player-type';
 import { SetCurrentIndex, SetCurrentAction } from 'src/app/store/actions/player.actions';
-import { Subscription, fromEvent } from 'rxjs';
+import { Subscription, fromEvent, timer } from 'rxjs';
 import { DOCUMENT } from '@angular/common';
 import { SetPlayMode, SetPlayList, SetSongList } from '../../../store/actions/player.actions';
 import { shuffle, findIndex } from 'src/app/utils/array';
@@ -13,7 +13,7 @@ import { WyPlayerPanelComponent } from './wy-player-panel/wy-player-panel.compon
 import { NzModalService } from 'ng-zorro-antd';
 import { BatchActionsService } from 'src/app/store/batch-actions.service';
 import { Router } from '@angular/router';
-import { trigger, style, transition, animate, state } from '@angular/animations';
+import { trigger, style, transition, animate, state, AnimationEvent } from '@angular/animations';
 import { CurrentActions } from '../../../store/reducers/player.reducer';
 
 
@@ -27,6 +27,12 @@ const modeTypes: PlayMode[] = [{
   type: 'singleLoop',
   label: '单曲循环'
 }];
+
+
+enum TipTitles {
+  Add = '已添加到列表',
+  Play = '已开始播放'
+}
 
 
 @Component({
@@ -43,6 +49,11 @@ const modeTypes: PlayMode[] = [{
 export class WyPlayerComponent implements OnInit {
   showPlayer = 'hide';
   isLocked = false;
+
+  controlTooltip = {
+    title: '',
+    show: false
+  }
 
   // 是否正在动画
   animating = false;
@@ -160,8 +171,33 @@ export class WyPlayerComponent implements OnInit {
   }
 
   private watchCurrentAction(action: CurrentActions) {
-    console.log('action :', CurrentActions[action]);
+    const title = TipTitles[CurrentActions[action]];
+    if (title) {
+      this.controlTooltip.title = title;
+      if (this.showPlayer === 'hide') {
+        this.togglePlayer('show');
+      }else{
+        this.showToolTip();
+      }
+    }
     this.store$.dispatch(SetCurrentAction({ currentAction: CurrentActions.Other }));
+  }
+
+  onAnimateDone(event: AnimationEvent) {
+    this.animating = false;
+    if (event.toState === 'show' && this.controlTooltip.title) {
+      this.showToolTip();
+    }
+  }
+
+  private showToolTip() {
+    this.controlTooltip.show = true;
+    timer(1500).subscribe(() => {
+      this.controlTooltip = {
+        title: '',
+        show: false
+      }
+    });
   }
 
 
