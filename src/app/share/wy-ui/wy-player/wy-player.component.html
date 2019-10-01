@@ -2,7 +2,7 @@
   [@showHide]="showPlayer"
   appClickoutside
   [bindFlag]="bindFlag"
-  (onClickOutSide)="onClickOutSide()"
+  (onClickOutSide)="onClickOutSide($event)"
   (mouseenter)="togglePlayer('show')"
   (mouseleave)="togglePlayer('hide')"
   (@showHide.start)="animating = true"
@@ -81,6 +81,7 @@
     (canplay)="onCanplay()"
     (timeupdate)="onTimeUpdate($event)"
     (ended)="onEnded()"
+    (error)="onError()"
   >
   </audio>
 </div>

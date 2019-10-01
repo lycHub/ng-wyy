@@ -25,7 +25,7 @@
           <div class="col icons">
             <i class="ico like" title="收藏"></i>
             <i class="ico share" title="分享"></i>
-            <i class="ico trush" title="删除" (click)="onDeleteSong.emit(item)"></i>
+            <i class="ico trush" title="删除" data-act="delete" (click)="onDeleteSong.emit(item)"></i>
           </div>
           <div class="singers clearfix ellipsis">
             <div class="singer-item" *ngFor="let singer of item.ar; last as isLast">

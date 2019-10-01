@@ -163,10 +163,9 @@ export class WyPlayerComponent implements OnInit {
   }
 
   private watchCurrentSong(song: Song) {
+    this.currentSong = song;
     if (song) {
-      this.currentSong = song;
       this.duration = song.dt / 1000;
-      // console.log('song :', song);
     }
   }
 
@@ -211,11 +210,12 @@ export class WyPlayerComponent implements OnInit {
     this.store$.dispatch(SetPlayMode({ playMode: modeTypes[++this.modeCount % 3] }))
   }
 
-  onClickOutSide() {
-    console.log('onClickOutSide');
-    this.showVolumnPanel = false;
-    this.showPanel = false;
-    this.bindFlag = false;
+  onClickOutSide(target: HTMLElement) {
+    if (target.dataset.act !== 'delete') {
+      this.showVolumnPanel = false;
+      this.showPanel = false;
+      this.bindFlag = false;
+    }
   }
 
 
@@ -314,6 +314,13 @@ export class WyPlayerComponent implements OnInit {
     }else {
       this.onNext(this.currentIndex + 1);
     }
+  }
+
+
+  // 播放错误
+  onError() {
+    this.playing = false;
+    this.bufferPercent = 0;
   }
 
 
