@@ -5,14 +5,18 @@ import { Store, select } from '@ngrx/store';
 import { PlayState, CurrentActions } from './reducers/player.reducer';
 import { SetSongList, SetPlayList, SetCurrentIndex, SetCurrentAction } from './actions/player.actions';
 import { shuffle, findIndex } from '../utils/array';
+import { MemberState, ModalTypes } from './reducers/member.reducer';
+import { SetModalType, SetModalVisible } from './actions/member.actions';
 
 @Injectable({
   providedIn: AppStoreModule
 })
 export class BatchActionsService {
   private playerState: PlayState;
+  private memberState: MemberState;
   constructor(private store$: Store<AppStoreModule>) {
-    this.store$.pipe(select('player')).subscribe(res => this.playerState = res)
+    this.store$.pipe(select('player')).subscribe(res => this.playerState = res);
+    this.store$.pipe(select('member')).subscribe(res => this.memberState = res);
   }
 
   // 播放列表
@@ -103,5 +107,12 @@ export class BatchActionsService {
     this.store$.dispatch(SetPlayList({ playList: [] }));
     this.store$.dispatch(SetCurrentIndex({ currentIndex: -1 }));
     this.store$.dispatch(SetCurrentAction({ currentAction: CurrentActions.Clear }));
+  }
+
+
+  // 会员弹窗显示隐藏/类型
+  controlModal(modalVisible = true, modalType = ModalTypes.Default) {
+    this.store$.dispatch(SetModalType({ modalType }));
+    this.store$.dispatch(SetModalVisible({ modalVisible }));
   }
 }
