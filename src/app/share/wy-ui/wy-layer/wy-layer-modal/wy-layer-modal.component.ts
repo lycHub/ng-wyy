@@ -1,4 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Store, select } from '@ngrx/store';
+import { AppStoreModule } from '../../../../store/index';
+import { getModalVisible, getModalType } from '../../../../store/selectors/member.selector';
 
 @Component({
   selector: 'app-wy-layer-modal',
@@ -8,7 +11,17 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 })
 export class WyLayerModalComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private store$: Store<AppStoreModule>
+  ) {
+    const appStore$ = this.store$.pipe(select('member'));
+    appStore$.pipe(select(getModalVisible)).subscribe(visib => {
+      console.log('visib :', visib);
+    });
+    appStore$.pipe(select(getModalType)).subscribe(type => {
+      console.log('type :', type);
+    });
+  }
 
   ngOnInit() {
   }
