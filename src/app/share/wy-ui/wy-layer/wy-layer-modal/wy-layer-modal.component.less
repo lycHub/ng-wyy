@@ -1,0 +1,43 @@
+@import "../../../../../assets/styles/varibles.less";
+@import "../../../../../assets/styles/mixins.less";
+
+
+.m-layer{
+  position: absolute;
+  width: 530px;
+  box-shadow: @box-shadow-base;
+  background-color: @white-color;
+  transform-origin: 50% 50%;
+  user-select: none;
+  border-width: 0 1px 1px;
+
+  .zbar{
+    position: relative;
+    height: 38px;
+    line-height: 38px;
+    border: 1px solid @play-bg-color;
+    background-color: @play-bg-color;
+    text-indent: 20px;
+    font-weight: bold;
+    color: #fff;
+    cursor: move;
+  }
+
+
+  .zcls{
+    position: absolute;
+    top: 16px;
+    right: 20px;
+    .icon("../images/layer.png", 10px, 10px);
+    background-position: 0 -95px;
+  }
+
+  .spin{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    background-color: #fff;
+    opacity: 0.5;
+  }
+}
