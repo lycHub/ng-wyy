@@ -1,5 +1,9 @@
-<div class="m-layer" [style.visibility]="showModal ? 'visible' : 'hidden'" #modalContainer>
-  <div class="zbar">
+<div class="m-layer"
+ #modalContainer
+ [@showHide]="showModal"
+ cdkDrag
+ cdkDragBoundary=".cdk-overlay-container">
+  <div class="zbar" cdkDragHandle>
     <div class="zttl f-thide">这是标题</div>
   </div>
   <ng-content></ng-content>
