@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'app-wy-layer-login',
@@ -7,7 +7,7 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WyLayerLoginComponent implements OnInit {
-
+  @Output() onChangeModalType = new EventEmitter<string | void>();
   constructor() { }
 
   ngOnInit() {

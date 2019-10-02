@@ -1,1 +1,38 @@
-<p>wy-layer-login works!</p>
+<div class="login-phone modal-content">
+  <div class="modal-wrap">
+    <form nz-form class="login-form">
+      <nz-form-item>
+        <nz-form-control nzHasFeedback nzErrorTip="请输入正确的手机号">
+          <nz-input-group nzPrefixIcon="mobile">
+            <input type="tel" nz-input placeholder="请输入手机号">
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-control nzHasFeedback nzErrorTip="请输入正确的密码">
+          <nz-input-group nzPrefixIcon="lock">
+            <input type="password" nz-input placeholder="请输入密码">
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+
+
+      <nz-form-item>
+        <nz-form-control nzHasFeedback nzErrorTip="请输入正确的密码">
+          <div class="tools">
+            <label nz-checkbox class="remember">
+              <span>记住密码</span>
+            </label>
+          </div>
+          <button nz-button class="login-form-button" nzType="primary" nzBlock>登陆</button>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </div>
+</div>
+
+<div class="m-footer clearfix">
+  <a (click)="onChangeModalType.emit('defult')"><  其它登陆方式</a>
+  <a (click)="onChangeModalType.emit('register')">没有账号？免费注册</a>
+</div>
