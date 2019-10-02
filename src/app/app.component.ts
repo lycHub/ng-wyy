@@ -5,7 +5,7 @@ import { isEmptyObject } from './utils/tools';
 import { ModalTypes } from './store/reducers/member.reducer';
 import { AppStoreModule } from './store/index';
 import { Store } from '@ngrx/store';
-import { SetModalType } from './store/actions/member.actions';
+import { SetModalType, SetUserId } from './store/actions/member.actions';
 import { BatchActionsService } from './store/batch-actions.service';
 import { LoginParams } from './share/wy-ui/wy-layer/wy-layer-login/wy-layer-login.component';
 import { MemberService } from './services/member.service';
@@ -41,6 +41,7 @@ export class AppComponent {
   ) {
     const userId = this.storageServe.getStorage('wyUserId');
     if (userId) {
+      this.store$.dispatch(SetUserId({ id: userId }));
       this.memberServe.getUserDetail(userId).subscribe(user => this.user = user);
     }
 
@@ -100,6 +101,7 @@ export class AppComponent {
         key: 'wyUserId',
         value: user.profile.userId
       });
+      this.store$.dispatch(SetUserId({ id: user.profile.userId.toString() }));
 
       if (params.remember) {
         this.storageServe.setStorage({
@@ -119,6 +121,7 @@ export class AppComponent {
     this.memberServe.logout().subscribe(() => {
       this.user = null;
       this.storageServe.removeStorage('wyUserId');
+      this.store$.dispatch(SetUserId({ id: '' }));
       this.alertMessage('success', '已退出');
     }, ({ error }) => {
       this.alertMessage('error', error.message || '退出失败');

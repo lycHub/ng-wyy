@@ -30,6 +30,6 @@ export class MemberService {
   // 退出
   logout(): Observable<SampleBack> {
     return this.http.get(this.uri + 'logout')
-    .pipe(map(res => res as sampleBack));
+    .pipe(map(res => res as SampleBack));
   }
 }
