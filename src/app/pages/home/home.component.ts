@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { map } from 'rxjs/internal/operators';
 import { SheetService } from 'src/app/services/sheet.service';
 import { BatchActionsService } from '../../store/batch-actions.service';
+import { ModalTypes } from '../../store/reducers/member.reducer';
 
 @Component({
   selector: 'app-home',
@@ -58,6 +59,6 @@ export class HomeComponent implements OnInit {
   }
 
   openModal() {
-    this.batchActionsServe.controlModal();
+    this.batchActionsServe.controlModal(true, ModalTypes.Default);
   }
 }

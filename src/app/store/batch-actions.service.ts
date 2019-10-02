@@ -111,8 +111,10 @@ export class BatchActionsService {
 
 
   // 会员弹窗显示隐藏/类型
-  controlModal(modalVisible = true, modalType = ModalTypes.Default) {
-    this.store$.dispatch(SetModalType({ modalType }));
+  controlModal(modalVisible = true, modalType?: ModalTypes) {
+    if (modalType) {
+      this.store$.dispatch(SetModalType({ modalType }));
+    }
     this.store$.dispatch(SetModalVisible({ modalVisible }));
   }
 }

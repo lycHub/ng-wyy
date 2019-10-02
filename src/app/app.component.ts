@@ -6,6 +6,7 @@ import { ModalTypes } from './store/reducers/member.reducer';
 import { AppStoreModule } from './store/index';
 import { Store } from '@ngrx/store';
 import { SetModalType } from './store/actions/member.actions';
+import { BatchActionsService } from './store/batch-actions.service';
 
 @Component({
   selector: 'app-root',
@@ -25,9 +26,16 @@ export class AppComponent {
 
   constructor(
     private searchServe: SearchService,
-    private store$: Store<AppStoreModule>
+    private store$: Store<AppStoreModule>,
+    private batchActionsServe: BatchActionsService,
   ) {
 
+  }
+
+
+  // 打开弹窗
+  openModal(type: ModalTypes) {
+    this.batchActionsServe.controlModal(true, type);
   }
 
 
