@@ -13,7 +13,7 @@
           
 
           <div class="member">
-            <div class="no-login">
+            <div class="no-login" *ngIf="!user else logined">
               <ul nz-menu nzTheme="dark" nzMode="horizontal">
                 <li nz-submenu>
                   <div title>
@@ -33,6 +33,28 @@
                 </li>
               </ul>
             </div>
+
+            <ng-template #logined>
+              <div class="login">
+                <ul nz-menu nzMode="horizontal" nzTheme="dark">
+                  <li nz-submenu>
+                    <div title>
+                      <nz-avatar nzIcon="user" [nzSrc]="user.profile.avatarUrl"></nz-avatar>
+                      <i nz-icon type="down" nzTheme="outline"></i>
+                    </div>
+                    <ul>
+                      <li nz-menu-item>
+                        <i nz-icon nzType="user" nzTheme="outline"></i>我的主页
+                      </li>
+                      <li nz-menu-item (click)="onLogout()">
+                        <i nz-icon nzType="close-circle" nzTheme="outline"></i>退出
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+            </ng-template>
+
           </div>
         </div>
       </div>

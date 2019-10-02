@@ -1,3 +1,8 @@
+export type sampleBack = {
+  code: number;
+  [key: string]: any;
+}
+
 export type Banner = {
   targetId: number;
   url: string;

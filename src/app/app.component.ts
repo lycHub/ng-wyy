@@ -35,7 +35,10 @@ export class AppComponent {
     private memberServe: MemberService,
     private messageServe: NzMessageService
   ) {
-
+    const userId = localStorage.getItem('wyUserId');
+    if (userId) {
+      this.memberServe.getUserDetail(userId).subscribe(user => this.user = user);
+    }
   }
 
 
@@ -94,6 +97,16 @@ export class AppComponent {
     }, ({ error }) => {
       // console.log('error :', error);
       this.alertMessage('error', error.message || '登陆失败');
+    });
+  }
+
+  onLogout() {
+    this.memberServe.logout().subscribe(() => {
+      this.user = null;
+      localStorage.removeItem('wyUserId');
+      this.alertMessage('success', '已退出');
+    }, ({ error }) => {
+      this.alertMessage('error', error.message || '退出失败');
     });
   }
 
