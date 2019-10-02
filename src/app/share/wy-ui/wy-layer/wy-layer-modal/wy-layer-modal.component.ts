@@ -24,7 +24,7 @@ import { trigger, style, transition, animate, state } from '@angular/animations'
 export class WyLayerModalComponent implements OnInit, AfterViewInit {
   showModal = 'hide';
   private visible = false;
-  private currentModalType = ModalTypes.Default;
+  currentModalType = ModalTypes.Default;
   private overlayRef: OverlayRef;
   private scrollStrategy: BlockScrollStrategy;
   private overlayContainerEl: HTMLElement;
@@ -81,6 +81,7 @@ export class WyLayerModalComponent implements OnInit, AfterViewInit {
   private watchModalType(type: ModalTypes) {
     if (this.currentModalType !== type) {
       this.currentModalType = type;
+      this.cdr.markForCheck();
     }
   }
 
@@ -129,7 +130,6 @@ export class WyLayerModalComponent implements OnInit, AfterViewInit {
 
 
   private getHideDomSize(dom: HTMLElement) {
-    console.log('dom :', dom);
     return {
       w: dom.offsetWidth,
       h: dom.offsetHeight

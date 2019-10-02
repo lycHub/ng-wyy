@@ -2,6 +2,10 @@ import { Component } from '@angular/core';
 import { SearchService } from './services/search.service';
 import { SearchResult } from './services/data-types/common.types';
 import { isEmptyObject } from './utils/tools';
+import { ModalTypes } from './store/reducers/member.reducer';
+import { AppStoreModule } from './store/index';
+import { Store } from '@ngrx/store';
+import { SetModalType } from './store/actions/member.actions';
 
 @Component({
   selector: 'app-root',
@@ -20,10 +24,19 @@ export class AppComponent {
   searchResult: SearchResult;
 
   constructor(
-    private searchServe: SearchService
+    private searchServe: SearchService,
+    private store$: Store<AppStoreModule>
   ) {
 
   }
+
+
+  // 改变弹窗类型
+  onChangeModalType(modalType = ModalTypes.Default) {
+    this.store$.dispatch(SetModalType({ modalType }));
+  }
+
+
   onSearch(keywords: string) {
     console.log('keywords :', keywords);
     if (keywords) {
