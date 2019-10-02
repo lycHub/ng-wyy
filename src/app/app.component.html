@@ -71,6 +71,6 @@
 <app-wy-player></app-wy-player>
 
 <app-wy-layer-modal>
-  <app-wy-layer-login name="login" (onLogin)="onLogin($event)" (onChangeModalType)="onChangeModalType($event)"></app-wy-layer-login>
+  <app-wy-layer-login name="login" [wyRememberLogin]="wyRememberLogin" (onLogin)="onLogin($event)" (onChangeModalType)="onChangeModalType($event)"></app-wy-layer-login>
   <app-wy-layer-default name="default" (onChangeModalType)="onChangeModalType($event)"></app-wy-layer-default>
 </app-wy-layer-modal>
