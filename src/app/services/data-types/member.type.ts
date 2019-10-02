@@ -1,3 +1,9 @@
+export type Signin = {
+  code: number;
+  point?: number;
+  msg?: string;
+}
+
 export type User = {
   // 等级
   level?: number;
