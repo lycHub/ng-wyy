@@ -11,6 +11,8 @@ import { LoginParams } from './share/wy-ui/wy-layer/wy-layer-login/wy-layer-logi
 import { MemberService } from './services/member.service';
 import { User } from './services/data-types/member.type';
 import { NzMessageService } from 'ng-zorro-antd';
+import { codeJson } from './utils/base64';
+import { StorageService } from './services/storage.service';
 
 @Component({
   selector: 'app-root',
@@ -34,14 +36,15 @@ export class AppComponent {
     private store$: Store<AppStoreModule>,
     private batchActionsServe: BatchActionsService,
     private memberServe: MemberService,
-    private messageServe: NzMessageService
+    private messageServe: NzMessageService,
+    private storageServe: StorageService,
   ) {
-    const userId = localStorage.getItem('wyUserId');
+    const userId = this.storageServe.getStorage('wyUserId');
     if (userId) {
       this.memberServe.getUserDetail(userId).subscribe(user => this.user = user);
     }
 
-    const wyRememberLogin = localStorage.getItem('wyRememberLogin');
+    const wyRememberLogin = this.storageServe.getStorage('wyRememberLogin');
     if (wyRememberLogin) {
       this.wyRememberLogin = JSON.parse(wyRememberLogin);
     }
@@ -93,12 +96,18 @@ export class AppComponent {
       this.user = user;
       this.batchActionsServe.controlModal(false);
       this.alertMessage('success', '登陆成功');
-      localStorage.setItem('wyUserId', user.profile.userId.toString());
+      this.storageServe.setStorage({
+        key: 'wyUserId',
+        value: user.profile.userId
+      });
 
       if (params.remember) {
-        localStorage.setItem('wyRememberLogin', JSON.stringify(params));
+        this.storageServe.setStorage({
+          key: 'wyRememberLogin',
+          value: JSON.stringify(codeJson(params))
+        });
       } else {
-        localStorage.removeItem('wyRememberLogin');
+        this.storageServe.removeStorage('wyRememberLogin');
       }
     }, ({ error }) => {
       // console.log('error :', error);
@@ -109,7 +118,7 @@ export class AppComponent {
   onLogout() {
     this.memberServe.logout().subscribe(() => {
       this.user = null;
-      localStorage.removeItem('wyUserId');
+      this.storageServe.removeStorage('wyUserId');
       this.alertMessage('success', '已退出');
     }, ({ error }) => {
       this.alertMessage('error', error.message || '退出失败');

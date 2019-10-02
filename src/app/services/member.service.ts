@@ -2,7 +2,7 @@ import { Injectable, Inject } from '@angular/core';
 import { ServicesModule, API_CONFIG } from './services.module';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Banner, HotTag, SongSheet, sampleBack } from './data-types/common.types';
+import { SampleBack } from './data-types/common.types';
 import { map } from 'rxjs/internal/operators';
 import { LoginParams } from '../share/wy-ui/wy-layer/wy-layer-login/wy-layer-login.component';
 import { User } from './data-types/member.type';
@@ -28,7 +28,7 @@ export class MemberService {
   }
 
   // 退出
-  logout(): Observable<sampleBack> {
+  logout(): Observable<SampleBack> {
     return this.http.get(this.uri + 'logout')
     .pipe(map(res => res as sampleBack));
   }
