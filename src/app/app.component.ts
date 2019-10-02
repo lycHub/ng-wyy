@@ -111,7 +111,7 @@ export class AppComponent {
       } else {
         this.storageServe.removeStorage('wyRememberLogin');
       }
-    }, ({ error }) => {
+    }, error => {
       // console.log('error :', error);
       this.alertMessage('error', error.message || '登陆失败');
     });
@@ -123,7 +123,7 @@ export class AppComponent {
       this.storageServe.removeStorage('wyUserId');
       this.store$.dispatch(SetUserId({ id: '' }));
       this.alertMessage('success', '已退出');
-    }, ({ error }) => {
+    }, error => {
       this.alertMessage('error', error.message || '退出失败');
     });
   }

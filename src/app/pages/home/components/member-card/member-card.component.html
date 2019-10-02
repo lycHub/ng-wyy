@@ -19,7 +19,7 @@
               {{user.level}}<i class="lvright u-icn2"></i>
             </span>
           </p>
-          <div class="btnwrap f-pr">
+          <div class="btnwrap f-pr" nz-tooltip [nzTitle]="tipTitle" nzPlacement="bottom" [nzVisible]="showTip">
             <button nz-button nzType="primary" nzBlock (click)="onSignin()">签到</button>
           </div>
         </div> 
