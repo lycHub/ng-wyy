@@ -43,7 +43,7 @@
                       <i nz-icon type="down" nzTheme="outline"></i>
                     </div>
                     <ul>
-                      <li nz-menu-item>
+                      <li nz-menu-item [routerLink]="['/member', user.profile.userId]">
                         <i nz-icon nzType="user" nzTheme="outline"></i>我的主页
                       </li>
                       <li nz-menu-item (click)="onLogout()">
