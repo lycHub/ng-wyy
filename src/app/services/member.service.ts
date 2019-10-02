@@ -2,11 +2,18 @@ import { Injectable, Inject } from '@angular/core';
 import { ServicesModule, API_CONFIG } from './services.module';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { SampleBack } from './data-types/common.types';
+import { SampleBack, SongSheet } from './data-types/common.types';
 import { map } from 'rxjs/internal/operators';
 import { LoginParams } from '../share/wy-ui/wy-layer/wy-layer-login/wy-layer-login.component';
-import { User, Signin } from './data-types/member.type';
+import { User, Signin, UserRecord, recordVal, UserSheet } from './data-types/member.type';
 import queryString from 'query-string';
+
+export enum RecordType {
+  allData,
+  weekData
+}
+
+const records = ['allData', 'weekData'];
 
 @Injectable({
   providedIn: ServicesModule
@@ -39,4 +46,25 @@ export class MemberService {
     const params = new HttpParams({ fromString: queryString.stringify({ type: 1 }) });
     return this.http.get(this.uri + 'daily_signin', { params }).pipe(map(res => res as Signin));
   }
+
+  // 听歌记录
+  getUserRecord(uid: string, type = RecordType.weekData): Observable<recordVal[]> {
+    const params = new HttpParams({ fromString: queryString.stringify({ uid, type }) });
+    return this.http.get(this.uri + 'user/record', { params })
+    .pipe(map((res: UserRecord) => res[records[type]]));
+  }
+
+  // 用户歌单
+  getUserSheets(uid: string): Observable<UserSheet> {
+    const params = new HttpParams({ fromString: queryString.stringify({ uid }) });
+    return this.http.get(this.uri + 'user/playlist', { params })
+    .pipe(map((res: { playlist: SongSheet[] }) => {
+      const list = res.playlist;
+      return {
+        self: list.filter(item => !item.subscribed),
+        subscribed: list.filter(item => item.subscribed)
+      };
+    }));
+  }
+
 }
