@@ -7,6 +7,7 @@ import { AppStoreModule } from './store/index';
 import { Store } from '@ngrx/store';
 import { SetModalType } from './store/actions/member.actions';
 import { BatchActionsService } from './store/batch-actions.service';
+import { LoginParams } from './share/wy-ui/wy-layer/wy-layer-login/wy-layer-login.component';
 
 @Component({
   selector: 'app-root',
@@ -69,5 +70,11 @@ export class AppComponent {
       });
     }
     return result;
+  }
+
+
+  // 登陆
+  onLogin(params: LoginParams) {
+    console.log('params :', params);
   }
 }
