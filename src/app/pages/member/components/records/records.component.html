@@ -5,9 +5,9 @@
       累计听歌{{listenSongs}}首
     </span>
     <div class="more tab-type">
-      <span class="active">最近一周</span>
+      <span [class.active]="recordType === 1" (click)="onChangeType.emit(1)">最近一周</span>
       <nz-divider nzType="vertical"></nz-divider>
-      <span>所有时间</span>
+      <span [class.active]="recordType === 0" (click)="onChangeType.emit(0)">所有时间</span>
     </div>
   </div>
 
@@ -31,7 +31,7 @@
       <tr *ngFor="let item of basicTable.data; index as i">
         <td class="first-col">
           <span>{{i + 1}}</span>
-          <i class="ico play-song" title="播放"></i>
+          <i class="ico play-song" title="播放" [class.current]="currentIndex === i" (click)="onAddSong.emit([item.song, true])"></i>
         </td>
         <td class="song-name">
           <a [routerLink]="['/songInfo', item.id]">{{item.song.name}}</a>
@@ -39,7 +39,7 @@
         <td class="time-col">
           <span>{{item.song.dt / 1000 | formatTime}}</span>
           <p class="icons">
-            <i class="ico add" title="添加"></i>
+            <i class="ico add" title="添加" (click)="onAddSong.emit([item.song, false])"></i>
             <i class="ico like" title="收藏"></i>
             <i class="ico share" title="分享"></i>
           </p>
