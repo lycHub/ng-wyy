@@ -1,35 +1,33 @@
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { map, takeUntil } from 'rxjs/internal/operators';
-import { recordVal, UserSheet, User } from '../../../services/data-types/member.type';
-import { SheetService } from '../../../services/sheet.service';
-import { BatchActionsService } from '../../../store/batch-actions.service';
-import { RecordType, MemberService } from '../../../services/member.service';
-import { SongService } from 'src/app/services/song.service';
-import { NzMessageService } from 'ng-zorro-antd';
-import { Song } from '../../../services/data-types/common.types';
-import { AppStoreModule } from 'src/app/store';
-import { Store, select } from '@ngrx/store';
-import { getCurrentSong } from '../../../store/selectors/player.selector';
-import { findIndex } from '../../../utils/array';
+import { User, recordVal } from 'src/app/services/data-types/member.type';
+import { RecordType, MemberService } from 'src/app/services/member.service';
+import { Song } from 'src/app/services/data-types/common.types';
 import { Subject } from 'rxjs';
+import { BatchActionsService } from 'src/app/store/batch-actions.service';
+import { SongService } from 'src/app/services/song.service';
+import { AppStoreModule } from 'src/app/store';
+import { NzMessageService } from 'ng-zorro-antd';
+import { Store, select } from '@ngrx/store';
+import { SheetService } from 'src/app/services/sheet.service';
+import { getCurrentSong } from 'src/app/store/selectors/player.selector';
+import { findIndex } from 'src/app/utils/array';
 
 @Component({
-  selector: 'app-center',
-  templateUrl: './center.component.html',
-  styleUrls: ['./center.component.less'],
+  selector: 'app-record-detail',
+  templateUrl: './record-detail.component.html',
+  styles: [`.record-detail .page-wrap { padding: 40px; }`],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CenterComponent implements OnInit, OnDestroy {
+export class RecordDetailComponent implements OnInit, OnDestroy {
   user: User;
   records: recordVal[];
-  userSheet: UserSheet;
   recordType = RecordType.weekData;
 
   private currentSong: Song;
   currentIndex = -1;
   private destory$ = new Subject();
-
   constructor(
     private route: ActivatedRoute,
     private sheetServe: SheetService,
@@ -41,10 +39,9 @@ export class CenterComponent implements OnInit, OnDestroy {
     private store$: Store<AppStoreModule>,
     private cdr: ChangeDetectorRef
   ) {
-    this.route.data.pipe(map(res => res.user)).subscribe(([user, userRecord, userSheet]) => {
+    this.route.data.pipe(map(res => res.user)).subscribe(([user, userRecord]) => {
       this.user = user;
-      this.records = userRecord.slice(0, 10);
-      this.userSheet = userSheet;
+      this.records = userRecord;
       this.listenCurrentSong();
     });
   }
@@ -76,7 +73,7 @@ export class CenterComponent implements OnInit, OnDestroy {
       this.recordType = type;
       this.memberServe.getUserRecord(this.user.profile.userId.toString(), type)
       .subscribe(records => {
-        this.records = records.slice(0, 10);
+        this.records = records;
         this.cdr.markForCheck();
       });
     }
@@ -99,4 +96,5 @@ export class CenterComponent implements OnInit, OnDestroy {
     this.destory$.next();
     this.destory$.complete();
   }
+
 }
