@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { map, takeUntil } from 'rxjs/internal/operators';
-import { SingerDetail, Song } from '../../../services/data-types/common.types';
+import { SingerDetail, Song, Singer } from '../../../services/data-types/common.types';
 import { AppStoreModule } from 'src/app/store';
 import { Store, select } from '@ngrx/store';
 import { SongService } from 'src/app/services/song.service';
@@ -18,6 +18,7 @@ import { Subject } from 'rxjs';
 })
 export class SingerDetailComponent implements OnInit, OnDestroy {
   singerDetail: SingerDetail;
+  simiSingers: Singer[];
   currentIndex = -1;
   currentSong: Song;
   private destroy$ = new Subject<void>();
@@ -28,8 +29,9 @@ export class SingerDetailComponent implements OnInit, OnDestroy {
     private batchActionServe: BatchActionsService,
     private nzMessageServe: NzMessageService
   ) {
-    this.route.data.pipe(map(res => res.singerDetail)).subscribe(detail => {
+    this.route.data.pipe(map(res => res.singerDetail)).subscribe(([detail, simiSingers]) => {
       this.singerDetail = detail;
+      this.simiSingers = simiSingers;
       this.listenCurrent();
     });
   }
@@ -45,7 +47,7 @@ export class SingerDetailComponent implements OnInit, OnDestroy {
       this.currentSong = song;
       if (song) {
         this.currentIndex = findIndex(this.singerDetail.hotSongs, song);
-      }else {
+      } else {
         this.currentIndex = -1;
       }
     });
