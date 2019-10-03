@@ -4,6 +4,7 @@ import { map } from 'rxjs/internal/operators';
 import { recordVal, UserSheet, User } from '../../../services/data-types/member.type';
 import { SheetService } from '../../../services/sheet.service';
 import { BatchActionsService } from '../../../store/batch-actions.service';
+import { RecordType } from '../../../services/member.service';
 
 @Component({
   selector: 'app-center',
@@ -14,6 +15,7 @@ export class CenterComponent implements OnInit {
   user: User;
   records: recordVal[];
   userSheet: UserSheet;
+  recordType = RecordType.weekData;
   constructor(
     private route: ActivatedRoute,
     private sheetServe: SheetService,
