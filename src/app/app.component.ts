@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { SearchService } from './services/search.service';
-import { SearchResult } from './services/data-types/common.types';
+import { SearchResult, SongSheet } from './services/data-types/common.types';
 import { isEmptyObject } from './utils/tools';
 import { ModalTypes } from './store/reducers/member.reducer';
 import { AppStoreModule } from './store/index';
 import { Store } from '@ngrx/store';
-import { SetModalType, SetUserId } from './store/actions/member.actions';
+import { SetModalType, SetUserId, SetModalVisible } from './store/actions/member.actions';
 import { BatchActionsService } from './store/batch-actions.service';
 import { LoginParams } from './share/wy-ui/wy-layer/wy-layer-login/wy-layer-login.component';
 import { MemberService } from './services/member.service';
@@ -31,6 +31,7 @@ export class AppComponent {
   searchResult: SearchResult;
   wyRememberLogin: LoginParams;
   user: User;
+  mySheets: SongSheet[];
   constructor(
     private searchServe: SearchService,
     private store$: Store<AppStoreModule>,
@@ -61,6 +62,19 @@ export class AppComponent {
   // 改变弹窗类型
   onChangeModalType(modalType = ModalTypes.Default) {
     this.store$.dispatch(SetModalType({ modalType }));
+  }
+
+
+  // 获取当前用户的歌单
+  onLoadMySheets() {
+    if (this.user) {
+      this.memberServe.getUserSheets(this.user.profile.userId.toString()).subscribe(userSheet => {
+        this.mySheets = userSheet.self;
+        this.store$.dispatch(SetModalVisible({ modalVisible: true }));
+      });
+    } else {
+      this.openModal(ModalTypes.Default);
+    }
   }
 
 

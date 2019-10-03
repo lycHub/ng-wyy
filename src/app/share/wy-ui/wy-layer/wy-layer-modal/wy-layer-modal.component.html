@@ -11,7 +11,13 @@
         <ng-content select="[name=login]"></ng-content>
       </ng-container>
       <ng-container *ngSwitchCase="'register'">
-        <p>registerregisterregisterregister</p>
+        <ng-content select="[name=register]"></ng-content>
+      </ng-container>
+      <ng-container *ngSwitchCase="'like'">
+        <ng-content select="[name=like]"></ng-content>
+      </ng-container>
+      <ng-container *ngSwitchCase="'share'">
+        <ng-content select="[name=share]"></ng-content>
       </ng-container>
       <ng-container *ngSwitchDefault>
         <ng-content select="[name=default]"></ng-content>

@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, ElementRef, ChangeDetectorRef, AfterViewInit, ViewChild, Renderer2, Inject } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ElementRef, ChangeDetectorRef, AfterViewInit, ViewChild, Renderer2, Inject, Output, EventEmitter } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppStoreModule } from '../../../../store/index';
 import { getModalVisible, getModalType } from '../../../../store/selectors/member.selector';
@@ -30,6 +30,9 @@ export class WyLayerModalComponent implements OnInit, AfterViewInit {
   private overlayContainerEl: HTMLElement;
   private resizeHandler: () => void;
   @ViewChild('modalContainer', { static: false }) private modalRef: ElementRef;
+
+  @Output() onLoadMySheets = new EventEmitter<void>();
+
   constructor(
     @Inject(WINDOW) private win: Window,
     @Inject(DOCUMENT) private doc: Document,
@@ -80,6 +83,9 @@ export class WyLayerModalComponent implements OnInit, AfterViewInit {
   }
   private watchModalType(type: ModalTypes) {
     if (this.currentModalType !== type) {
+      if (type === ModalTypes.Like) {
+        this.onLoadMySheets.emit();
+      }
       this.currentModalType = type;
       this.cdr.markForCheck();
     }

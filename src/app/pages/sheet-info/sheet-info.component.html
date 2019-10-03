@@ -106,7 +106,7 @@
               <span>{{item.dt / 1000 | formatTime}}</span>
               <p class="icons">
                 <i class="ico add" title="添加" (click)="onAddSong(item)"></i>
-                <i class="ico like" title="收藏"></i>
+                <i class="ico like" title="收藏" (click)="onLikeSong(item.id.toString())"></i>
                 <i class="ico share" title="分享"></i>
               </p>
             </td>

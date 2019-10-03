@@ -10,6 +10,7 @@ import { SongService } from '../../services/song.service';
 import { BatchActionsService } from '../../store/batch-actions.service';
 import { NzMessageService } from 'ng-zorro-antd';
 import { findIndex } from 'src/app/utils/array';
+import { ModalTypes } from '../../store/reducers/member.reducer';
 
 @Component({
   selector: 'app-sheet-info',
@@ -61,21 +62,19 @@ export class SheetInfoComponent implements OnInit, OnDestroy {
       this.currentSong = song;
       if (song) {
         this.currentIndex = findIndex(this.sheetInfo.tracks, song);
-      }else {
+      } else {
         this.currentIndex = -1;
       }
     });
   }
 
   private changeDesc(desc: string) {
-    // console.log('desc :', desc);
-    
     if (desc.length < 99) {
       this.description = {
         short: this.replaceBr('<b>介绍：</b>' + desc),
         long: ''
       }
-    }else {
+    } else {
       this.description = {
         short: this.replaceBr('<b>介绍：</b>' + desc.slice(0, 99)) + '...',
         long: this.replaceBr('<b>介绍：</b>' + desc)
@@ -93,7 +92,7 @@ export class SheetInfoComponent implements OnInit, OnDestroy {
     if (this.controlDesc.isExpand) {
       this.controlDesc.label = '收起';
       this.controlDesc.iconCls = 'up';
-    }else {
+    } else {
       this.controlDesc.label = '展开';
       this.controlDesc.iconCls = 'down';
     }
@@ -107,7 +106,7 @@ export class SheetInfoComponent implements OnInit, OnDestroy {
       .subscribe(list => {
         if (list.length) {
           this.batchActionServe.insertSong(list[0], isPlay);
-        }else {
+        } else {
           this.nzMessageServe.create('warning', '无url!');
         }
       });
@@ -119,11 +118,17 @@ export class SheetInfoComponent implements OnInit, OnDestroy {
       if (list.length) {
         if (isPlay) {
           this.batchActionServe.selectPlayList({ list, index: 0 });
-        }else {
+        } else {
           this.batchActionServe.insertSongs(list);
         }
       }
     });
+  }
+
+
+  // 收藏歌曲
+  onLikeSong(id: string) {
+    this.batchActionServe.controlModal(true, ModalTypes.Like);
   }
 
 

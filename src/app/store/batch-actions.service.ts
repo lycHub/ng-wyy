@@ -117,4 +117,9 @@ export class BatchActionsService {
     }
     this.store$.dispatch(SetModalVisible({ modalVisible }));
   }
+
+  // 收藏歌曲
+  likeSong(id: string) {
+    this.store$.dispatch(SetModalType({ modalType: ModalTypes.Like }));
+  }
 }

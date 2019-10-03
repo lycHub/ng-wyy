@@ -6,11 +6,12 @@ import { NzButtonModule, NzInputModule, NzCheckboxModule, NzSpinModule, NzAlertM
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { WyLayerLoginComponent } from './wy-layer-login/wy-layer-login.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { WyLayerLikeComponent } from './wy-layer-like/wy-layer-like.component';
 
 
 
 @NgModule({
-  declarations: [WyLayerModalComponent, WyLayerDefaultComponent, WyLayerLoginComponent],
+  declarations: [WyLayerModalComponent, WyLayerDefaultComponent, WyLayerLoginComponent, WyLayerLikeComponent],
   imports: [
     CommonModule,
     NzButtonModule,
@@ -25,6 +26,6 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
     NzFormModule,
     FormsModule
   ],
-  exports: [WyLayerModalComponent, WyLayerDefaultComponent, WyLayerLoginComponent]
+  exports: [WyLayerModalComponent, WyLayerDefaultComponent, WyLayerLoginComponent, WyLayerLikeComponent]
 })
 export class WyLayerModule { }
