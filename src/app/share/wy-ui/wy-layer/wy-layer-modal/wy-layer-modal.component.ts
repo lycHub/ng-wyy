@@ -19,6 +19,15 @@ import { trigger, style, transition, animate, state } from '@angular/animations'
   ])]
 })
 export class WyLayerModalComponent implements OnInit, AfterViewInit, OnChanges {
+
+  modalTitle = {
+    register: '注册',
+    loginByPhone: '手机登录',
+    share: '分享',
+    like: '收藏',
+    default: ''
+  }
+
   showModal = 'hide';
   @Input() visible = false;
   @Input() currentModalType = ModalTypes.Default;
@@ -27,7 +36,6 @@ export class WyLayerModalComponent implements OnInit, AfterViewInit, OnChanges {
   private overlayContainerEl: HTMLElement;
   private resizeHandler: () => void;
   @ViewChild('modalContainer', { static: false }) private modalRef: ElementRef;
-
   @Output() onLoadMySheets = new EventEmitter<void>();
 
   constructor(
