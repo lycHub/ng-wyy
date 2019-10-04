@@ -129,8 +129,7 @@ export class WyPlayerComponent implements OnInit {
 
     stateArr.forEach(item => {
       appStore$.pipe(select(item.type)).subscribe(item.cb);
-    })
-
+    });
   }
 
   ngOnInit() {

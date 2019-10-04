@@ -1,8 +1,6 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input, OnChanges } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Input, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { SongSheet } from '../../../../services/data-types/common.types';
-import { AppStoreModule } from '../../../../store/index';
-import { Store, select } from '@ngrx/store';
-import { getLikeId } from '../../../../store/selectors/member.selector';
+import { LikeSongParams } from 'src/app/services/member.service';
 
 @Component({
   selector: 'app-wy-layer-like',
@@ -12,23 +10,22 @@ import { getLikeId } from '../../../../store/selectors/member.selector';
 })
 export class WyLayerLikeComponent implements OnInit, OnChanges {
   @Input() mySheets: SongSheet[];
-  private likeId: string;
-  constructor(private store$: Store<AppStoreModule>) {
-    this.store$.pipe(select('member'), select(getLikeId)).subscribe(id => {
-      if (id) {
-        this.likeId = id;
-      }
-    });
+  @Input() likeId: string;
+  @Output() onLikeSong = new EventEmitter<LikeSongParams>();
+  constructor() {}
+
+  ngOnInit() {}
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['mySheets']) {
+      console.log('mySheets :', this.mySheets);
+    }
+    if (changes['likeId']) {
+      console.log('likeId :', this.likeId);
+    }
   }
 
-  ngOnInit() {
-  }
-
-  ngOnChanges(changes: import("@angular/core").SimpleChanges): void {
-    console.log('mySheets :', changes['mySheets'].currentValue);
-  }
-
-  onLike(id: string) {
-    
+  onLike(pid: string) {
+    this.onLikeSong.emit({ pid, tracks: this.likeId });
   }
 }

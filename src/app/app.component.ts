@@ -4,15 +4,16 @@ import { SearchResult, SongSheet } from './services/data-types/common.types';
 import { isEmptyObject } from './utils/tools';
 import { ModalTypes } from './store/reducers/member.reducer';
 import { AppStoreModule } from './store/index';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { SetModalType, SetUserId, SetModalVisible } from './store/actions/member.actions';
 import { BatchActionsService } from './store/batch-actions.service';
 import { LoginParams } from './share/wy-ui/wy-layer/wy-layer-login/wy-layer-login.component';
-import { MemberService } from './services/member.service';
+import { MemberService, LikeSongParams } from './services/member.service';
 import { User } from './services/data-types/member.type';
 import { NzMessageService } from 'ng-zorro-antd';
 import { codeJson } from './utils/base64';
 import { StorageService } from './services/storage.service';
+import { getLikeId, getModalVisible, getModalType } from './store/selectors/member.selector';
 
 @Component({
   selector: 'app-root',
@@ -32,6 +33,17 @@ export class AppComponent {
   wyRememberLogin: LoginParams;
   user: User;
   mySheets: SongSheet[];
+
+
+  // 被收藏歌曲的id
+  likeId: string;
+
+  // 弹窗显示
+  visible = false;
+
+  // 弹窗类型
+  currentModalType = ModalTypes.Default;
+
   constructor(
     private searchServe: SearchService,
     private store$: Store<AppStoreModule>,
@@ -49,6 +61,47 @@ export class AppComponent {
     const wyRememberLogin = this.storageServe.getStorage('wyRememberLogin');
     if (wyRememberLogin) {
       this.wyRememberLogin = JSON.parse(wyRememberLogin);
+    }
+    this.listenStates();
+  }
+
+
+  private listenStates() {
+    const appStore$ = this.store$.pipe(select('member'));
+    const stateArr = [{
+      type: getLikeId,
+      cb: id => this.watchLikeId(id)
+    }, {
+      type: getModalVisible,
+      cb: visib => this.watchModalVisible(visib)
+    }, {
+      type: getModalType,
+      cb: type => this.watchModalType(type)
+    }];
+
+    stateArr.forEach(item => {
+      appStore$.pipe(select(item.type)).subscribe(item.cb);
+    });
+  }
+
+
+  private watchModalVisible(visib: boolean) {
+    if (this.visible !== visib) {
+      this.visible = visib;
+    }
+  }
+  private watchModalType(type: ModalTypes) {
+    if (this.currentModalType !== type) {
+      if (type === ModalTypes.Like) {
+        this.onLoadMySheets();
+      }
+      this.currentModalType = type;
+    }
+  }
+
+  private watchLikeId(id: string) {
+    if (id) {
+      this.likeId = id;
     }
   }
 
@@ -141,6 +194,15 @@ export class AppComponent {
       this.alertMessage('error', error.message || '退出失败');
     });
   }
+
+
+
+  // 收藏歌曲
+  onLikeSong(args: LikeSongParams) {
+    console.log('onLikeSong :', args);
+  }
+
+
 
   private alertMessage(type: string, msg: string) {
     this.messageServe.create(type, msg);

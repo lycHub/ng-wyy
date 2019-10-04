@@ -13,6 +13,11 @@ export enum RecordType {
   weekData
 }
 
+export type LikeSongParams = {
+  pid: string;
+  tracks: string;
+}
+
 @Injectable({
   providedIn: ServicesModule
 })
@@ -67,8 +72,8 @@ export class MemberService {
 
 
   // 收藏歌曲
-  likeSong(pid: string, tracks, op = 'add'): Observable<number> { // playlist/tracks
-    const params = new HttpParams({ fromString: queryString.stringify({ pid, tracks, op }) });
+  likeSong({ pid, tracks }: LikeSongParams): Observable<number> {
+    const params = new HttpParams({ fromString: queryString.stringify({ pid, tracks, op: 'add' }) });
     return this.http.get(this.uri + 'playlist/tracks', { params }).pipe(map((res: SampleBack) => res.code));
   }
 }
