@@ -200,6 +200,12 @@ export class AppComponent {
   // 收藏歌曲
   onLikeSong(args: LikeSongParams) {
     console.log('onLikeSong :', args);
+    this.memberServe.likeSong(args).subscribe(() => {
+      this.batchActionsServe.controlModal(false);
+      this.alertMessage('success', '收藏成功');
+    }, error => {
+      this.alertMessage('error', error.msg || '收藏失败');
+    });
   }
 
 

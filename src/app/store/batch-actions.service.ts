@@ -7,6 +7,7 @@ import { SetSongList, SetPlayList, SetCurrentIndex, SetCurrentAction } from './a
 import { shuffle, findIndex } from '../utils/array';
 import { MemberState, ModalTypes } from './reducers/member.reducer';
 import { SetModalType, SetModalVisible, SetLikeId } from './actions/member.actions';
+import { timer } from 'rxjs';
 
 @Injectable({
   providedIn: AppStoreModule
@@ -116,6 +117,9 @@ export class BatchActionsService {
       this.store$.dispatch(SetModalType({ modalType }));
     }
     this.store$.dispatch(SetModalVisible({ modalVisible }));
+    if (!modalVisible) {
+      timer(500).subscribe(() => this.store$.dispatch(SetModalType({ modalType: ModalTypes.Default })));
+    }
   }
 
   // 收藏歌曲
