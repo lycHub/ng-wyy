@@ -31,7 +31,7 @@
               </button>
               <button class="add" nz-button nzType="primary" (click)="onAddSongs(sheetInfo.tracks)">+</button>
             </nz-button-group>
-            <button class="btn like" nz-button>
+            <button class="btn like" nz-button [disabled]="sheetInfo.subscribed" (click)="onLikeSheet(sheetInfo.id)">
               <span>收藏</span>({{sheetInfo.subscribedCount}})
             </button>
             <button class="btn share" nz-button>

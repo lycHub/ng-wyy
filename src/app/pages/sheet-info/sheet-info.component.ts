@@ -11,6 +11,7 @@ import { BatchActionsService } from '../../store/batch-actions.service';
 import { NzMessageService } from 'ng-zorro-antd';
 import { findIndex } from 'src/app/utils/array';
 import { ModalTypes } from '../../store/reducers/member.reducer';
+import { MemberService } from '../../services/member.service';
 
 @Component({
   selector: 'app-sheet-info',
@@ -40,7 +41,8 @@ export class SheetInfoComponent implements OnInit, OnDestroy {
     private store$: Store<AppStoreModule>,
     private songServe: SongService,
     private batchActionServe: BatchActionsService,
-    private nzMessageServe: NzMessageService
+    private messageServe: NzMessageService,
+    private memberServe: MemberService
   ) {
     this.route.data.pipe(map(res => res.sheetInfo)).subscribe(res => {
       this.sheetInfo = res;
@@ -107,7 +109,7 @@ export class SheetInfoComponent implements OnInit, OnDestroy {
         if (list.length) {
           this.batchActionServe.insertSong(list[0], isPlay);
         } else {
-          this.nzMessageServe.create('warning', '无url!');
+          this.alertMessage('warning', '无url!');
         }
       });
     }
@@ -126,11 +128,26 @@ export class SheetInfoComponent implements OnInit, OnDestroy {
   }
 
 
+  // 收藏歌单
+  onLikeSheet(id: string) {
+    console.log('id :', id);
+    this.memberServe.likeSheet(id).subscribe(() => {
+      this.alertMessage('success', '收藏成功');
+    }, error => {
+      this.alertMessage('error', error.msg || '收藏失败');
+    });
+  }
+
+
   // 收藏歌曲
   onLikeSong(id: string) {
     this.batchActionServe.likeSong(id);
   }
 
+
+  private alertMessage(type: string, msg: string) {
+    this.messageServe.create(type, msg);
+  }
 
   ngOnDestroy(): void {
     this.destroy$.next();
