@@ -1,6 +1,6 @@
 <div class="like">
-  <div class="sheet-list">
-    <div class="header">
+  <div class="sheet-list" *ngIf="!creating else createSheet">
+    <div class="header" (click)="creating = true">
       <i nz-icon nzType="folder-add" nzTheme="outline"></i>
       <span>新建歌单</span>
     </div>
@@ -19,4 +19,25 @@
       </ng-template>
     </nz-list>
   </div>
+
+  <ng-template #createSheet>
+    <div class="create-sheet">
+      <form nz-form [formGroup]="formModel" (ngSubmit)="onSubmit()">
+        <nz-form-item>
+          <nz-form-label nzSpan="5">歌单名：</nz-form-label>
+          <nz-form-control nzHasFeedback nzSpan="12" nzErrorTip="请填写歌单名称">
+            <input nz-input placeholder="歌单名" formControlName="sheetName" />
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <div class="btns">
+            <button nz-button class="btn-back" (click)="creating = false">返回</button>
+            <button nz-button nzType="primary" [disabled]="!formModel.valid">新建</button>
+          </div>
+        </nz-form-item>
+      </form>
+    </div>
+  </ng-template>
+  
+  
 </div>

@@ -1,6 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { SongSheet } from '../../../../services/data-types/common.types';
 import { LikeSongParams } from 'src/app/services/member.service';
+import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-wy-layer-like',
@@ -11,21 +12,32 @@ import { LikeSongParams } from 'src/app/services/member.service';
 export class WyLayerLikeComponent implements OnInit, OnChanges {
   @Input() mySheets: SongSheet[];
   @Input() likeId: string;
+  @Input() visible: boolean;
   @Output() onLikeSong = new EventEmitter<LikeSongParams>();
-  constructor() {}
+  @Output() onCreateSheet = new EventEmitter<string>();
+  creating = false;
+  formModel: FormGroup;
+  constructor(private fb: FormBuilder) {
+    this.formModel = this.fb.group({
+      sheetName: ['', [Validators.required]]
+    });
+  }
 
   ngOnInit() {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['mySheets']) {
-      console.log('mySheets :', this.mySheets);
-    }
-    if (changes['likeId']) {
-      console.log('likeId :', this.likeId);
+    if (changes['visible']) {
+      if (!this.visible) {
+        this.creating = false;
+      }
     }
   }
 
   onLike(pid: string) {
     this.onLikeSong.emit({ pid, tracks: this.likeId });
+  }
+
+  onSubmit() {
+    this.onCreateSheet.emit(this.formModel.get('sheetName').value);
   }
 }

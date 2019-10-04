@@ -208,6 +208,16 @@ export class AppComponent {
     });
   }
 
+  // 新建歌单
+  onCreateSheet(sheetName: string) {
+    console.log('sheetName :', sheetName);
+    this.memberServe.createSheet(sheetName).subscribe(pid => {
+      this.onLikeSong({ pid, tracks: this.likeId });
+    }, error => {
+      this.alertMessage('error', error.msg || '新建失败');
+    })
+  }
+
 
 
   private alertMessage(type: string, msg: string) {

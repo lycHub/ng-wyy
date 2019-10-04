@@ -72,6 +72,6 @@
 
 <app-wy-layer-modal [visible]="visible" [currentModalType]="currentModalType" (onLoadMySheets)="onLoadMySheets()">
   <app-wy-layer-login name="login" [wyRememberLogin]="wyRememberLogin" (onLogin)="onLogin($event)" (onChangeModalType)="onChangeModalType($event)"></app-wy-layer-login>
-  <app-wy-layer-like name="like" [likeId]="likeId" [mySheets]="mySheets" (onLikeSong)="onLikeSong($event)"></app-wy-layer-like>
+  <app-wy-layer-like name="like" [visible]="visible" [likeId]="likeId" [mySheets]="mySheets" (onCreateSheet)="onCreateSheet($event)" (onLikeSong)="onLikeSong($event)"></app-wy-layer-like>
   <app-wy-layer-default name="default" (onChangeModalType)="onChangeModalType($event)"></app-wy-layer-default>
 </app-wy-layer-modal>
