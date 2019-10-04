@@ -115,6 +115,7 @@ export class AppComponent {
     console.log('info :', info);
     if (info) {
       this.shareInfo = info;
+      this.openModal(ModalTypes.Share);
     }
   }
 
@@ -122,6 +123,10 @@ export class AppComponent {
   // 打开弹窗
   openModal(type: ModalTypes) {
     this.batchActionsServe.controlModal(true, type);
+  }
+
+  closeModal() {
+    this.batchActionsServe.controlModal(false);
   }
 
 
