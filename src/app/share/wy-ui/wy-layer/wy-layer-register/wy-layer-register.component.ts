@@ -15,6 +15,7 @@ export class WyLayerRegisterComponent implements OnInit {
   @Input() visible = false;
   @Output() onChangeModalType = new EventEmitter<string | void>();
 
+  showCode = true;
   formModel: FormGroup;
   timing: number;
   constructor(private fb: FormBuilder, private memberServe: MemberService, private messageServe: NzMessageService) {
@@ -36,7 +37,16 @@ export class WyLayerRegisterComponent implements OnInit {
   private sendCode() {
     this.memberServe.sendCode(this.formModel.get('phone').value).subscribe(() => {
       this.timing = 60;
+      if (!this.showCode) {
+        this.showCode = true;
+      }
       interval(1000).pipe(take(60)).subscribe(() => this.timing--);
     }, error => this.messageServe.error(error.message));
+  }
+
+  changeType() {
+    this.onChangeModalType.emit();
+    this.showCode = false;
+    this.formModel.reset();
   }
 }

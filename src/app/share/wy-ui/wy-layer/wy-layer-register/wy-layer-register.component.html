@@ -1,5 +1,5 @@
 <div class="register modal-content">
-  <div class="modal-wrap">
+  <div class="modal-wrap" *ngIf="!showCode else code">
     <form nz-form nzLayout="vertical" [formGroup]="formModel" (ngSubmit)="onSubmit()">
       <nz-form-item>
         <nz-form-label>手机号</nz-form-label>
@@ -24,6 +24,12 @@
       </nz-form-item>
     </form>
   </div>
+
+  <ng-template #code>
+    <div class="modal-wrap">
+      <app-wy-check-code [phone]="formModel.get('phone').value"></app-wy-check-code>
+    </div>
+  </ng-template>
 </div>
 
-<div class="m-footer clearfix"><a (click)="onChangeModalType.emit('defult')">&lt; 其它登陆方式</a></div>
+<div class="m-footer clearfix"><a (click)="changeType()">&lt; 其它登陆方式</a></div>
