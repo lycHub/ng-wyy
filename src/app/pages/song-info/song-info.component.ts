@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { map, takeUntil } from 'rxjs/internal/operators';
 import { BaseLyricLine, WyLyric } from '../../share/wy-ui/wy-player/wy-player-panel/wy-lyric';
-import { Song } from 'src/app/services/data-types/common.types';
+import { Song, Singer } from 'src/app/services/data-types/common.types';
 import { SongService } from '../../services/song.service';
 import { Subject } from 'rxjs';
 import { Store, select } from '@ngrx/store';
@@ -10,6 +10,7 @@ import { AppStoreModule } from 'src/app/store';
 import { BatchActionsService } from 'src/app/store/batch-actions.service';
 import { NzMessageService } from 'ng-zorro-antd';
 import { getCurrentSong } from 'src/app/store/selectors/player.selector';
+import { SetShareInfo } from 'src/app/store/actions/member.actions';
 
 @Component({
   selector: 'app-song-info',
@@ -74,6 +75,22 @@ export class SongInfoComponent implements OnInit, OnDestroy {
         }
       });
     }
+  }
+
+  // 收藏歌曲
+  onLikeSong(id: string) {
+    this.batchActionServe.likeSong(id);
+  }
+
+  // 分享
+  onShareSong(resource: Song, type = 'song') {
+    const txt = this.makeTxt('歌曲', resource.name, resource.ar);
+    this.store$.dispatch(SetShareInfo({ info: { id: resource.id.toString(), type, txt } }));
+  }
+
+  private makeTxt(type: string, name: string, makeBy: Singer[]): string {
+    const makeByStr = makeBy.map(item => item.name).join('/');
+    return `${type}: ${name} -- ${makeByStr}`;
   }
 
 

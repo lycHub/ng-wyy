@@ -41,7 +41,9 @@
     [listenSongs]="user.listenSongs"
     [currentIndex]="currentIndex"
     (onChangeType)="onChangeType($event)"
-    (onAddSong)="onAddSong($event)">
+    (onAddSong)="onAddSong($event)"
+    (onLikeSong)="onLikeSong($event)"
+    (onShareSong)="onShareSong($event)">
   </app-records>
   <a class="look-more" [routerLink]="['/records', user.profile.userId]">查看更多&gt;</a>
 

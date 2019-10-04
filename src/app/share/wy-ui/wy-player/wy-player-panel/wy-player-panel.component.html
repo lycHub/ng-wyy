@@ -23,8 +23,8 @@
           <i class="col arrow"></i>
           <div class="col name ellipsis">{{item.name}}</div>
           <div class="col icons">
-            <i class="ico like" title="收藏"></i>
-            <i class="ico share" title="分享"></i>
+            <i class="ico like" title="收藏" (click)="likeSong($event, item.id)"></i>
+            <i class="ico share" title="分享" (click)="shareSong($event, item)"></i>
             <i class="ico trush" title="删除" data-act="delete" (click)="onDeleteSong.emit(item)"></i>
           </div>
           <div class="singers clearfix ellipsis">

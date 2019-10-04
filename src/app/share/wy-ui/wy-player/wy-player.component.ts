@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, Inject } from 
 import { Store, select } from '@ngrx/store';
 import { AppStoreModule } from '../../../store/index';
 import { getSongList, getPlayList, getCurrentIndex, getPlayMode, getCurrentSong, getCurrentAction } from '../../../store/selectors/player.selector';
-import { Song } from '../../../services/data-types/common.types';
+import { Song, Singer } from '../../../services/data-types/common.types';
 import { PlayMode } from './player-type';
 import { SetCurrentIndex, SetCurrentAction } from 'src/app/store/actions/player.actions';
 import { Subscription, fromEvent, timer } from 'rxjs';
@@ -15,6 +15,7 @@ import { BatchActionsService } from 'src/app/store/batch-actions.service';
 import { Router } from '@angular/router';
 import { trigger, style, transition, animate, state, AnimationEvent } from '@angular/animations';
 import { CurrentActions } from '../../../store/reducers/player.reducer';
+import { SetShareInfo } from 'src/app/store/actions/member.actions';
 
 
 const modeTypes: PlayMode[] = [{
@@ -402,5 +403,22 @@ export class WyPlayerComponent implements OnInit {
     if (!this.isLocked && !this.animating) {
       this.showPlayer = type;
     }
+  }
+
+
+   // 收藏歌曲
+   onLikeSong(id: string) {
+    this.batchActionsServe.likeSong(id);
+  }
+
+  // 分享
+  onShareSong(resource: Song, type = 'song') {
+    const txt = this.makeTxt('歌曲', resource.name, resource.ar);
+    this.store$.dispatch(SetShareInfo({ info: { id: resource.id.toString(), type, txt } }));
+  }
+
+  private makeTxt(type: string, name: string, makeBy: Singer[]): string {
+    const makeByStr = makeBy.map(item => item.name).join('/');
+    return `${type}: ${name} -- ${makeByStr}`;
   }
 }

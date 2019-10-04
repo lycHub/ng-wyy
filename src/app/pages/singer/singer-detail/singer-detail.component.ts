@@ -10,6 +10,7 @@ import { BatchActionsService } from 'src/app/store/batch-actions.service';
 import { getCurrentSong } from 'src/app/store/selectors/player.selector';
 import { findIndex } from 'src/app/utils/array';
 import { Subject } from 'rxjs';
+import { SetShareInfo } from 'src/app/store/actions/member.actions';
 
 @Component({
   selector: 'app-singer-detail',
@@ -78,6 +79,23 @@ export class SingerDetailComponent implements OnInit, OnDestroy {
         }
       });
     }
+  }
+
+
+   // 收藏歌曲
+   onLikeSong(id: string) {
+    this.batchActionServe.likeSong(id);
+  }
+
+  // 分享
+  onShareSong(resource: Song, type = 'song') {
+    const txt = this.makeTxt('歌曲', resource.name, resource.ar);
+    this.store$.dispatch(SetShareInfo({ info: { id: resource.id.toString(), type, txt } }));
+  }
+
+  private makeTxt(type: string, name: string, makeBy: Singer[]): string {
+    const makeByStr = makeBy.map(item => item.name).join('/');
+    return `${type}: ${name} -- ${makeByStr}`;
   }
 
   ngOnDestroy(): void {
