@@ -114,8 +114,12 @@ export class AppComponent {
   private watchShareInfo(info: ShareInfo) {
     console.log('info :', info);
     if (info) {
-      this.shareInfo = info;
-      this.openModal(ModalTypes.Share);
+      if (this.user) {
+        this.shareInfo = info;
+        this.openModal(ModalTypes.Share);
+      } else {
+        this.openModal(ModalTypes.Default);
+      }
     }
   }
 

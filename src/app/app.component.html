@@ -71,8 +71,8 @@
 <app-wy-player></app-wy-player>
 
 <app-wy-layer-modal [visible]="visible" [currentModalType]="currentModalType" (onLoadMySheets)="onLoadMySheets()">
-  <app-wy-layer-login name="login" [wyRememberLogin]="wyRememberLogin" (onLogin)="onLogin($event)" (onChangeModalType)="onChangeModalType($event)"></app-wy-layer-login>
+  <app-wy-layer-login name="login" [visible]="visible" [wyRememberLogin]="wyRememberLogin" (onLogin)="onLogin($event)" (onChangeModalType)="onChangeModalType($event)"></app-wy-layer-login>
   <app-wy-layer-like name="like" [visible]="visible" [likeId]="likeId" [mySheets]="mySheets" (onCreateSheet)="onCreateSheet($event)" (onLikeSong)="onLikeSong($event)"></app-wy-layer-like>
-  <app-wy-layer-share name="share" [shareInfo]="shareInfo" (onCancel)="closeModal()" (onShare)="onShare($event)"></app-wy-layer-share>
+  <app-wy-layer-share name="share" [visible]="visible" [shareInfo]="shareInfo" (onCancel)="closeModal()" (onShare)="onShare($event)"></app-wy-layer-share>
   <app-wy-layer-default name="default" (onChangeModalType)="onChangeModalType($event)"></app-wy-layer-default>
 </app-wy-layer-modal>
