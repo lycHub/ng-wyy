@@ -6,7 +6,7 @@ import { PlayState, CurrentActions } from './reducers/player.reducer';
 import { SetSongList, SetPlayList, SetCurrentIndex, SetCurrentAction } from './actions/player.actions';
 import { shuffle, findIndex } from '../utils/array';
 import { MemberState, ModalTypes } from './reducers/member.reducer';
-import { SetModalType, SetModalVisible } from './actions/member.actions';
+import { SetModalType, SetModalVisible, SetLikeId } from './actions/member.actions';
 
 @Injectable({
   providedIn: AppStoreModule
@@ -121,5 +121,6 @@ export class BatchActionsService {
   // 收藏歌曲
   likeSong(id: string) {
     this.store$.dispatch(SetModalType({ modalType: ModalTypes.Like }));
+    this.store$.dispatch(SetLikeId({ id }));
   }
 }
