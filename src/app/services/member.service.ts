@@ -111,4 +111,23 @@ export class MemberService {
     const params = new HttpParams({ fromString: queryString.stringify({ id, msg, type }) });
     return this.http.get(this.uri + 'share/resource', { params }).pipe(map((res: SampleBack) => res.code));
   }
+
+
+  // 发送验证码
+  sendCode(phone: number): Observable<number> {
+    const params = new HttpParams({ fromString: queryString.stringify({ phone }) });
+    return this.http.get(this.uri + 'captcha/sent', { params }).pipe(map((res: SampleBack) => res.code));
+  }
+
+  // 验证验证码
+  checkCode(phone: number, captcha: number): Observable<number> {
+    const params = new HttpParams({ fromString: queryString.stringify({ phone, captcha }) });
+    return this.http.get(this.uri + 'captcha/verify', { params }).pipe(map((res: SampleBack) => res.code));
+  }
+
+  // 是否已注册
+  checkExist(phone: number): Observable<number> {
+    const params = new HttpParams({ fromString: queryString.stringify({ phone }) });
+    return this.http.get(this.uri + 'cellphone/existence/check', { params }).pipe(map((res: { exist: number }) => res.exist));
+  }
 }
