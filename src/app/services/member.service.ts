@@ -85,6 +85,13 @@ export class MemberService {
   }
 
 
+  // 收藏歌手
+  likeSinger(id: string, t = 1): Observable<number> {
+    const params = new HttpParams({ fromString: queryString.stringify({ id, t }) });
+    return this.http.get(this.uri + 'artist/sub', { params }).pipe(map((res: SampleBack) => res.code));
+  }
+
+
   // 新建歌单
   createSheet(name: string): Observable<string> {
     const params = new HttpParams({ fromString: queryString.stringify({ name }) });

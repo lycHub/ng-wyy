@@ -11,6 +11,7 @@ import { getCurrentSong } from 'src/app/store/selectors/player.selector';
 import { findIndex } from 'src/app/utils/array';
 import { Subject } from 'rxjs';
 import { SetShareInfo } from 'src/app/store/actions/member.actions';
+import { MemberService } from '../../../services/member.service';
 
 @Component({
   selector: 'app-singer-detail',
@@ -22,13 +23,15 @@ export class SingerDetailComponent implements OnInit, OnDestroy {
   simiSingers: Singer[];
   currentIndex = -1;
   currentSong: Song;
+  hasLiked = false;
   private destroy$ = new Subject<void>();
   constructor(
     private route: ActivatedRoute,
     private store$: Store<AppStoreModule>,
     private songServe: SongService,
     private batchActionServe: BatchActionsService,
-    private nzMessageServe: NzMessageService
+    private nzMessageServe: NzMessageService,
+    private memberServe: MemberService
   ) {
     this.route.data.pipe(map(res => res.singerDetail)).subscribe(([detail, simiSingers]) => {
       this.singerDetail = detail;
@@ -81,6 +84,33 @@ export class SingerDetailComponent implements OnInit, OnDestroy {
     }
   }
 
+  // 收藏歌手
+  onLikeSinger(id: string) {
+    let typeInfo = {
+      type: 1,
+      msg: '收藏'
+    }
+    if (this.hasLiked) {
+      typeInfo = {
+        type: 2,
+        msg: '取消收藏'
+      }
+    }
+    this.memberServe.likeSinger(id, typeInfo.type).subscribe(() => {
+      this.hasLiked = !this.hasLiked;
+      this.nzMessageServe.create('success', typeInfo.msg + '成功');
+    }, err => {
+      this.nzMessageServe.create('error', err.msg || typeInfo.msg + '失败');
+    });
+  }
+
+
+  // 批量收藏
+  onLikeSongs(songs: Song[]) {
+    const ids = songs.map(item => item.id).join(',');
+    this.onLikeSong(ids);
+  }
+
 
    // 收藏歌曲
    onLikeSong(id: string) {
@@ -97,6 +127,8 @@ export class SingerDetailComponent implements OnInit, OnDestroy {
     const makeByStr = makeBy.map(item => item.name).join('/');
     return `${type}: ${name} -- ${makeByStr}`;
   }
+
+
 
   ngOnDestroy(): void {
     this.destroy$.next();
