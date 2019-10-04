@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { SearchService } from './services/search.service';
 import { SearchResult, SongSheet } from './services/data-types/common.types';
 import { isEmptyObject } from './utils/tools';
-import { ModalTypes } from './store/reducers/member.reducer';
+import { ModalTypes, ShareInfo } from './store/reducers/member.reducer';
 import { AppStoreModule } from './store/index';
 import { Store, select } from '@ngrx/store';
 import { SetModalType, SetUserId, SetModalVisible } from './store/actions/member.actions';
@@ -13,7 +13,7 @@ import { User } from './services/data-types/member.type';
 import { NzMessageService } from 'ng-zorro-antd';
 import { codeJson } from './utils/base64';
 import { StorageService } from './services/storage.service';
-import { getLikeId, getModalVisible, getModalType } from './store/selectors/member.selector';
+import { getLikeId, getModalVisible, getModalType, getShareInfo } from './store/selectors/member.selector';
 
 @Component({
   selector: 'app-root',
@@ -43,6 +43,9 @@ export class AppComponent {
 
   // 弹窗类型
   currentModalType = ModalTypes.Default;
+
+  // 分享信息
+  shareInfo: ShareInfo;
 
   constructor(
     private searchServe: SearchService,
@@ -77,6 +80,9 @@ export class AppComponent {
     }, {
       type: getModalType,
       cb: type => this.watchModalType(type)
+    }, {
+      type: getShareInfo,
+      cb: info => this.watchShareInfo(info)
     }];
 
     stateArr.forEach(item => {
@@ -102,6 +108,13 @@ export class AppComponent {
   private watchLikeId(id: string) {
     if (id) {
       this.likeId = id;
+    }
+  }
+
+  private watchShareInfo(info: ShareInfo) {
+    console.log('info :', info);
+    if (info) {
+      this.shareInfo = info;
     }
   }
 

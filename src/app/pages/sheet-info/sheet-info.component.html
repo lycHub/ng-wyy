@@ -34,7 +34,7 @@
             <button class="btn like" nz-button [disabled]="sheetInfo.subscribed" (click)="onLikeSheet(sheetInfo.id)">
               <span>收藏</span>({{sheetInfo.subscribedCount}})
             </button>
-            <button class="btn share" nz-button>
+            <button class="btn share" nz-button (click)="shareResource(sheetInfo, 'playlist')">
               <span>分享</span>({{sheetInfo.shareCount}})
             </button>
           </div>
@@ -107,7 +107,7 @@
               <p class="icons">
                 <i class="ico add" title="添加" (click)="onAddSong(item)"></i>
                 <i class="ico like" title="收藏" (click)="onLikeSong(item.id.toString())"></i>
-                <i class="ico share" title="分享"></i>
+                <i class="ico share" title="分享" (click)="shareResource(item)"></i>
               </p>
             </td>
             <td>

@@ -3,7 +3,7 @@ import { PlayMode } from 'src/app/share/wy-ui/wy-player/player-type';
 import { Song } from '../../services/data-types/common.types';
 import { createReducer, on, Action } from '@ngrx/store';
 import { SetPlaying } from '../actions/player.actions';
-import { SetModalVisible, SetModalType, SetUserId, SetLikeId } from '../actions/member.actions';
+import { SetModalVisible, SetModalType, SetUserId, SetLikeId, SetShareInfo } from '../actions/member.actions';
 
 export enum ModalTypes {
   Register = 'register',
@@ -13,11 +13,19 @@ export enum ModalTypes {
   Default = 'default'
 }
 
+
+export type ShareInfo = {
+  id: string;
+  type: string;
+  txt: string;
+}
+
 export type MemberState = {
   modalVisible: boolean;
   modalType: ModalTypes;
   userId: string;
   likeId: string;
+  shareInfo?: ShareInfo;
 }
 
 
@@ -34,6 +42,7 @@ const reducer = createReducer(
   on(SetModalType, (state, { modalType }) => ({ ...state,  modalType })),
   on(SetUserId, (state, { id }) => ({ ...state,  userId: id })),
   on(SetLikeId, (state, { id }) => ({ ...state,  likeId: id })),
+  on(SetShareInfo, (state, { info }) => ({ ...state,  shareInfo: info }))
 );
 
 export function memberReducer(state: MemberState, action: Action) {

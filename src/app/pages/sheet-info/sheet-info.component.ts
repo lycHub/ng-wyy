@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { map, takeUntil } from 'rxjs/internal/operators';
-import { SongSheet, Song } from '../../services/data-types/common.types';
+import { SongSheet, Song, Singer } from '../../services/data-types/common.types';
 import { AppStoreModule } from '../../store/index';
 import { Store, select } from '@ngrx/store';
 import { Observable, Subject } from 'rxjs';
@@ -12,6 +12,7 @@ import { NzMessageService } from 'ng-zorro-antd';
 import { findIndex } from 'src/app/utils/array';
 import { ModalTypes } from '../../store/reducers/member.reducer';
 import { MemberService } from '../../services/member.service';
+import { SetShareInfo } from '../../store/actions/member.actions';
 
 @Component({
   selector: 'app-sheet-info',
@@ -142,6 +143,27 @@ export class SheetInfoComponent implements OnInit, OnDestroy {
   // 收藏歌曲
   onLikeSong(id: string) {
     this.batchActionServe.likeSong(id);
+  }
+
+  // 分享
+  shareResource(resource: Song | SongSheet, type = 'song') {
+    let txt = '';
+    if (type === 'playlist') {
+      txt = this.makeTxt('歌单', resource.name, (<SongSheet>resource).creator.nickname);
+    } else {
+      txt = this.makeTxt('歌曲', resource.name, (<Song>resource).ar);
+    }
+    this.store$.dispatch(SetShareInfo({ info: { id: resource.id.toString(), type, txt } }));
+  }
+
+  private makeTxt(type: string, name: string, makeBy: string | Singer[]): string {
+    let makeByStr = '';
+    if (Array.isArray(makeBy)) {
+      makeByStr = makeBy.map(item => item.name).join('/');
+    } else {
+      makeByStr = makeBy;
+    }
+    return `${type}: ${name} -- ${makeByStr}`;
   }
 
 

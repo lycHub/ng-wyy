@@ -90,4 +90,11 @@ export class MemberService {
     const params = new HttpParams({ fromString: queryString.stringify({ id, t }) });
     return this.http.get(this.uri + 'playlist/subscribe', { params }).pipe(map((res: SampleBack) => res.code));
   }
+
+
+  // 分享
+  shareResource(id: string, msg: string, type = 'song'): Observable<number> {
+    const params = new HttpParams({ fromString: queryString.stringify({ id, msg, type }) });
+    return this.http.get(this.uri + 'share/resource', { params }).pipe(map((res: SampleBack) => res.code));
+  }
 }
