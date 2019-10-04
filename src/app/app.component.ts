@@ -8,7 +8,7 @@ import { Store, select } from '@ngrx/store';
 import { SetModalType, SetUserId, SetModalVisible } from './store/actions/member.actions';
 import { BatchActionsService } from './store/batch-actions.service';
 import { LoginParams } from './share/wy-ui/wy-layer/wy-layer-login/wy-layer-login.component';
-import { MemberService, LikeSongParams } from './services/member.service';
+import { MemberService, LikeSongParams, ShareParams } from './services/member.service';
 import { User } from './services/data-types/member.type';
 import { NzMessageService } from 'ng-zorro-antd';
 import { codeJson } from './utils/base64';
@@ -180,7 +180,7 @@ export class AppComponent {
   onLogin(params: LoginParams) {
     this.memberServe.login(params).subscribe(user => {
       this.user = user;
-      this.batchActionsServe.controlModal(false);
+      this.closeModal();
       this.alertMessage('success', '登陆成功');
       this.storageServe.setStorage({
         key: 'wyUserId',
@@ -219,7 +219,7 @@ export class AppComponent {
   onLikeSong(args: LikeSongParams) {
     console.log('onLikeSong :', args);
     this.memberServe.likeSong(args).subscribe(() => {
-      this.batchActionsServe.controlModal(false);
+      this.closeModal();
       this.alertMessage('success', '收藏成功');
     }, error => {
       this.alertMessage('error', error.msg || '收藏失败');
@@ -233,9 +233,19 @@ export class AppComponent {
       this.onLikeSong({ pid, tracks: this.likeId });
     }, error => {
       this.alertMessage('error', error.msg || '新建失败');
-    })
+    });
   }
 
+
+  // 分享
+  onShare(arg: ShareParams) {
+    this.memberServe.shareResource(arg).subscribe(() => {
+      this.alertMessage('success', '分享成功');
+      this.closeModal();
+    }, error => {
+      this.alertMessage('error', error.msg || '分享失败');
+    });
+  }
 
 
   private alertMessage(type: string, msg: string) {

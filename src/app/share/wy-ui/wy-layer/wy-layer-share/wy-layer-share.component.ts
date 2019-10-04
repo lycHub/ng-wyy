@@ -1,6 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter } from '@angular/core';
 import { ShareInfo } from '../../../../store/reducers/member.reducer';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { ShareParams } from 'src/app/services/member.service';
 
 const MAX_MSG = 140;
 
@@ -13,6 +14,7 @@ const MAX_MSG = 140;
 export class WyLayerShareComponent implements OnInit {
   @Input() shareInfo: ShareInfo;
   @Output() onCancel = new EventEmitter<void>();
+  @Output() onShare = new EventEmitter<ShareParams>();
   formModel: FormGroup;
   surplusMsgCount = MAX_MSG;
   constructor() {
@@ -28,6 +30,12 @@ export class WyLayerShareComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log('share :', this.formModel);
+    if (this.formModel.valid) {
+      this.onShare.emit({
+        id: this.shareInfo.id,
+        msg: this.formModel.get('msg').value,
+        type: this.shareInfo.type
+      });
+    }
   }
 }
