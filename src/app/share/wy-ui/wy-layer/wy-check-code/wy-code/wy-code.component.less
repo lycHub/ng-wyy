@@ -1,0 +1,39 @@
+.code-wrap{
+  .u-word{
+    position: relative;
+    width: 70px;
+    float: left;
+    margin-right: 5px;
+    input{
+      width: 100%;
+      margin: 0 13px;
+      border: none;
+      font-size: 24px;
+      height: 19px;
+      padding: 5px 6px 6px;
+      border-radius: 2px;
+      line-height: 19px;
+    }
+    &::before{
+      content: '';
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 2px;
+      background-color: rgba(0, 0, 0, 0.1);
+    }
+    &::after{
+      content: '';
+      position: absolute;
+      bottom: 0;
+      width: 0px;
+      height: 2px;
+      background-color: #B82712;
+      transition: width .2s;
+    }
+
+    &.focus::after{
+      width: 100%;
+    }
+  }
+}

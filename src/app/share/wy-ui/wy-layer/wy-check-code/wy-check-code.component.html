@@ -1,9 +1,9 @@
 <div class="check-code">
   <div class="js-mobwrap">
     <p class="s-fc3">
-      你的手机号
+      你的手机号：
       <strong class="s-fc1">
-        <span class="js-mob">{{phoneHideStr}}</span>
+        <span class="js-mob">{{phone}}</span>
       </strong>
     </p>
     <p class="s-fc4">为了安全，我们会给您发送短信验证码</p>
@@ -13,7 +13,7 @@
     <form nz-form nzLayout="vertical">
       <nz-form-item>
         <nz-form-control>
-          这里是4个输入框
+          <app-wy-code></app-wy-code>
           <div class="send clearfix">
             <span class="err">验证码不正确</span>
             <span class="txt">60s</span>
