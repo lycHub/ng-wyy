@@ -56,7 +56,7 @@ export class WyLayerRegisterComponent implements OnInit, OnChanges {
     }
   }
 
-  private sendCode() {
+  sendCode() {
     this.memberServe.sendCode(this.formModel.get('phone').value).subscribe(() => {
       this.timing = 60;
       if (!this.showCode) {

@@ -174,6 +174,14 @@ export class AppComponent {
     }
   }
 
+  openModalByMenu(type: 'loginByPhone' | 'register') {
+    if (type === 'loginByPhone') {
+      this.openModal(ModalTypes.LoginByPhone);
+    } else {
+      this.openModal(ModalTypes.Register);
+    }
+  }
+
 
   // 打开弹窗
   openModal(type: ModalTypes) {
