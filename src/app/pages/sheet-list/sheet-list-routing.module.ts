@@ -4,7 +4,7 @@ import { SheetListComponent } from './sheet-list.component';
 
 
 const routes: Routes = [{
-  path: 'sheet', component: SheetListComponent, data: { title: '歌单' }
+  path: '', component: SheetListComponent, data: { title: '歌单' }
 }];
 
 @NgModule({
