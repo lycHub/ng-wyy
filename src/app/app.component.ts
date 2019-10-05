@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { SearchService } from './services/search.service';
 import { SearchResult, SongSheet } from './services/data-types/common.types';
 import { isEmptyObject } from './utils/tools';
@@ -18,6 +18,7 @@ import { Router, ActivatedRoute, NavigationEnd, NavigationStart } from '@angular
 import { Observable, interval } from 'rxjs';
 import { filter, map, mergeMap, takeUntil } from 'rxjs/internal/operators';
 import { Title } from '@angular/platform-browser';
+import { DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'app-root',
@@ -69,6 +70,7 @@ export class AppComponent {
     private router: Router,
     private activateRoute: ActivatedRoute,
     private titleServe: Title,
+    @Inject(DOCUMENT) private doc: Document
   ) {
     const userId = this.storageServe.getStorage('wyUserId');
     if (userId) {
@@ -97,6 +99,7 @@ export class AppComponent {
     });
     this.navEnd.subscribe(() => {
       this.loadPercent = 100;
+      // this.doc.documentElement.scrollTop = 0;
     });
   }
 

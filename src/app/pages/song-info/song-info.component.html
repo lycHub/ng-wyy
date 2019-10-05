@@ -54,7 +54,7 @@
               </div>
             </div>
 
-            <div class="toggle-expand" (click)="toggleLyric()">
+            <div class="toggle-expand" (click)="toggleLyric()" [hidden]="!lyric.length">
               <span>{{controlLyric.label}}</span>
               <i nz-icon [nzType]="controlLyric.iconCls" nzTheme="outline"></i>
             </div>
