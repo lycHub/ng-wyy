@@ -14,6 +14,10 @@ import { NzMessageService } from 'ng-zorro-antd';
 import { codeJson } from './utils/base64';
 import { StorageService } from './services/storage.service';
 import { getLikeId, getModalVisible, getModalType, getShareInfo } from './store/selectors/member.selector';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
+import { Observable } from 'rxjs';
+import { filter, map, mergeMap } from 'rxjs/internal/operators';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-root',
@@ -50,6 +54,9 @@ export class AppComponent {
   // 分享信息
   shareInfo: ShareInfo;
 
+  routeTitle = '';
+  private navEnd: Observable<NavigationEnd>;
+
   constructor(
     private searchServe: SearchService,
     private store$: Store<AppStoreModule>,
@@ -57,6 +64,9 @@ export class AppComponent {
     private memberServe: MemberService,
     private messageServe: NzMessageService,
     private storageServe: StorageService,
+    private router: Router,
+    private activateRoute: ActivatedRoute,
+    private titleServe: Title,
   ) {
     const userId = this.storageServe.getStorage('wyUserId');
     if (userId) {
@@ -69,6 +79,24 @@ export class AppComponent {
       this.wyRememberLogin = JSON.parse(wyRememberLogin);
     }
     this.listenStates();
+    this.navEnd = <Observable<NavigationEnd>>this.router.events.pipe(filter(evt => evt instanceof NavigationEnd));
+    this.setTitle();
+  }
+
+  private setTitle() {
+    this.navEnd.pipe(
+      map(() => this.activateRoute),
+      map((route: ActivatedRoute) => {
+        while (route.firstChild) {
+          route = route.firstChild;
+        }
+        return route;
+      }),
+      mergeMap(route => route.data)
+    ).subscribe(data => {
+      this.routeTitle = data['title'];
+      this.titleServe.setTitle(this.routeTitle);
+    })
   }
 
 
