@@ -252,6 +252,12 @@ export class AppComponent {
   }
 
 
+  // 注册
+  onRegister(phone: string) {
+    this.alertMessage('success', phone + '注册成功');
+  }
+
+
   private alertMessage(type: string, msg: string) {
     this.messageServe.create(type, msg);
   }

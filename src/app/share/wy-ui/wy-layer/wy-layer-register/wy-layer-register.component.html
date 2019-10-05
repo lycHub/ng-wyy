@@ -31,7 +31,9 @@
         [phone]="formModel.get('phone').value"
         [codePass]="codePass"
         [timing]="timing"
-        (onCheckCode)="onCheckCode($event)">
+        (onCheckCode)="onCheckCode($event)"
+        (onReatSendCode)="sendCode()"
+        (onCheckExist)="onCheckExist()">
       </app-wy-check-code>
     </div>
   </ng-template>

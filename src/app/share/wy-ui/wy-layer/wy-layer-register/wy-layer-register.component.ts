@@ -4,6 +4,12 @@ import { MemberService } from '../../../../services/member.service';
 import { NzMessageService } from 'ng-zorro-antd';
 import { interval } from 'rxjs';
 import { take } from 'rxjs/internal/operators';
+import { ModalTypes } from '../../../../store/reducers/member.reducer';
+
+enum Exist {
+  '存在' = 1,
+  '不存在' = -1
+}
 
 @Component({
   selector: 'app-wy-layer-register',
@@ -13,12 +19,13 @@ import { take } from 'rxjs/internal/operators';
 })
 export class WyLayerRegisterComponent implements OnInit {
   @Input() visible = false;
-  @Output() onChangeModalType = new EventEmitter<string | void>();
+  @Output() onChangeModalType = new EventEmitter<string>();
+  @Output() onRegister = new EventEmitter<string>();
 
   showCode = false;
   formModel: FormGroup;
   timing: number;
-  codePass = false;
+  codePass: string | boolean = '';
   constructor(
     private fb: FormBuilder,
     private memberServe: MemberService,
@@ -64,8 +71,21 @@ export class WyLayerRegisterComponent implements OnInit {
     );
   }
 
-  changeType() {
-    this.onChangeModalType.emit();
+
+  onCheckExist() {
+    const phone = this.formModel.get('phone').value;
+    this.memberServe.checkExist(Number(phone)).subscribe(res => {
+      if (Exist[res] === '存在') {
+        this.messageServe.error('账号已存在，可直接登陆');
+        this.changeType(ModalTypes.LoginByPhone);
+      } else {
+        this.onRegister.emit(phone);
+      }
+    });
+  }
+
+  changeType(type = ModalTypes.Default) {
+    this.onChangeModalType.emit(type);
     this.showCode = false;
     this.formModel.reset();
   }

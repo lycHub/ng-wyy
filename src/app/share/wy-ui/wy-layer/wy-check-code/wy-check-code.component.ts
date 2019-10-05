@@ -11,7 +11,8 @@ export class WyCheckCodeComponent implements OnInit, OnChanges {
   private phoneHideStr = '';
 
   formModel: FormGroup;
-
+  showRepeatBtn = false;
+  showErrorTip = false;
   @Input() codePass = false;
   @Input() timing: number;
   @Input ()
@@ -26,10 +27,19 @@ export class WyCheckCodeComponent implements OnInit, OnChanges {
   }
   
   @Output() onCheckCode = new EventEmitter<string>();
+  @Output() onReatSendCode = new EventEmitter<string>();
+  @Output() onCheckExist = new EventEmitter<void>();
   constructor() {
     this.formModel = new FormGroup({
       code: new FormControl('', [Validators.required, Validators.pattern(/\d{4}/)])
     });
+
+    const codeControl = this.formModel.get('code');
+    codeControl.statusChanges.subscribe(status => {
+      if (status === 'VALID') {
+        this.onCheckCode.emit(this.formModel.value.code);
+      }
+    })
   }
 
   ngOnInit() {
@@ -37,12 +47,16 @@ export class WyCheckCodeComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['timing']) {
-      console.log(this.timing);
+      this.showRepeatBtn = this.timing <= 0;
+    }
+    
+    if (changes['codePass'] && !changes['codePass'].firstChange) {
+      this.showErrorTip = !this.codePass;
     }
   }
   onSubmit() {
-    if (this.formModel.valid) {
-      this.onCheckCode.emit(this.formModel.value.code);
+    if (this.formModel.valid && this.codePass) {
+       this.onCheckExist.emit();
     }
   }
 }
