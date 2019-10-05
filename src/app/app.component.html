@@ -76,3 +76,13 @@
   <app-wy-layer-register name="register" [visible]="visible" (onChangeModalType)="onChangeModalType($event)" (onRegister)="onRegister($event)"></app-wy-layer-register>
   <app-wy-layer-default (onChangeModalType)="onChangeModalType($event)"></app-wy-layer-default>
 </app-wy-layer-modal>
+
+<nz-back-top [nzTemplate]="tpl">
+  <ng-template #tpl>
+    <div class="ant-back-top-inner">
+      <button nz-button nzType="primary" nzSize="large">
+        <i nz-icon nzType="to-top" nzTheme="outline"></i>
+      </button>
+    </div>
+  </ng-template>
+</nz-back-top>
