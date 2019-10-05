@@ -41,6 +41,9 @@ export class AppComponent {
   // 弹窗显示
   visible = false;
 
+  // 弹窗loading
+  showSpin = false;
+
   // 弹窗类型
   currentModalType = ModalTypes.Default;
 
@@ -182,6 +185,7 @@ export class AppComponent {
 
   // 登陆
   onLogin(params: LoginParams) {
+    this.showSpin = true;
     this.memberServe.login(params).subscribe(user => {
       this.user = user;
       this.closeModal();
@@ -200,8 +204,9 @@ export class AppComponent {
       } else {
         this.storageServe.removeStorage('wyRememberLogin');
       }
+      this.showSpin = false;
     }, error => {
-      // console.log('error :', error);
+      this.showSpin = false;
       this.alertMessage('error', error.message || '登陆失败');
     });
   }

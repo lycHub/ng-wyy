@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, ChangeDetectorRef, OnChanges, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MemberService } from '../../../../services/member.service';
 import { NzMessageService } from 'ng-zorro-antd';
@@ -17,7 +17,7 @@ enum Exist {
   styleUrls: ['./wy-layer-register.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class WyLayerRegisterComponent implements OnInit {
+export class WyLayerRegisterComponent implements OnInit, OnChanges {
   @Input() visible = false;
   @Output() onChangeModalType = new EventEmitter<string>();
   @Output() onRegister = new EventEmitter<string>();
@@ -39,6 +39,15 @@ export class WyLayerRegisterComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['visible'] && !changes['visible'].firstChange) {
+      this.formModel.markAllAsTouched();
+      if (!this.visible) {
+        this.showCode = false;
+      }
+    }
   }
 
   onSubmit() {
