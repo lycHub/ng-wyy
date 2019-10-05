@@ -8,13 +8,13 @@ export const WINDOW = new InjectionToken('WindowToken');
 @NgModule({
   declarations: [],
   imports: [
-    
+
   ],
   providers: [
-    { provide: API_CONFIG, useValue: 'http://localhost:3000/' },
+    { provide: API_CONFIG, useValue: '/api/' },
     {
       provide: WINDOW,
-      useFactory(platformId: Object): Window | Object {
+      useFactory(platformId: object): Window | object {
         return isPlatformBrowser(platformId) ? window : {};
       },
       deps: [PLATFORM_ID]

@@ -26,7 +26,7 @@ export class WyLayerLikeComponent implements OnInit, OnChanges {
   ngOnInit() {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['visible']) {
+    if (changes.visible) {
       if (!this.visible) {
         // this.formModel.get('sheetName').setValue('');
         this.formModel.get('sheetName').reset();

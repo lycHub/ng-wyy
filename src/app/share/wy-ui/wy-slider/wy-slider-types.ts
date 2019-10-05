@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
 
-export type WySliderStyle = {
+export interface WySliderStyle {
   width?: string | null;
   height?: string | null;
   left?: string | null;
@@ -8,7 +8,7 @@ export type WySliderStyle = {
 }
 
 
-export type SliderEventObserverConfig = {
+export interface SliderEventObserverConfig {
   start: string;
   move: string;
   end: string;

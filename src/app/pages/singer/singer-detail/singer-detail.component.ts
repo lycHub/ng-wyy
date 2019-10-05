@@ -62,7 +62,7 @@ export class SingerDetailComponent implements OnInit, OnDestroy {
       if (list.length) {
         if (isPlay) {
           this.batchActionServe.selectPlayList({ list, index: 0 });
-        }else {
+        } else {
           this.batchActionServe.insertSongs(list);
         }
       }
@@ -77,7 +77,7 @@ export class SingerDetailComponent implements OnInit, OnDestroy {
       .subscribe(list => {
         if (list.length) {
           this.batchActionServe.insertSong(list[0], isPlay);
-        }else {
+        } else {
           this.nzMessageServe.create('warning', '无url!');
         }
       });
@@ -89,12 +89,12 @@ export class SingerDetailComponent implements OnInit, OnDestroy {
     let typeInfo = {
       type: 1,
       msg: '收藏'
-    }
+    };
     if (this.hasLiked) {
       typeInfo = {
         type: 2,
         msg: '取消收藏'
-      }
+      };
     }
     this.memberServe.likeSinger(id, typeInfo.type).subscribe(() => {
       this.hasLiked = !this.hasLiked;

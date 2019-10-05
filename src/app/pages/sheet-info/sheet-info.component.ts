@@ -25,13 +25,13 @@ export class SheetInfoComponent implements OnInit, OnDestroy {
   description = {
     short: '',
     long: ''
-  }
+  };
 
   controlDesc = {
     isExpand: false,
     label: '展开',
     iconCls: 'down'
-  }
+  };
 
   currentSong: Song;
   currentIndex = -1;
@@ -76,12 +76,12 @@ export class SheetInfoComponent implements OnInit, OnDestroy {
       this.description = {
         short: this.replaceBr('<b>介绍：</b>' + desc),
         long: ''
-      }
+      };
     } else {
       this.description = {
         short: this.replaceBr('<b>介绍：</b>' + desc.slice(0, 99)) + '...',
         long: this.replaceBr('<b>介绍：</b>' + desc)
-      }
+      };
     }
   }
 
@@ -149,9 +149,9 @@ export class SheetInfoComponent implements OnInit, OnDestroy {
   shareResource(resource: Song | SongSheet, type = 'song') {
     let txt = '';
     if (type === 'playlist') {
-      txt = this.makeTxt('歌单', resource.name, (<SongSheet>resource).creator.nickname);
+      txt = this.makeTxt('歌单', resource.name, (resource as SongSheet).creator.nickname);
     } else {
-      txt = this.makeTxt('歌曲', resource.name, (<Song>resource).ar);
+      txt = this.makeTxt('歌曲', resource.name, (resource as Song).ar);
     }
     this.store$.dispatch(SetShareInfo({ info: { id: resource.id.toString(), type, txt } }));
   }

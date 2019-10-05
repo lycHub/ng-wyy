@@ -38,7 +38,7 @@
               </button>
               <button class="add" nz-button nzType="primary" (click)="onAddSong(song)">+</button>
             </nz-button-group>
-            <button class="btn like" nz-button (click)="onLikeSong(song.id)">
+            <button class="btn like" nz-button (click)="onLikeSong(song.id.toString())">
               <span>收藏</span>
             </button>
             <button class="btn share" nz-button (click)="onShareSong(song)">

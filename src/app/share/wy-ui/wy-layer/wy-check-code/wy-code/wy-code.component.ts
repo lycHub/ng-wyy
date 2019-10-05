@@ -47,7 +47,7 @@ export class WyCodeComponent implements OnInit, ControlValueAccessor, AfterViewI
   }
 
   private listenKeyUp(event: KeyboardEvent) {
-    const target = <HTMLInputElement>event.target;
+    const target = event.target as HTMLInputElement;
     const value = target.value;
     const isBackSpace = event.keyCode === BACKSPACE;
     if (/\D/.test(value)) {

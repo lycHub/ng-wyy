@@ -3,10 +3,10 @@ import { Resolve, Router, ActivatedRouteSnapshot } from '@angular/router';
 import { Observable, forkJoin } from 'rxjs';
 import { first } from 'rxjs/internal/operators';
 import { User } from 'src/app/services/data-types/member.type';
-import { recordVal } from '../../../services/data-types/member.type';
+import { RecordVal } from '../../../services/data-types/member.type';
 import { MemberService } from 'src/app/services/member.service';
 
-type CenterDataType = [User, recordVal[]];
+type CenterDataType = [User, RecordVal[]];
 
 @Injectable()
 export class RecordResolverService implements Resolve<CenterDataType> {

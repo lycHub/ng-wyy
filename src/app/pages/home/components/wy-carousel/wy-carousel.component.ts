@@ -12,7 +12,7 @@ export class WyCarouselComponent implements OnInit {
   @Output() changeSlide = new EventEmitter<'pre' | 'next'>();
 
   @ViewChild('dot', { static: true }) dotRef: TemplateRef<any>;
-  
+
   constructor() { }
 
   ngOnInit() {

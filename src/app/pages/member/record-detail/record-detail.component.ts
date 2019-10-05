@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { map, takeUntil } from 'rxjs/internal/operators';
-import { User, recordVal } from 'src/app/services/data-types/member.type';
+import { User, RecordVal } from 'src/app/services/data-types/member.type';
 import { RecordType, MemberService } from 'src/app/services/member.service';
 import { Song, Singer } from 'src/app/services/data-types/common.types';
 import { Subject } from 'rxjs';
@@ -23,7 +23,7 @@ import { SetShareInfo } from 'src/app/store/actions/member.actions';
 })
 export class RecordDetailComponent implements OnInit, OnDestroy {
   user: User;
-  records: recordVal[];
+  records: RecordVal[];
   recordType = RecordType.weekData;
 
   private currentSong: Song;

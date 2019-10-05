@@ -42,7 +42,7 @@ export class WyScrollComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['data']) {
+    if (changes.data) {
       this.refreshScroll();
     }
   }

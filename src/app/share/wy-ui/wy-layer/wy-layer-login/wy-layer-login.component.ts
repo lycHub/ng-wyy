@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectionStrategy, EventEmitter, Output, Input
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { codeJson } from 'src/app/utils/base64';
 
-export type LoginParams = {
+export interface LoginParams {
   phone: string;
   password: string;
   remember: boolean;
@@ -21,15 +21,15 @@ export class WyLayerLoginComponent implements OnInit, OnChanges {
   @Output() onLogin = new EventEmitter<LoginParams>();
   formModel: FormGroup;
   constructor(private fb: FormBuilder) {
-    
+
   }
 
   ngOnInit() {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    const userLoginParams = changes['wyRememberLogin'];
-    const visible = changes['visible'];
+    const userLoginParams = changes.wyRememberLogin;
+    const visible = changes.visible;
     if (userLoginParams) {
       let phone = '';
       let password = '';

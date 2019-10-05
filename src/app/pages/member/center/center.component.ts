@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { map, takeUntil } from 'rxjs/internal/operators';
-import { recordVal, UserSheet, User } from '../../../services/data-types/member.type';
+import { RecordVal, UserSheet, User } from '../../../services/data-types/member.type';
 import { SheetService } from '../../../services/sheet.service';
 import { BatchActionsService } from '../../../store/batch-actions.service';
 import { RecordType, MemberService } from '../../../services/member.service';
@@ -23,7 +23,7 @@ import { SetShareInfo } from 'src/app/store/actions/member.actions';
 })
 export class CenterComponent implements OnInit, OnDestroy {
   user: User;
-  records: recordVal[];
+  records: RecordVal[];
   userSheet: UserSheet;
   recordType = RecordType.weekData;
 

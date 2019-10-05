@@ -88,8 +88,8 @@ export class AppComponent {
       this.loadPercent = 0;
       this.setTitle();
     });
-    
-    this.navEnd = <Observable<NavigationEnd>>this.router.events.pipe(filter(evt => evt instanceof NavigationEnd));
+
+    this.navEnd = this.router.events.pipe(filter(evt => evt instanceof NavigationEnd)) as Observable<NavigationEnd>;
     this.setLoadingBar();
   }
 
@@ -114,9 +114,9 @@ export class AppComponent {
       }),
       mergeMap(route => route.data)
     ).subscribe(data => {
-      this.routeTitle = data['title'];
+      this.routeTitle = data.title;
       this.titleServe.setTitle(this.routeTitle);
-    })
+    });
   }
 
 
@@ -171,6 +171,14 @@ export class AppComponent {
       } else {
         this.openModal(ModalTypes.Default);
       }
+    }
+  }
+
+  openModalByMenu(type: 'loginByPhone' | 'register') {
+    if (type === 'loginByPhone') {
+      this.openModal(ModalTypes.LoginByPhone);
+    } else {
+      this.openModal(ModalTypes.Register);
     }
   }
 

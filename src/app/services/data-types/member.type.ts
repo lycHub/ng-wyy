@@ -1,12 +1,12 @@
 import { Song, SongSheet } from './common.types';
 
-export type Signin = {
+export interface Signin {
   code: number;
   point?: number;
   msg?: string;
 }
 
-export type User = {
+export interface User {
   // 等级
   level?: number;
 
@@ -32,22 +32,22 @@ export type User = {
     // 动态
     eventCount: number;
   };
-};
+}
 
 
-export type recordVal = {
+export interface RecordVal {
   playCount: number;
   score: number;
   song: Song;
-};
+}
 
 type recordKeys = 'weekData' | 'allData';
 
 export type UserRecord = {
-  [key in recordKeys]: recordVal[];
-}
+  [key in recordKeys]: RecordVal[];
+};
 
-export type UserSheet = {
-  self: SongSheet[],
-  subscribed: SongSheet[]
+export interface UserSheet {
+  self: SongSheet[];
+  subscribed: SongSheet[];
 }
