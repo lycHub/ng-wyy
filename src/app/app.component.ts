@@ -14,9 +14,9 @@ import { NzMessageService } from 'ng-zorro-antd';
 import { codeJson } from './utils/base64';
 import { StorageService } from './services/storage.service';
 import { getLikeId, getModalVisible, getModalType, getShareInfo } from './store/selectors/member.selector';
-import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
-import { Observable } from 'rxjs';
-import { filter, map, mergeMap } from 'rxjs/internal/operators';
+import { Router, ActivatedRoute, NavigationEnd, NavigationStart } from '@angular/router';
+import { Observable, interval } from 'rxjs';
+import { filter, map, mergeMap, takeUntil } from 'rxjs/internal/operators';
 import { Title } from '@angular/platform-browser';
 
 @Component({
@@ -32,6 +32,8 @@ export class AppComponent {
     label: '歌单',
     path: '/sheet'
   }];
+
+  loadPercent = 0;
 
   searchResult: SearchResult;
   wyRememberLogin: LoginParams;
@@ -79,8 +81,23 @@ export class AppComponent {
       this.wyRememberLogin = JSON.parse(wyRememberLogin);
     }
     this.listenStates();
+
+    this.router.events.pipe(filter(evt => evt instanceof NavigationStart)).subscribe(() => {
+      this.loadPercent = 0;
+      this.setTitle();
+    });
+    
     this.navEnd = <Observable<NavigationEnd>>this.router.events.pipe(filter(evt => evt instanceof NavigationEnd));
-    this.setTitle();
+    this.setLoadingBar();
+  }
+
+  private setLoadingBar() {
+    interval(100).pipe(takeUntil(this.navEnd)).subscribe(() => {
+      this.loadPercent = Math.max(95, ++this.loadPercent);
+    });
+    this.navEnd.subscribe(() => {
+      this.loadPercent = 100;
+    });
   }
 
   private setTitle() {

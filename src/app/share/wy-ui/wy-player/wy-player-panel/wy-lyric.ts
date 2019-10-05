@@ -1,10 +1,10 @@
 import { Lyric } from '../../../../services/data-types/common.types';
 import { from, zip, Subject, Subscription, timer } from 'rxjs';
 import { skip } from 'rxjs/internal/operators';
-// [00:34.940]  [00:34]
+// [00:34.940]  [00:34] [0:34]
 // const timeExp = /\[(\d{2}):(\d{2})\.(\d{2,3})\]/;
 // const timeExp = /\[(\d{2}):(\d{2})(\.\d{2,3})?\]/;
-const timeExp = /\[(\d{2}):(\d{2})(?:\.(\d{2,3}))?\]/;
+const timeExp = /\[(\d{1,2}):(\d{2})(?:\.(\d{2,3}))?\]/;
 
 
 export interface BaseLyricLine {
@@ -68,7 +68,7 @@ export class WyLyric {
     }else {
       tempArr = [tlines, lines];
     }
-
+    
     const first = timeExp.exec(tempArr[1][0])[0];
 
     const skipIndex = tempArr[0].findIndex(item => {
