@@ -11,7 +11,7 @@ export const WINDOW = new InjectionToken('WindowToken');
 
   ],
   providers: [
-    { provide: API_CONFIG, useValue: 'http://localhost:3000/' },
+    { provide: API_CONFIG, useValue: '/api/' },
     {
       provide: WINDOW,
       useFactory(platformId: object): Window | object {

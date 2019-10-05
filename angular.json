@@ -91,7 +91,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "ng-wyy:build"
+            "browserTarget": "ng-wyy:build",
+            "proxyConfig": "proxyconfig.json"
           },
           "configurations": {
             "production": {
