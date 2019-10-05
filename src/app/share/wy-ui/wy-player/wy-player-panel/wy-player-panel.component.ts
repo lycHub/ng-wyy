@@ -60,7 +60,6 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
 
     if (changes.currentSong) {
       if (this.currentSong) {
-        console.log('currentSong :', this.currentSong);
         this.updateCurrentIndex();
         this.updateLyric();
         if (this.show) {
@@ -74,7 +73,6 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
 
     if (changes.show) {
       if (!changes.show.firstChange && this.show) {
-        // console.log('wyScroll :', this.wyScroll);
         this.wyScroll.first.refreshScroll();
         this.wyScroll.last.refreshScroll();
         timer(80).subscribe(() => {
@@ -97,10 +95,8 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
   private updateLyric() {
     this.resetLyric();
     this.songServe.getLyric(this.currentSong.id).subscribe(res => {
-      // console.log('res :', res);
       this.lyric = new WyLyric(res);
       this.currentLyric = this.lyric.lines;
-      // console.log('currentLyric :', this.currentLyric);
       this.startLine = res.tlyric ? 1 : 3;
       this.handleLyric();
       this.wyScroll.last.scrollTo(0, 0);
@@ -116,7 +112,6 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
     this.lyric.handler.subscribe(({ lineNum }) => {
       if (!this.lyricRefs) {
         this.lyricRefs = this.wyScroll.last.el.nativeElement.querySelectorAll('ul li');
-        // console.log('lyricRefs :', this.lyricRefs);
       }
 
 
@@ -159,8 +154,6 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
       const currentLi = songListRefs[this.currentIndex || 0] as HTMLElement;
       const offsetTop = currentLi.offsetTop;
       const offsetHeight = currentLi.offsetHeight;
-      console.log('scrollY :', this.scrollY);
-      console.log('offsetTop :', offsetTop);
       if (((offsetTop - Math.abs(this.scrollY)) > offsetHeight * 5) || (offsetTop < Math.abs(this.scrollY))) {
         this.wyScroll.first.scrollToElement(currentLi, speed, false, false);
       }

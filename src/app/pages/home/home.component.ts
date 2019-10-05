@@ -43,7 +43,6 @@ export class HomeComponent implements OnInit {
       this.singers = singers;
     });
     this.store$.pipe(select('member'), select(getUserId)).subscribe(id => {
-      console.log('id :', id);
       if (id) {
         this.getUserDetail(id);
       } else {

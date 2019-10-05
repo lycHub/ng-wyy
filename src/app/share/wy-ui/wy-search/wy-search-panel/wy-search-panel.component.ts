@@ -16,7 +16,6 @@ export class WySearchPanelComponent implements OnInit {
 
   // 跳转
   toInfo(path: [string, number]) {
-    console.log('toInfo :', path);
     if (path[1]) {
       this.router.navigate(path);
     }

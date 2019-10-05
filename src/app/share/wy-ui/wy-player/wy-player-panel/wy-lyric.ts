@@ -53,7 +53,6 @@ export class WyLyric {
   private generLyric() {
     const lines = this.lrc.lyric.split('\n');
     lines.forEach(line => this.makeLine(line));
-    // console.log('lines :', this.lines);
   }
 
   private generTLyric() {
@@ -83,7 +82,6 @@ export class WyLyric {
     if (skipItems.length) {
       skipItems.forEach(line => this.makeLine(line));
     }
-    // console.log('this.lines :', this.lines);
 
     let zipLines$;
     if (moreLine > 0) {
@@ -91,14 +89,12 @@ export class WyLyric {
     } else {
       zipLines$ = zip(from(lines), from(tlines).pipe(skip(_skip)));
     }
-    // zipLines$.subscribe(([line, tline]))
     zipLines$.subscribe(([line, tline]) => this.makeLine(line, tline));
   }
 
 
   private makeLine(line: string, tline = '') {
     const result = timeExp.exec(line);
-    // console.log('result :', result);
     if (result) {
       const txt = line.replace(timeExp, '').trim();
       const txtCn = tline ? tline.replace(timeExp, '').trim() : '';

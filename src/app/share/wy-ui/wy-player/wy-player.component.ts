@@ -149,7 +149,6 @@ export class WyPlayerComponent implements OnInit {
   }
 
   private watchPlayMode(mode: PlayMode) {
-    console.log('mode :', mode);
     this.currentMode = mode;
     if (this.songList) {
       let list = this.songList.slice();
@@ -390,7 +389,6 @@ export class WyPlayerComponent implements OnInit {
 
   // 跳转
   toInfo(path: [string, number]) {
-    console.log('toInfo :', path);
     if (path[1]) {
       this.showVolumnPanel = false;
       this.showPanel = false;

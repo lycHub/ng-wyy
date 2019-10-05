@@ -61,7 +61,6 @@ export class SheetInfoComponent implements OnInit, OnDestroy {
     this.store$
     .pipe(select('player'), select(getCurrentSong), takeUntil(this.destroy$))
     .subscribe(song => {
-      console.log('song :', song);
       this.currentSong = song;
       if (song) {
         this.currentIndex = findIndex(this.sheetInfo.tracks, song);
@@ -131,7 +130,6 @@ export class SheetInfoComponent implements OnInit, OnDestroy {
 
   // 收藏歌单
   onLikeSheet(id: string) {
-    console.log('id :', id);
     this.memberServe.likeSheet(id).subscribe(() => {
       this.alertMessage('success', '收藏成功');
     }, error => {

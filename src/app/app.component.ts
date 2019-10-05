@@ -163,7 +163,6 @@ export class AppComponent {
   }
 
   private watchShareInfo(info: ShareInfo) {
-    console.log('info :', info);
     if (info) {
       if (this.user) {
         this.shareInfo = info;
@@ -213,11 +212,9 @@ export class AppComponent {
 
 
   onSearch(keywords: string) {
-    console.log('keywords :', keywords);
     if (keywords) {
       this.searchServe.search(keywords).subscribe(res => {
         this.searchResult = this.highlightKeyWords(keywords, res);
-        console.log('searchResult :', this.searchResult);
       });
     } else {
       this.searchResult = {};
@@ -282,7 +279,6 @@ export class AppComponent {
 
   // 收藏歌曲
   onLikeSong(args: LikeSongParams) {
-    console.log('onLikeSong :', args);
     this.memberServe.likeSong(args).subscribe(() => {
       this.closeModal();
       this.alertMessage('success', '收藏成功');
@@ -293,7 +289,6 @@ export class AppComponent {
 
   // 新建歌单
   onCreateSheet(sheetName: string) {
-    console.log('sheetName :', sheetName);
     this.memberServe.createSheet(sheetName).subscribe(pid => {
       this.onLikeSong({ pid, tracks: this.likeId });
     }, error => {

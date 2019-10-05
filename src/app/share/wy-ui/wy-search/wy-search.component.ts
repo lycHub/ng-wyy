@@ -33,7 +33,6 @@ export class WySearchComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   ngAfterViewInit() {
-    console.log(' nzInput:', this.nzInput.nativeElement);
     fromEvent(this.nzInput.nativeElement, 'input')
     .pipe(debounceTime(300), distinctUntilChanged(), pluck('target', 'value'))
     .subscribe((value: string) => {

@@ -124,7 +124,6 @@ export class BatchActionsService {
     if (modalType) {
       this.store$.dispatch(SetModalType({ modalType }));
     }
-    console.log('modalVisible :', modalVisible);
     this.store$.dispatch(SetModalVisible({ modalVisible }));
     if (!modalVisible) {
       timer(500).subscribe(() => this.store$.dispatch(SetModalType({ modalType: ModalTypes.Default })));

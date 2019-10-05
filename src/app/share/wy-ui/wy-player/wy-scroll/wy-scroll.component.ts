@@ -56,7 +56,6 @@ export class WyScrollComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   private refresh() {
-    console.log('refresh');
     this.bs.refresh();
   }
 
