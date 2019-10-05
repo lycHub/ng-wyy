@@ -12,7 +12,7 @@ export enum CurrentActions {
   Other
 }
 
-export type PlayState = {
+export interface PlayState {
   // 播放状态
   playing: boolean;
 
@@ -40,7 +40,7 @@ export const initialState: PlayState = {
   playMode: { type: 'loop', label: '循环' },
   currentIndex: -1,
   currentAction: CurrentActions.Other
-}
+};
 
 const reducer = createReducer(
   initialState,

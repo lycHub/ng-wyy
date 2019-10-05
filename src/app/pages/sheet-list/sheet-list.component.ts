@@ -15,7 +15,7 @@ export class SheetListComponent implements OnInit {
     order: 'hot',
     offset: 1,
     limit: 35
-  }
+  };
   sheets: SheetList;
   orderValue = 'hot';
   constructor(
@@ -55,5 +55,5 @@ export class SheetListComponent implements OnInit {
   toInfo(id: number) {
     this.router.navigate(['/sheetInfo', id]);
   }
- 
+
 }

@@ -26,7 +26,7 @@ export class WyLayerModalComponent implements OnInit, AfterViewInit, OnChanges {
     share: '分享',
     like: '收藏',
     default: ''
-  }
+  };
 
   showModal = 'hide';
   @Input() visible = false;
@@ -64,7 +64,7 @@ export class WyLayerModalComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['visible'] && !changes['visible'].firstChange) {
+    if (changes.visible && !changes.visible.firstChange) {
       this.handleVisibleChange(this.visible);
     }
   }
@@ -130,12 +130,12 @@ export class WyLayerModalComponent implements OnInit, AfterViewInit, OnChanges {
     return {
       w: dom.offsetWidth,
       h: dom.offsetHeight
-    }
+    };
   }
   private getWIndowSize() {
     return {
       w: this.win.innerWidth || this.doc.documentElement.clientWidth || this.doc.body.offsetWidth,
       h: this.win.innerHeight || this.doc.documentElement.clientHeight || this.doc.body.offsetHeight
-    }
+    };
   }
 }

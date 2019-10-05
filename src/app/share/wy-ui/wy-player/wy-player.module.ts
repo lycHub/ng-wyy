@@ -23,7 +23,7 @@ import { NzToolTipModule } from 'ng-zorro-antd';
     CommonModule,
     FormsModule,
     WySliderModule,
-    NzToolTipModule 
+    NzToolTipModule
   ],
   exports: [WyPlayerComponent, FormatTimePipe, ClickoutsideDirective]
 })

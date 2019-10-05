@@ -23,15 +23,15 @@ export class BatchActionsService {
   // 播放列表
   selectPlayList({ list, index }: { list: Song[], index: number }) {
     this.store$.dispatch(SetSongList({ songList: list }));
-      let trueIndex = index;
-      let trueList = list.slice();
-      if (this.playerState.playMode.type === 'random') {
+    let trueIndex = index;
+    let trueList = list.slice();
+    if (this.playerState.playMode.type === 'random') {
         trueList = shuffle(list || []);
         trueIndex = findIndex(trueList, list[trueIndex]);
       }
-      this.store$.dispatch(SetPlayList({ playList: trueList }));
-      this.store$.dispatch(SetCurrentIndex({ currentIndex: trueIndex }));
-      this.store$.dispatch(SetCurrentAction({ currentAction: CurrentActions.Play }));
+    this.store$.dispatch(SetPlayList({ playList: trueList }));
+    this.store$.dispatch(SetCurrentIndex({ currentIndex: trueIndex }));
+    this.store$.dispatch(SetCurrentAction({ currentAction: CurrentActions.Play }));
   }
 
 
@@ -46,7 +46,7 @@ export class BatchActionsService {
       if (isPlay) {
         insertIndex = pIndex;
       }
-    }else {
+    } else {
       songList.push(song);
       playList.push(song);
       if (isPlay) {
@@ -59,7 +59,7 @@ export class BatchActionsService {
     if (insertIndex !== this.playerState.currentIndex) {
       this.store$.dispatch(SetCurrentIndex({ currentIndex: insertIndex }));
       this.store$.dispatch(SetCurrentAction({ currentAction: CurrentActions.Play }));
-    }else {
+    } else {
       this.store$.dispatch(SetCurrentAction({ currentAction: CurrentActions.Add }));
     }
   }

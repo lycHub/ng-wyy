@@ -7,10 +7,10 @@ import { map, pluck, switchMap } from 'rxjs/internal/operators';
 import { SongService } from './song.service';
 import queryString from 'query-string';
 
-export type SheetParams = {
+export interface SheetParams {
   offset: number;
   limit: number;
-  order: 'new' | 'hot',
+  order: 'new' | 'hot';
   cat: string;
 }
 

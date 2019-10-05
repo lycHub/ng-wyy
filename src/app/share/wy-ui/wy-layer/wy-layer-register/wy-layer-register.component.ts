@@ -42,7 +42,7 @@ export class WyLayerRegisterComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['visible'] && !changes['visible'].firstChange) {
+    if (changes.visible && !changes.visible.firstChange) {
       this.formModel.markAllAsTouched();
       if (!this.visible) {
         this.showCode = false;

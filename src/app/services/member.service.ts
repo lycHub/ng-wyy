@@ -5,7 +5,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { SampleBack, SongSheet } from './data-types/common.types';
 import { map } from 'rxjs/internal/operators';
 import { LoginParams } from '../share/wy-ui/wy-layer/wy-layer-login/wy-layer-login.component';
-import { User, Signin, UserRecord, recordVal, UserSheet } from './data-types/member.type';
+import { User, Signin, UserRecord, RecordVal, UserSheet } from './data-types/member.type';
 import queryString from 'query-string';
 
 export enum RecordType {
@@ -13,13 +13,13 @@ export enum RecordType {
   weekData
 }
 
-export type LikeSongParams = {
+export interface LikeSongParams {
   pid: string;
   tracks: string;
 }
 
 
-export type ShareParams = {
+export interface ShareParams {
   id: string;
   msg: string;
   type: string;
@@ -58,7 +58,7 @@ export class MemberService {
   }
 
   // 听歌记录
-  getUserRecord(uid: string, type = RecordType.weekData): Observable<recordVal[]> {
+  getUserRecord(uid: string, type = RecordType.weekData): Observable<RecordVal[]> {
     const params = new HttpParams({ fromString: queryString.stringify({ uid, type }) });
     return this.http.get(this.uri + 'user/record', { params })
     .pipe(map((res: UserRecord) => res[RecordType[type]]));

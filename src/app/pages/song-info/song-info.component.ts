@@ -25,7 +25,7 @@ export class SongInfoComponent implements OnInit, OnDestroy {
     isExpand: false,
     label: '展开',
     iconCls: 'down'
-  }
+  };
 
   currentSong: Song;
   private destroy$ = new Subject<void>();
@@ -58,7 +58,7 @@ export class SongInfoComponent implements OnInit, OnDestroy {
     if (this.controlLyric.isExpand) {
       this.controlLyric.label = '收起';
       this.controlLyric.iconCls = 'up';
-    }else {
+    } else {
       this.controlLyric.label = '展开';
       this.controlLyric.iconCls = 'down';
     }
@@ -70,7 +70,7 @@ export class SongInfoComponent implements OnInit, OnDestroy {
       .subscribe(list => {
         if (list.length) {
           this.batchActionServe.insertSong(list[0], isPlay);
-        }else {
+        } else {
           this.nzMessageServe.create('warning', '无url!');
         }
       });

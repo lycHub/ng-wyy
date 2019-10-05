@@ -14,13 +14,13 @@ export enum ModalTypes {
 }
 
 
-export type ShareInfo = {
+export interface ShareInfo {
   id: string;
   type: string;
   txt: string;
 }
 
-export type MemberState = {
+export interface MemberState {
   modalVisible: boolean;
   modalType: ModalTypes;
   userId: string;
@@ -34,7 +34,7 @@ export const initialState: MemberState = {
   modalType: ModalTypes.Default,
   userId: '',
   likeId: ''
-}
+};
 
 const reducer = createReducer(
   initialState,

@@ -5,14 +5,14 @@ import { DOCUMENT } from '@angular/common';
   selector: '[appClickoutside]'
 })
 export class ClickoutsideDirective implements OnChanges {
-  
+
   private handleClick: () => void;
   @Input() bindFlag = false;
   @Output() onClickOutSide = new EventEmitter<void>();
   constructor(private el: ElementRef, private rd: Renderer2, @Inject(DOCUMENT) private doc: Document) {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['bindFlag'] && !changes['bindFlag'].firstChange) {
+    if (changes.bindFlag && !changes.bindFlag.firstChange) {
       if (this.bindFlag) {
         this.handleClick = this.rd.listen(this.doc, 'click', evt => {
           const target = evt.target;
@@ -21,7 +21,7 @@ export class ClickoutsideDirective implements OnChanges {
             this.onClickOutSide.emit(target);
           }
         });
-      }else {
+      } else {
         this.handleClick();
       }
     }

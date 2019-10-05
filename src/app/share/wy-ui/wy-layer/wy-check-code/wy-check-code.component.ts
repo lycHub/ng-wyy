@@ -25,7 +25,7 @@ export class WyCheckCodeComponent implements OnInit, OnChanges {
   get phone() {
     return this.phoneHideStr;
   }
-  
+
   @Output() onCheckCode = new EventEmitter<string>();
   @Output() onReatSendCode = new EventEmitter<string>();
   @Output() onCheckExist = new EventEmitter<void>();
@@ -39,18 +39,18 @@ export class WyCheckCodeComponent implements OnInit, OnChanges {
       if (status === 'VALID') {
         this.onCheckCode.emit(this.formModel.value.code);
       }
-    })
+    });
   }
 
   ngOnInit() {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['timing']) {
+    if (changes.timing) {
       this.showRepeatBtn = this.timing <= 0;
     }
-    
-    if (changes['codePass'] && !changes['codePass'].firstChange) {
+
+    if (changes.codePass && !changes.codePass.firstChange) {
       this.showErrorTip = !this.codePass;
     }
   }

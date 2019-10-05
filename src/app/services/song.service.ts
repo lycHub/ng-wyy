@@ -20,7 +20,7 @@ export class SongService {
     .pipe(map((res: { data: SongUrl[] }) => res.data));
   }
 
-  
+
   getSongList(songs: Song | Song[]): Observable<Song[]> {
     const songArr = Array.isArray(songs) ? songs.slice() : [songs];
     const ids = songArr.map(item => item.id).join(',');
@@ -31,7 +31,7 @@ export class SongService {
   private generateSongList(songs: Song[], urls: SongUrl[]): Song[] {
     const result = [];
     songs.forEach(song => {
-      const url = urls.find(url => url.id === song.id).url;
+      const url = urls.find(songUrl => songUrl.id === song.id).url;
       if (url) {
         result.push({ ...song, url });
       }
@@ -58,12 +58,12 @@ export class SongService {
           return {
             lyric: res.lrc.lyric,
             tlyric: res.tlyric.lyric,
-          }
-        }catch(err) {
+          };
+        } catch (err) {
           return {
             lyric: '',
             tlyric: '',
-          }
+          };
         }
     }));
   }

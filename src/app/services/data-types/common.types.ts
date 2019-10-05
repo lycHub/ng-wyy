@@ -6,14 +6,14 @@ export interface SampleBack extends AnyJson {
   code: number;
 }
 
-export type Banner = {
+export interface Banner {
   targetId: number;
   url: string;
   imageUrl: string;
 }
 
 
-export type HotTag = {
+export interface HotTag {
   id: number;
   name: string;
   position: number;
@@ -23,7 +23,7 @@ export type HotTag = {
 
 
 // 歌手
-export type Singer = {
+export interface Singer {
   id: number;
   name: string;
   alias: string[];
@@ -32,14 +32,14 @@ export type Singer = {
 }
 
 
-export type SingerDetail = {
+export interface SingerDetail {
   artist: Singer;
   hotSongs: Song[];
 }
 
 
 // 歌曲
-export type Song = {
+export interface Song {
   id: number;
   name: string;
   url: string;
@@ -50,14 +50,14 @@ export type Song = {
 
 
 // 播放地址
-export type SongUrl = {
+export interface SongUrl {
   id: number;
   url: string;
 }
 
 
 // 歌单
-export type SongSheet = {
+export interface SongSheet {
   id: number;
   userId: number;
   name: string;
@@ -78,20 +78,20 @@ export type SongSheet = {
 
 
 // 歌词
-export type Lyric = {
+export interface Lyric {
   lyric: string;
   tlyric: string;
 }
 
 
 // 歌单列表
-export type SheetList = {
+export interface SheetList {
   playlists: SongSheet[];
   total: number;
 }
 
 
-export type SearchResult = {
+export interface SearchResult {
   artists?: Singer[];
   playlists?: SongSheet[];
   songs?: Song[];

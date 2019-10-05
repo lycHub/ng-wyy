@@ -7,7 +7,7 @@ import { Singer, SingerDetail } from './data-types/common.types';
 import queryString from 'query-string';
 
 
-type SingerParams = {
+interface SingerParams {
   offset: number;
   limit: number;
   cat?: string;
@@ -17,7 +17,7 @@ const defaultParams: SingerParams = {
   offset: 0,
   limit: 9,
   cat: '5001'
-}
+};
 
 @Injectable({
   providedIn: ServicesModule

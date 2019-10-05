@@ -54,7 +54,7 @@ export class WyPlayerComponent implements OnInit {
   controlTooltip = {
     title: '',
     show: false
-  }
+  };
 
   // 是否正在动画
   animating = false;
@@ -159,7 +159,7 @@ export class WyPlayerComponent implements OnInit {
       this.updateCurrentIndex(list, this.currentSong);
       this.store$.dispatch(SetPlayList({ playList: list }));
     }
-    
+
   }
 
   private watchCurrentSong(song: Song) {
@@ -175,7 +175,7 @@ export class WyPlayerComponent implements OnInit {
       this.controlTooltip.title = title;
       if (this.showPlayer === 'hide') {
         this.togglePlayer('show');
-      }else{
+      } else {
         this.showToolTip();
       }
     }
@@ -195,7 +195,7 @@ export class WyPlayerComponent implements OnInit {
       this.controlTooltip = {
         title: '',
         show: false
-      }
+      };
     });
   }
 
@@ -207,7 +207,7 @@ export class WyPlayerComponent implements OnInit {
 
   // 改变模式
   changeMode() {
-    this.store$.dispatch(SetPlayMode({ playMode: modeTypes[++this.modeCount % 3] }))
+    this.store$.dispatch(SetPlayMode({ playMode: modeTypes[++this.modeCount % 3] }));
   }
 
   onClickOutSide(target: HTMLElement) {
@@ -248,7 +248,7 @@ export class WyPlayerComponent implements OnInit {
   }
 
 
-  
+
   togglePanel(type: string) {
     this[type] = !this[type];
     this.bindFlag = (this.showVolumnPanel || this.showPanel);
@@ -269,12 +269,12 @@ export class WyPlayerComponent implements OnInit {
       if (this.playList.length) {
         this.updateIndex(0);
       }
-    }else {
+    } else {
       if (this.songReady) {
         this.playing = !this.playing;
         if (this.playing) {
           this.audioEl.play();
-        }else {
+        } else {
           this.audioEl.pause();
         }
       }
@@ -284,10 +284,10 @@ export class WyPlayerComponent implements OnInit {
 
   // 上一曲
   onPrev(index: number) {
-    if (!this.songReady) return;
+    if (!this.songReady) { return; }
     if (this.playList.length === 1) {
       this.loop();
-    }else {
+    } else {
       const newIndex = index <= 0 ? this.playList.length - 1 : index;
       this.updateIndex(newIndex);
     }
@@ -296,10 +296,10 @@ export class WyPlayerComponent implements OnInit {
 
   // 下一曲
   onNext(index: number) {
-    if (!this.songReady) return;
+    if (!this.songReady) { return; }
     if (this.playList.length === 1) {
       this.loop();
-    }else {
+    } else {
       const newIndex = index >= this.playList.length ? 0 : index;
       this.updateIndex(newIndex);
     }
@@ -311,7 +311,7 @@ export class WyPlayerComponent implements OnInit {
     this.playing = false;
     if (this.currentMode.type === 'singleLoop') {
       this.loop();
-    }else {
+    } else {
       this.onNext(this.currentIndex + 1);
     }
   }
@@ -347,7 +347,7 @@ export class WyPlayerComponent implements OnInit {
 
 
   onTimeUpdate(e: Event) {
-    this.currentTime = (<HTMLAudioElement>e.target).currentTime;
+    this.currentTime = (e.target as HTMLAudioElement).currentTime;
     this.percent = (this.currentTime / this.duration) * 100;
     const buffered = this.audioEl.buffered;
     if (buffered.length && this.bufferPercent < 100) {

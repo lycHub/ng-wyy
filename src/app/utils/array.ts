@@ -11,7 +11,7 @@ export function shuffle<T>(arr: T[]): T[] {
 
     // 0和i 之间的一个随机数
     const j = getRandomInt([0, i]);
-    
+
     [result[i], result[j]] = [result[j], result[i]];
   }
   return result;

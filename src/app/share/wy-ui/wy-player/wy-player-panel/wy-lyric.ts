@@ -45,7 +45,7 @@ export class WyLyric {
   private init() {
     if (this.lrc.tlyric) {
       this.generTLyric();
-    }else {
+    } else {
       this.generLyric();
     }
   }
@@ -65,10 +65,10 @@ export class WyLyric {
     let tempArr = [];
     if (moreLine >= 0) {
       tempArr = [lines, tlines];
-    }else {
+    } else {
       tempArr = [tlines, lines];
     }
-    
+
     const first = timeExp.exec(tempArr[1][0])[0];
 
     const skipIndex = tempArr[0].findIndex(item => {
@@ -78,7 +78,7 @@ export class WyLyric {
       }
     });
 
-    const _skip= skipIndex === -1 ? 0 : skipIndex;
+    const _skip = skipIndex === -1 ? 0 : skipIndex;
     const skipItems = tempArr[0].slice(0, _skip);
     if (skipItems.length) {
       skipItems.forEach(line => this.makeLine(line));
@@ -88,7 +88,7 @@ export class WyLyric {
     let zipLines$;
     if (moreLine > 0) {
       zipLines$ = zip(from(lines).pipe(skip(_skip)), from(tlines));
-    }else {
+    } else {
       zipLines$ = zip(from(lines), from(tlines).pipe(skip(_skip)));
     }
     // zipLines$.subscribe(([line, tline]))
@@ -113,7 +113,7 @@ export class WyLyric {
   }
 
   play(startTime = 0, skip = false) {
-    if (!this.lines.length) return;
+    if (!this.lines.length) { return; }
     if (!this.playing) {
       this.playing = true;
     }
@@ -123,7 +123,7 @@ export class WyLyric {
     if (!skip) {
       this.callHandler(this.curNum - 1);
     }
-    
+
     if (this.curNum < this.lines.length) {
       this.clearTimer();
       this.playReset();
@@ -132,7 +132,7 @@ export class WyLyric {
   }
 
   private playReset() {
-    let line = this.lines[this.curNum];
+    const line = this.lines[this.curNum];
     const delay = line.time - (Date.now() - this.startStamp);
     this.timer$ = timer(delay).subscribe(() => {
       this.callHandler(this.curNum++);
@@ -169,7 +169,7 @@ export class WyLyric {
     if (playing) {
       const startTime = (this.pauseStamp || now) - (this.startStamp || now);
       this.play(startTime, true);
-    }else {
+    } else {
       this.stop();
       this.pauseStamp = now;
     }

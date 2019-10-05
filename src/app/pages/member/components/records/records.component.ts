@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter } from '@angular/core';
-import { recordVal } from '../../../../services/data-types/member.type';
+import { RecordVal } from '../../../../services/data-types/member.type';
 import { RecordType } from '../../../../services/member.service';
 import { Song } from 'src/app/services/data-types/common.types';
 
@@ -10,10 +10,11 @@ import { Song } from 'src/app/services/data-types/common.types';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RecordsComponent implements OnInit {
-  @Input() records: recordVal[];
+  @Input() records: RecordVal[];
   @Input() recordType = RecordType.weekData;
   @Input() listenSongs = 0;
   @Input() currentIndex = -1;
+
 
   @Output() onChangeType = new EventEmitter<RecordType>();
   @Output() onAddSong = new EventEmitter<[Song, boolean]>();

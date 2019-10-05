@@ -34,7 +34,7 @@ export class WySearchComponent implements OnInit, AfterViewInit, OnChanges {
 
   ngAfterViewInit() {
     console.log(' nzInput:', this.nzInput.nativeElement);
-    fromEvent(this.nzInput.nativeElement,'input')
+    fromEvent(this.nzInput.nativeElement, 'input')
     .pipe(debounceTime(300), distinctUntilChanged(), pluck('target', 'value'))
     .subscribe((value: string) => {
       this.onSearch.emit(value);
@@ -42,10 +42,10 @@ export class WySearchComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['searchResult'] && !changes['searchResult'].firstChange) {
+    if (changes.searchResult && !changes.searchResult.firstChange) {
       if (!isEmptyObject(this.searchResult)) {
         this.showOverlayPanel();
-      }else{
+      } else {
         this.showOverlayPanel();
       }
     }

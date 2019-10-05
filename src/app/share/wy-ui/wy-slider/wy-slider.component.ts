@@ -147,7 +147,7 @@ export class WySliderComponent implements OnInit, OnDestroy, ControlValueAccesso
 
   private setValue(value: SliderValue, needCheck = false) {
     if (needCheck) {
-      if (this.isDragging) return;
+      if (this.isDragging) { return; }
       this.value = this.formatValue(value);
       this.updateTrackAndHandles();
     } else if (!this.valuesEqual(this.value, value)) {
@@ -155,7 +155,7 @@ export class WySliderComponent implements OnInit, OnDestroy, ControlValueAccesso
       this.updateTrackAndHandles();
       this.onValueChange(this.value);
     }
-    
+
   }
 
 
@@ -163,7 +163,7 @@ export class WySliderComponent implements OnInit, OnDestroy, ControlValueAccesso
     let res = value;
     if (this.assertValueValid(value)) {
       res = this.wyMin;
-    }else {
+    } else {
       res = limitNumberInRange(value, this.wyMin, this.wyMax);
     }
     return res;
@@ -197,7 +197,7 @@ export class WySliderComponent implements OnInit, OnDestroy, ControlValueAccesso
     this.isDragging = movable;
     if (movable) {
       this.subscribeDrag(['move', 'end']);
-    }else {
+    } else {
       this.unsubscribeDrag(['move', 'end']);
     }
   }
@@ -227,8 +227,8 @@ export class WySliderComponent implements OnInit, OnDestroy, ControlValueAccesso
   }
 
 
-  private onValueChange(value: SliderValue): void {};
-  private onTouched(): void {};
+  private onValueChange(value: SliderValue): void {}
+  private onTouched(): void {}
 
   writeValue(value: SliderValue): void {
     this.setValue(value, true);

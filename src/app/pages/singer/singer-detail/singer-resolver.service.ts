@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
 import { Observable, forkJoin } from 'rxjs';
 import { SingerDetail, Singer } from '../../../services/data-types/common.types';
