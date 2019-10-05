@@ -1,32 +1,28 @@
 <div class="m-layer"
-[@showHide]="showModal"
-#modalContainer
-cdkDragBoundary=".cdk-overlay-container"
-cdkDrag>
-    <div class="zbar" cdkDragHandle>
-      <div class="zttl f-thide">{{modalTitle[currentModal]}}</div>
-    </div>
-    <ng-container [ngSwitch]="currentModal" #bodyContainer>
+ #modalContainer
+ [@showHide]="showModal"
+ cdkDrag
+ cdkDragBoundary=".cdk-overlay-container">
+  <div class="zbar" cdkDragHandle>
+    <div class="zttl f-thide">{{modalTitle[currentModalType]}}</div>
+  </div>
+  <ng-container [ngSwitch]="currentModalType">
       <ng-container *ngSwitchCase="'loginByPhone'">
         <ng-content select="[name=login]"></ng-content>
       </ng-container>
       <ng-container *ngSwitchCase="'register'">
         <ng-content select="[name=register]"></ng-content>
       </ng-container>
-      <ng-container *ngSwitchCase="'share'">
-        <ng-content select="[name=share]"></ng-content>
-      </ng-container>
       <ng-container *ngSwitchCase="'like'">
         <ng-content select="[name=like]"></ng-content>
+      </ng-container>
+      <ng-container *ngSwitchCase="'share'">
+        <ng-content select="[name=share]"></ng-content>
       </ng-container>
       <ng-container *ngSwitchDefault>
         <ng-content></ng-content>
       </ng-container>
     </ng-container>
-    
-    
-
-    <div class="zcls" title="关闭弹窗" (mousedown)="hide()"></div>
-    <nz-spin nzTip="loading..." class="spin" *ngIf="showSpin"></nz-spin>
-  </div>
- 
+  <div class="zcls" title="关闭" (click)="hide()"></div>
+  <nz-spin nzTip="loading..." class="spin" *ngIf="showSpin"></nz-spin>
+</div>

@@ -1,8 +1,10 @@
-import {Pipe, PipeTransform} from '@angular/core';
+import { Pipe, PipeTransform } from '@angular/core';
 
-@Pipe({name: 'FormatTime'})
-export class FormatTimePipe implements  PipeTransform{
-  transform(time: number): string {
+@Pipe({
+  name: 'formatTime'
+})
+export class FormatTimePipe implements PipeTransform {
+  transform(time: number): any {
     if (time) {
       const temp = time | 0;
       const minute = temp / 60 | 0;
@@ -12,4 +14,5 @@ export class FormatTimePipe implements  PipeTransform{
       return '00:00';
     }
   }
+
 }

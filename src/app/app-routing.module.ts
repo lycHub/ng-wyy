@@ -1,5 +1,11 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { HomeModule } from './pages/home/home.module';
+import { SheetListModule } from './pages/sheet-list/sheet-list.module';
+import { SheetInfoModule } from './pages/sheet-info/sheet-info.module';
+import { SongInfoModule } from './pages/song-info/song-info.module';
+
+
 
 const routes: Routes = [
   {
@@ -7,12 +13,8 @@ const routes: Routes = [
     loadChildren: () => import('./pages/home/home.module').then(mod => mod.HomeModule)
   },
   {
-    path: 'singer/:id',
-    loadChildren: () => import('./pages/singer/singer.module').then(mod => mod.SingerModule)
-  },
-  {
     path: 'sheet',
-    loadChildren: () => import('./pages/sheet/sheet.module').then(mod => mod.SheetModule)
+    loadChildren: () => import('./pages/sheet-list/sheet-list.module').then(mod => mod.SheetListModule)
   },
   {
     path: 'sheetInfo/:id',
@@ -23,18 +25,15 @@ const routes: Routes = [
     loadChildren: () => import('./pages/song-info/song-info.module').then(mod => mod.SongInfoModule)
   },
   {
-    path: 'userCenter/:id',
-    loadChildren: () => import('./pages/user/user.module').then(mod => mod.UserModule)
+    path: 'member/:id',
+    loadChildren: () => import('./pages/member/member.module').then(mod => mod.MemberModule)
   },
   {
-    path: '',
-    redirectTo: '/home',
-    pathMatch: 'full'
+    path: 'singer/:id',
+    loadChildren: () => import('./pages/singer/singer.module').then(mod => mod.SingerModule)
   },
-  {
-    path: '**',
-    redirectTo: '/home'
-  }
+  { path: '', redirectTo: '/home', pathMatch: 'full' },
+  { path: '**', redirectTo: '/home' }
 ];
 
 @NgModule({

@@ -1,23 +1,21 @@
 <div class="play-panel" [class.show]="show">
   <div class="hd">
     <div class="hdc">
-      <h4>播放列表(<span>{{songList.length}}</span>)</h4>
+      <h4>播放列表（<span>{{songList.length}}</span>）</h4>
       <div class="add-all">
-        <i class="icon" title="收藏全部"></i>
-        收藏全部
+        <i class="icon" title="收藏全部"></i>收藏全部
       </div>
       <span class="line"></span>
       <div class="clear-all" (click)="onClearSong.emit()">
-        <i class="icon trush" title="清除"></i>
-        清除
+        <i class="icon trush" title="清除"></i>清除
       </div>
       <p class="playing-name">{{currentSong?.name}}</p>
-      <i class="icon close" (click)="onClose.emit()">关闭</i>
+      <i class="icon close" (click)="onClose.emit()"></i>
     </div>
   </div>
 
   <div class="bd">
-    <img appImgDefault class="imgbg" src="//music.163.com/api/img/blur/109951163826278397" />
+    <img src="//music.163.com/api/img/blur/109951163826278397" class="imgbg">
     <div class="msk"></div>
     <app-wy-scroll class="list-wrap" [data]="songList" (onScrollEnd)="scrollY = $event">
       <ul>
@@ -25,30 +23,27 @@
           <i class="col arrow"></i>
           <div class="col name ellipsis">{{item.name}}</div>
           <div class="col icons">
-            <i class="ico like" title="收藏" (click)="onLikeSong.emit(item.id.toString())"></i>
-            <i class="ico share" title="分享" (click)="onShareSong.emit(item)"></i>
-            <i class="ico trush" title="删除" (click)="onDelete($event, item)"></i>
+            <i class="ico like" title="收藏" (click)="likeSong($event, item.id)"></i>
+            <i class="ico share" title="分享" (click)="shareSong($event, item)"></i>
+            <i class="ico trush" title="删除" data-act="delete" (click)="onDeleteSong.emit(item)"></i>
           </div>
           <div class="singers clearfix ellipsis">
-            <div class="singer-item" *ngFor="let item of item.ar; last as isLast">
-              <a class="col ellipsis" (click)="onToInfo.emit(['/singer', item.id])">{{item.name}}</a>
-              <span [hidden]="last || item.ar?.length <= 1">/</span>
+            <div class="singer-item" *ngFor="let singer of item.ar; last as isLast">
+              <a class="col ellipsis" (click)="toInfo($event, ['/singer', singer.id])">{{singer.name}}</a>
+              <span [hidden]="isLast">/</span>
             </div>
           </div>
-          
-          <div class="col duration">{{(item.dt / 1000) | FormatTime}}</div>
-          <div class="col link" (click)="onToInfo.emit(['/sheetInfo', item.al.id])"></div>
+          <div class="col duration">{{(item.dt / 1000) | formatTime}}</div>
+          <div class="col link" (click)="toInfo($event, ['/songInfo', item.id])"></div>
         </li>
       </ul>
     </app-wy-scroll>
 
-    <!--歌词-->
+
     <app-wy-scroll class="list-lyric" [data]="currentLyric">
       <ul>
-        <li *ngFor="let item of currentLyric; index as i" [class.current]="currentLineIndex === i">
-          {{item.txt}}
-          <br />
-          {{item.txtCn}}
+        <li *ngFor="let item of currentLyric; index as i" [class.current]="currentLineNum === i">
+          {{item.txt}} <br /> {{item.txtCn}}
         </li>
       </ul>
     </app-wy-scroll>

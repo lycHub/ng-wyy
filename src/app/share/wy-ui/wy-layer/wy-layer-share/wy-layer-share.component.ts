@@ -1,75 +1,48 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Store, select } from '@ngrx/store';
-import { AppStoreModule } from 'src/app/store';
-import { NzMessageService } from 'ng-zorro-antd';
-import { MemberService } from 'src/app/service/member.service';
-import { Observable, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-import { getShareParams } from 'src/app/store/selectors/member.selector';
-import { ShareParams, ModalTypes } from '../../../../store/reducers/member.reducer';
-import { MultipleReducersService } from 'src/app/store/multiple-reducers.service';
+import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import { ShareInfo } from '../../../../store/reducers/member.reducer';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { ShareParams } from 'src/app/services/member.service';
 
-const MaxMsg = 140;
+const MAX_MSG = 140;
 
 @Component({
   selector: 'app-wy-layer-share',
   templateUrl: './wy-layer-share.component.html',
-  styleUrls: ['./wy-layer-share.component.less']
+  styleUrls: ['./wy-layer-share.component.less'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class WyLayerShareComponent implements OnInit, OnDestroy {
-  msg = '';
-  surplusTxt = MaxMsg;
-  showAlert = false;
-  shareParams: ShareParams;
-  private appStore$: Observable<AppStoreModule>;
-  private destroy$ = new Subject<void>();
-  constructor(
-    private store$: Store<AppStoreModule>,
-    private messageServe: NzMessageService,
-    private memberServe: MemberService,
-    private multipleReducerServe: MultipleReducersService
-  ) {
-    this.appStore$ = this.store$.pipe(select('member'), takeUntil(this.destroy$));
-    this.appStore$.pipe(select(getShareParams)).subscribe(params => this.watchShareParams(params));
+export class WyLayerShareComponent implements OnInit, OnChanges {
+  @Input() shareInfo: ShareInfo;
+  @Input() visible = false;
+  @Output() onCancel = new EventEmitter<void>();
+  @Output() onShare = new EventEmitter<ShareParams>();
+  formModel: FormGroup;
+  surplusMsgCount = MAX_MSG;
+  constructor() {
+    this.formModel = new FormGroup({
+      msg: new FormControl('', Validators.maxLength(MAX_MSG))
+    });
+    this.formModel.get('msg').valueChanges.subscribe(msg => {
+      this.surplusMsgCount = MAX_MSG - msg.length;
+    });
   }
 
   ngOnInit() {
   }
 
-  private watchShareParams(params: ShareParams) {
-    this.shareParams = params;
-  }
-
-  onMsgChange(msg: string) {
-    this.surplusTxt = MaxMsg - msg.length;
-  }
-
-  onShare() {
-    if (this.surplusTxt < 0) {
-      this.showAlert = true;
-    }else{
-      this.memberServe.userShare(this.shareParams.id, this.msg, this.shareParams.type).subscribe(code => {
-        if (code === 200) {
-          this.alertMessage('success', '分享成功');
-          this.msg = '';
-          this.multipleReducerServe.controlModal(ModalTypes.Default, false);
-        }else{
-          this.alertMessage('error', '分享失败');
-        }
-      });
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['visible'] && !changes['visible'].firstChange) {
+      this.formModel.get('msg').markAsTouched();
     }
   }
 
-  private alertMessage(type: string, msg: string) {
-    this.messageServe.create(type, msg);
-  }
-
-  onCancel() {
-    this.multipleReducerServe.controlModal(ModalTypes.Default, false);
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+  onSubmit() {
+    if (this.formModel.valid) {
+      this.onShare.emit({
+        id: this.shareInfo.id,
+        msg: this.formModel.get('msg').value,
+        type: this.shareInfo.type
+      });
+    }
   }
 }

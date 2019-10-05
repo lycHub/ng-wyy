@@ -1,31 +1,26 @@
-import { Component, ChangeDetectionStrategy, Output, Input, EventEmitter } from '@angular/core';
-import { SongSheet } from 'src/app/service/data-modals/common.models';
+import { Component, OnInit, Input, ChangeDetectionStrategy, Output, EventEmitter } from '@angular/core';
+import { SongSheet } from '../../../services/data-types/common.types';
 
 @Component({
   selector: 'app-single-sheet',
-  template: `
-  <ng-container>
-    <a class="cover">
-      <img src="{{sheet.picUrl || sheet.coverImgUrl}}" alt="{{sheet.name}}" appImgDefault />
-      <div class="bottom">
-        <div class="num">
-          <i class="icon erji"></i>
-          <span>{{sheet.playCount | PlayCount}}</span>
-        </div>
-        <i class="icon play" (click)="play($event)"></i>
-      </div>
-    </a>
-    <span class="dec">{{sheet.name}}</span>
-  </ng-container>`,
+  templateUrl: './single-sheet.component.html',
   styleUrls: ['./single-sheet.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SingleSheetComponent {
+export class SingleSheetComponent implements OnInit {
   @Input() sheet: SongSheet;
   @Output() onPlay = new EventEmitter<number>();
   constructor() { }
-  play(evt: MouseEvent) {
+
+  ngOnInit() {
+  }
+
+  playSheet(evt: MouseEvent, id: number) {
     evt.stopPropagation();
-    this.onPlay.emit(this.sheet.id);
+    this.onPlay.emit(id);
+  }
+
+  get coverImg(): string {
+    return this.sheet.picUrl || this.sheet.coverImgUrl;
   }
 }

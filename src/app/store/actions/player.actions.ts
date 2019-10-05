@@ -1,11 +1,11 @@
 import { createAction, props } from '@ngrx/store';
-import {Song} from "../../service/data-modals/common.models";
-import { PlayMode } from 'src/app/share/wy-ui/wy-player/wy-player.component';
+import { Song } from '../../services/data-types/common.types';
+import { PlayMode } from '../../share/wy-ui/wy-player/player-type';
 import { CurrentActions } from '../reducers/player.reducer';
 
-export const SetPlayList = createAction('[Player] Set playList', props<{ list: Song[] }>());
-// export const SetPlaying = createAction('[Player] Set PlayIng', props<{ playing: boolean }>());
-export const SetSongList = createAction('[Player] Set SongList', props<{ list: Song[] }>());
-export const SetPlayMode = createAction('[Player] Set PlayMode', props<{ mode: PlayMode }>());
-export const SetCurrentIndex = createAction('[Player] Set CurrentIndex', props<{ index: number }>());
-export const SetCurrentAction = createAction('[Player] Set CurrentAction', props<{ action: CurrentActions }>());
+export const SetPlaying = createAction('[player] Set playing', props<{ playing: boolean }>());
+export const SetPlayList = createAction('[player] Set playList', props<{ playList: Song[] }>());
+export const SetSongList = createAction('[player] Set songList', props<{ songList: Song[] }>());
+export const SetPlayMode = createAction('[player] Set playMode', props<{ playMode: PlayMode }>());
+export const SetCurrentIndex = createAction('[player] Set currentIndex', props<{ currentIndex: number }>());
+export const SetCurrentAction = createAction('[player] Set currentAction', props<{ currentAction: CurrentActions }>());

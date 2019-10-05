@@ -1,11 +1,14 @@
-import {Pipe, PipeTransform} from '@angular/core';
+import { Pipe, PipeTransform } from '@angular/core';
 
-@Pipe({name: 'PlayCount'})
-export class PlayCountPipe implements  PipeTransform{
+@Pipe({
+  name: 'playCount'
+})
+export class PlayCountPipe implements PipeTransform {
+
   transform(value: number): number | string {
     if (value > 10000) {
       return Math.floor(value / 10000) + '万';
-    }else {
+    } else {
       return value;
     }
   }

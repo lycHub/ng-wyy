@@ -1,14 +1,15 @@
 <div class="m-player"
   [@showHide]="showPlayer"
-  (click)="selfClick = true"
+  appClickoutside
+  [bindFlag]="bindFlag"
+  (onClickOutSide)="onClickOutSide($event)"
   (mouseenter)="togglePlayer('show')"
   (mouseleave)="togglePlayer('hide')"
   (@showHide.start)="animating = true"
-  (@showHide.done)="onAnimateDone($event)">
-  <div class="lock">
-    <div class="left" (click)="lockPlayer = !lockPlayer">
-      <i [class.locked]="lockPlayer"></i>
-    </div>
+  (@showHide.done)="onAnimateDone($event)"
+>
+  <div class="lock" (click)="isLocked = !isLocked">
+    <div class="left"><i [class.locked]="isLocked"></i></div>
   </div>
   <div class="hand"></div>
   <div class="container">
@@ -19,14 +20,13 @@
         <i class="next" (click)="onNext(currentIndex + 1)"></i>
       </div>
       <div class="head">
-        <img appImgDefault (click)="toInfo(['/songInfo', currentSong.id])" [hidden]="currentSong" src="//s4.music.126.net/style/web2/img/default/default_album.jpg" />
-        <img appImgDefault [hidden]="!currentSong" src="{{currentSong?.al.picUrl}}" alt="{{currentSong?.name}}" />
-        <i class="mask"></i>
+        <img [src]="picUrl" />
+        <i class="mask" (click)="toInfo(['/songInfo', currentSong && currentSong.id])"></i>
       </div>
       <div class="play">
-        <div class="words clearfix" [class.hide]="!currentSong">
-          <p class="ellipsis" (click)="toInfo(['/songInfo', currentSong.id])">{{currentSong?.name}}</p>
-          <ul class="songs clearfix">
+        <div class="words clearfix">
+          <p class="ellipsis margin-bottom-none" (click)="toInfo(['/songInfo', currentSong.id])">{{currentSong?.name}}</p>
+          <ul class="songs clearfix margin-bottom-none">
             <li *ngFor="let item of currentSong?.ar; last as isLast">
               <a (click)="toInfo(['/singer', item.id])">{{item.name}}</a>
               <span [hidden]="isLast">/</span>
@@ -38,8 +38,8 @@
             <app-wy-slider [bufferOffset]="bufferPercent" [(ngModel)]="percent" (wyOnAfterChange)="onPercentChange($event)"></app-wy-slider>
           </div>
           <span class="time">
-          <em>{{currentTime | FormatTime}}</em> / {{duration | FormatTime}}
-        </span>
+            <em>{{currentTime | formatTime}}</em> / {{duration | formatTime}}
+          </span>
         </div>
       </div>
 
@@ -50,39 +50,40 @@
       <div class="ctrl">
         <i class="volume" title="音量" (click)="toggleVolPanel($event)"></i>
         <i [ngClass]="currentMode.type" [title]="currentMode.label" (click)="changeMode()"></i>
-        <p class="open" nz-tooltip [nzTitle]="controlToolTip.title" nzOverlayClassName="tip-bg" [nzVisible]="controlToolTip.show" (click)="toggleListPanel($event)">
+        <p nz-tooltip [nzTitle]="controlTooltip.title" [nzVisible]="controlTooltip.show" nzOverlayClassName="tip-bg" class="open" (click)="toggleListPanel()">
           <span></span>
         </p>
 
-        <!--音量-->
-        <div class="control-vol" [hidden]="!showVolPanel">
-          <app-wy-slider [wyVertical]="true" [(ngModel)]="currentVol" (ngModelChange)="onVolChange($event)"></app-wy-slider>
+        <div class="control-vol" [hidden]="!showVolumnPanel">
+          <app-wy-slider [wyVertical]="true" [(ngModel)]="volume" (ngModelChange)="onVolumeChange($event)"></app-wy-slider>
         </div>
       </div>
-
-      <!--面板-->
       <app-wy-player-panel
-        [show]="showPanel"
         [playing]="playing"
         [songList]="songList"
         [currentSong]="currentSong"
-        (onClose)="showPanel = false"
+        [show]="showPanel"
         (onChangeSong)="onChangeSong($event)"
+        (onClose)="showPanel = false"
         (onDeleteSong)="onDeleteSong($event)"
-        (onClearSong)="onClearSong()"
+        (onClearSong)="onClearSong($event)"
+        (onToInfo)="toInfo($event)"
         (onLikeSong)="onLikeSong($event)"
         (onShareSong)="onShareSong($event)"
-        (onToInfo)="toInfo($event)">
+      >
       </app-wy-player-panel>
     </div>
   </div>
 
+
+
   <audio
     #audio
-    src="{{currentSong?.url}}"
-    (canplay)="onCanPlay()"
-    (error)="onError()"
+    [src]="currentSong?.url"
+    (canplay)="onCanplay()"
     (timeupdate)="onTimeUpdate($event)"
-    (ended)="onEnded()">
+    (ended)="onEnded()"
+    (error)="onError()"
+  >
   </audio>
 </div>

@@ -1,19 +1,23 @@
+import { getRandomInt } from './number';
+import { Song } from '../services/data-types/common.types';
 
+export function inArray(arr: any[], target: any): boolean {
+  return arr.indexOf(target) !== -1;
+}
 
-import {getRandomInt} from "./number";
-import {Song} from "../service/data-modals/common.models";
 export function shuffle<T>(arr: T[]): T[] {
-  let _arr = arr.slice();
-  for (let i = 0; i < _arr.length; i++) {
-  
-    // 0和当前索引直接取一个随机数
+  const result = arr.slice();
+  for (let i = 0; i < result.length; i++) {
+
+    // 0和i 之间的一个随机数
     const j = getRandomInt([0, i]);
-    [_arr[i], _arr[j]] = [_arr[j], _arr[i]];
+    
+    [result[i], result[j]] = [result[j], result[i]];
   }
-  return _arr;
+  return result;
 }
 
 
-export function findIndex(list: Song[], target: Song): number {
-  return list.findIndex(item => item.id === target.id);
+export function findIndex(list: Song[], currentSong: Song): number {
+  return list.findIndex(item => item.id === currentSong.id);
 }

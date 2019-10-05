@@ -1,11 +1,10 @@
-<ng-template #defaultHandler>
+<ng-template #defaultView>
   <div class="search" #search>
-    <nz-input-group [nzSuffix]="suffixIconSearch">
-      <input type="text" nz-input placeholder="歌单/歌曲/歌手" #nzInput (focus)="onFocus()" (blur)="onBlur()" />
+    <nz-input-group nzSuffixIcon="search">
+      <input type="text" #nzInput nz-input placeholder="歌单/歌手/歌曲" (focus)="onFocus()" (blur)="onBlur()" />
     </nz-input-group>
-    <ng-template #suffixIconSearch>
-      <i nz-icon type="search"></i>
-    </ng-template>
   </div>
 </ng-template>
-<ng-container *ngTemplateOutlet="handlerView ? handlerView : defaultHandler"></ng-container>
+
+
+<ng-container *ngTemplateOutlet="customView ? customView : defaultView"></ng-container>

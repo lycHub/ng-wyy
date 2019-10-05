@@ -1,26 +1,27 @@
-import {Component, OnDestroy} from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
-import {SongService} from 'src/app/service/song.service';
-import {Song, SongSheet, Singer} from 'src/app/service/data-modals/common.models';
-import { map } from 'rxjs/operators';
-import { MultipleReducersService } from 'src/app/store/multiple-reducers.service';
-import {Observable, Subject} from "rxjs/index";
-import {AppStoreModule} from "../../store/index";
-import {select, Store} from "@ngrx/store";
-import {takeUntil} from "rxjs/internal/operators";
-import {getCurrentSong} from "../../store/selectors/player.selector";
-import {findIndex} from "../../utils/array";
-import { SheetService } from '../../service/sheet.service';
-import { MemberService } from '../../service/member.service';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { map, takeUntil } from 'rxjs/internal/operators';
+import { SongSheet, Song, Singer } from '../../services/data-types/common.types';
+import { AppStoreModule } from '../../store/index';
+import { Store, select } from '@ngrx/store';
+import { Observable, Subject } from 'rxjs';
+import { getCurrentSong } from '../../store/selectors/player.selector';
+import { SongService } from '../../services/song.service';
+import { BatchActionsService } from '../../store/batch-actions.service';
 import { NzMessageService } from 'ng-zorro-antd';
+import { findIndex } from 'src/app/utils/array';
+import { ModalTypes } from '../../store/reducers/member.reducer';
+import { MemberService } from '../../services/member.service';
+import { SetShareInfo } from '../../store/actions/member.actions';
 
 @Component({
   selector: 'app-sheet-info',
   templateUrl: './sheet-info.component.html',
   styleUrls: ['./sheet-info.component.less']
 })
-export class SheetInfoComponent implements OnDestroy{
+export class SheetInfoComponent implements OnInit, OnDestroy {
   sheetInfo: SongSheet;
+
   description = {
     short: '',
     long: ''
@@ -31,75 +32,64 @@ export class SheetInfoComponent implements OnDestroy{
     label: '展开',
     iconCls: 'down'
   }
-  
+
+  currentSong: Song;
   currentIndex = -1;
-
-  // 是否已收藏
-  hasLiked: boolean;
-
-  private currentSong: Song;
-  
-  private appStore$: Observable<AppStoreModule>;
   private destroy$ = new Subject<void>();
-  
+
   constructor(
     private route: ActivatedRoute,
+    private store$: Store<AppStoreModule>,
     private songServe: SongService,
-    private sheetServe: SheetService,
-    private memberServe: MemberService,
+    private batchActionServe: BatchActionsService,
     private messageServe: NzMessageService,
-    private multipleReducerServe: MultipleReducersService,
-    private store$: Store<AppStoreModule>
+    private memberServe: MemberService
   ) {
     this.route.data.pipe(map(res => res.sheetInfo)).subscribe(res => {
       this.sheetInfo = res;
-      this.hasLiked = res.subscribed;
-      
       if (res.description) {
         this.changeDesc(res.description);
       }
-      
-      this.listenCurrentSong();
+      this.listenCurrent();
     });
   }
-  
-  // 监听currentSong
-  private listenCurrentSong() {
-    this.appStore$ = this.store$.pipe(select('player'), takeUntil(this.destroy$));
-    this.appStore$.pipe(select(getCurrentSong)).subscribe(song => {
+
+  ngOnInit() {
+  }
+
+  private listenCurrent() {
+    this.store$
+    .pipe(select('player'), select(getCurrentSong), takeUntil(this.destroy$))
+    .subscribe(song => {
+      console.log('song :', song);
       this.currentSong = song;
       if (song) {
         this.currentIndex = findIndex(this.sheetInfo.tracks, song);
-      }else{
+      } else {
         this.currentIndex = -1;
       }
     });
   }
 
-
-  playSheet(tracks: Song[]) {
-    this.songServe.getSongList(tracks).subscribe(list => {
-      if (list.length) {
-        this.multipleReducerServe.selectPlay(({ list, index: 0 }));
+  private changeDesc(desc: string) {
+    if (desc.length < 99) {
+      this.description = {
+        short: this.replaceBr('<b>介绍：</b>' + desc),
+        long: ''
       }
-    });
-  }
-  
-  // 添加一首歌曲
-  onAddSong(song: Song, play = false) {
-    if (!this.currentSong || this.currentSong.id !== song.id) {
-      this.songServe.getSongList(song).subscribe(list => this.multipleReducerServe.insertSong(list[0], play));
+    } else {
+      this.description = {
+        short: this.replaceBr('<b>介绍：</b>' + desc.slice(0, 99)) + '...',
+        long: this.replaceBr('<b>介绍：</b>' + desc)
+      }
     }
   }
-  
-  // 添加歌单
-  onAddSongs(songs: Song[]) {
-    this.songServe.getSongList(songs).subscribe(list => {
-      this.multipleReducerServe.insertSongs(list);
-    });
+
+
+  private replaceBr(str: string): string {
+    return str.replace(/\n/g, '<br />');
   }
 
-  // 控制简介的展开和隐藏
   toggleDesc() {
     this.controlDesc.isExpand = !this.controlDesc.isExpand;
     if (this.controlDesc.isExpand) {
@@ -111,55 +101,71 @@ export class SheetInfoComponent implements OnDestroy{
     }
   }
 
-  private changeDesc(desc: string) {
-    if (desc.length < 99) {
-      this.description.short = '<b>介绍：</b>' + desc;
-    }else{
-      const str = '<b>介绍：</b>' + desc.replace(/\n/g, '<br />');
-      this.description.short = str.slice(0, 99) + '...';
-      this.description.long = str;
+
+  // 添加一首歌曲
+  onAddSong(song: Song, isPlay = false) {
+    if (!this.currentSong || this.currentSong.id !== song.id) {
+      this.songServe.getSongList(song)
+      .subscribe(list => {
+        if (list.length) {
+          this.batchActionServe.insertSong(list[0], isPlay);
+        } else {
+          this.alertMessage('warning', '无url!');
+        }
+      });
     }
   }
-  
+
+  onAddSongs(songs: Song[], isPlay = false) {
+    this.songServe.getSongList(songs).subscribe(list => {
+      if (list.length) {
+        if (isPlay) {
+          this.batchActionServe.selectPlayList({ list, index: 0 });
+        } else {
+          this.batchActionServe.insertSongs(list);
+        }
+      }
+    });
+  }
+
+
+  // 收藏歌单
+  onLikeSheet(id: string) {
+    console.log('id :', id);
+    this.memberServe.likeSheet(id).subscribe(() => {
+      this.alertMessage('success', '收藏成功');
+    }, error => {
+      this.alertMessage('error', error.msg || '收藏失败');
+    });
+  }
+
 
   // 收藏歌曲
   onLikeSong(id: string) {
-    this.multipleReducerServe.likeSongs(id);
+    this.batchActionServe.likeSong(id);
   }
-
-  // 收藏歌单
-  onLikeSheet(id: number) {
-    this.memberServe.likeSheet(id).subscribe(code => {
-      if (code === 200) {
-        this.alertMessage('success', '收藏成功');
-      }else{
-        this.alertMessage('error', '收藏失败');
-      }
-    }, error => this.alertMessage('error', '收藏失败'));
-  }
-
 
   // 分享
-  onShareSong(info: SongSheet | Song, type = 'song') {
+  shareResource(resource: Song | SongSheet, type = 'song') {
     let txt = '';
     if (type === 'playlist') {
-      txt = this.makeTxt('歌单', info.name, (<SongSheet>info).creator.nickname);
-    }else{
-      txt = this.makeTxt('单曲', info.name, (<Song>info).ar);
+      txt = this.makeTxt('歌单', resource.name, (<SongSheet>resource).creator.nickname);
+    } else {
+      txt = this.makeTxt('歌曲', resource.name, (<Song>resource).ar);
     }
-    this.multipleReducerServe.share({ id: info.id, type, txt });
+    this.store$.dispatch(SetShareInfo({ info: { id: resource.id.toString(), type, txt } }));
   }
 
   private makeTxt(type: string, name: string, makeBy: string | Singer[]): string {
     let makeByStr = '';
-    if (makeBy instanceof Array) {
+    if (Array.isArray(makeBy)) {
       makeByStr = makeBy.map(item => item.name).join('/');
-    }else {
+    } else {
       makeByStr = makeBy;
     }
-    
-    return `${type}：${name} -- ${makeByStr}`;
+    return `${type}: ${name} -- ${makeByStr}`;
   }
+
 
   private alertMessage(type: string, msg: string) {
     this.messageServe.create(type, msg);

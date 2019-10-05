@@ -1,12 +1,16 @@
 import { NgModule } from '@angular/core';
-import { WySliderComponent } from './wy-slider.component';
-import { WySliderTrackComponent } from './wy-slider-track.component';
-import { WySliderHandleComponent } from './wy-slider-handle.component';
 import { CommonModule } from '@angular/common';
+import { WySliderComponent } from './wy-slider.component';
+import { WySliderHandleComponent } from './wy-slider-handle.component';
+import { WySliderTrackComponent } from './wy-slider-track.component';
+
+
 
 @NgModule({
-  imports: [CommonModule],
-  declarations: [WySliderComponent, WySliderTrackComponent, WySliderHandleComponent],
-  exports: [WySliderComponent, WySliderTrackComponent, WySliderHandleComponent]
+  declarations: [WySliderComponent, WySliderHandleComponent, WySliderTrackComponent],
+  imports: [
+    CommonModule
+  ],
+  exports: [WySliderComponent]
 })
 export class WySliderModule { }

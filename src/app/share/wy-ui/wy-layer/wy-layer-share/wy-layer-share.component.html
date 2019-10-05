@@ -1,20 +1,24 @@
 <div class="share">
   <div class="u-txtwrap">
-    <textarea rows="6" nz-input [(ngModel)]="msg" (ngModelChange)="onMsgChange($event)"></textarea>
+    <form nz-form [formGroup]="formModel">
+      <nz-form-item>
+        <nz-form-control nzErrorTip="不能超过140个字">
+          <textarea nz-input rows="6" formControlName="msg"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
     <div class="info">
       <div class="text">
-        <p class="f-thide ellipsis">{{shareParams?.txt}}</p>
+        <p class="f-thide ellipsis">{{shareInfo?.txt}}</p>
       </div>
     </div>
   </div>
 
   <div class="tools clearfix">
-    <!-- <i class="icon-at"></i> -->
-    <span class="txt-count" [class.exceed]="surplusTxt < 0">{{surplusTxt}}</span>
+    <span class="txt-count" [class.exceed]="surplusMsgCount < 0">{{surplusMsgCount}}</span>
     <div class="btns">
-      <button nz-button nzType="default" (click)="onCancel()">取消</button>
-      <button nz-button nzType="primary" (click)="onShare()">分享</button>
+      <button nz-button (click)="onCancel.emit()">取消</button>
+      <button nz-button nzType="primary" [disabled]="!formModel.valid" (click)="onSubmit()">分享</button>
     </div>
   </div>
-  <nz-alert nzType="error" nzMessage="Error" nzShowIcon *ngIf="showAlert"></nz-alert>
 </div>

@@ -2,20 +2,29 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WyPlayerComponent } from './wy-player.component';
 import { WySliderModule } from '../wy-slider/wy-slider.module';
-import { WyPlayerPanelComponent } from './wy-player-panel/wy-player-panel.component';
-import {FormatTimePipe} from "../../pipes/format-time.pipe";
-import { WyScrollComponent } from './wy-scroll.component';
-import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { FormsModule } from '@angular/forms';
+import { FormatTimePipe } from '../../pipes/format-time.pipe';
+import { WyPlayerPanelComponent } from './wy-player-panel/wy-player-panel.component';
+import { WyScrollComponent } from './wy-scroll/wy-scroll.component';
+import { ClickoutsideDirective } from '../../directives/clickoutside.directive';
+import { NzToolTipModule } from 'ng-zorro-antd';
+
+
 
 @NgModule({
+  declarations: [
+    WyPlayerComponent,
+    FormatTimePipe,
+    WyPlayerPanelComponent,
+    WyScrollComponent,
+    ClickoutsideDirective
+  ],
   imports: [
     CommonModule,
+    FormsModule,
     WySliderModule,
-    NzToolTipModule,
-    FormsModule
+    NzToolTipModule 
   ],
-  declarations: [WyPlayerComponent, WyPlayerPanelComponent, FormatTimePipe, WyScrollComponent],
-  exports: [WyPlayerComponent, FormatTimePipe]
+  exports: [WyPlayerComponent, FormatTimePipe, ClickoutsideDirective]
 })
 export class WyPlayerModule { }

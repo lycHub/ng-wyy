@@ -1,0 +1,88 @@
+<div class="user-center wrap feature-wrap">
+  <div class="page-wrap">
+    <div class="m-proifo clearfix">
+      <div class="f-pr">
+        <img [src]="user.profile.avatarUrl" [alt]="user.profile.nickname" />
+      </div>
+      <div class="f-r">
+        <div class="name">
+          <h2 class="clearfix">
+            <span class="tit ellipsis">{{user.profile.nickname}}</span>
+            <p class="lv">
+              <span class="u-lv u-icn2">
+                {{user.level}}<i class="lvright u-icn2"></i>
+              </span>
+            </p>
+            <div class="icn-gender"></div>
+          </h2>
+        </div>
+
+        <ul class="dny clearfix">
+          <li class="fst">
+            <strong class="ellipsis">{{user.profile.eventCount}}</strong>
+            <span>动态</span>
+          </li>
+          <li>
+            <strong class="ellipsis">{{user.profile.follows}}</strong>
+            <span>关注</span>
+          </li>
+          <li class="lst">
+            <strong class="ellipsis">{{user.profile.followeds}}</strong>
+            <span>粉丝</span>
+          </li>
+        </ul>
+        <div class="inf f-brk">{{user.profile.signature}}</div>
+      </div>
+    </div>
+
+    <app-records
+    [records]="records"
+    [recordType]="recordType"
+    [listenSongs]="user.listenSongs"
+    [currentIndex]="currentIndex"
+    (onChangeType)="onChangeType($event)"
+    (onAddSong)="onAddSong($event)"
+    (onLikeSong)="onLikeSong($event)"
+    (onShareSong)="onShareSong($event)">
+  </app-records>
+  <a class="look-more" [routerLink]="['/records', user.profile.userId]">查看更多&gt;</a>
+
+    <div class="wy-sec sheets">
+      <div class="u-title wy-sec-wrap clearfix">
+        <h3 class="wy-sec-tit">
+          <span class="f-ff2">我创建的歌单</span>
+          <span class="sub s-fc3">{{userSheet.self.length}}</span>
+        </h3>
+      </div>
+
+      <div class="sheet-list clearfix">
+        <app-single-sheet
+        class="sheet-item"
+        *ngFor="let item of userSheet.self"
+        [sheet]="item"
+        [routerLink]="['/sheetInfo', item.id]"
+        (onPlay)="onPlaySheet($event)">
+        </app-single-sheet>
+      </div>
+    </div>
+
+    <div class="wy-sec sheets">
+      <div class="u-title wy-sec-wrap clearfix">
+        <h3 class="wy-sec-tit">
+          <span class="f-ff2">我收藏的歌单</span>
+          <span class="sub s-fc3">{{userSheet.subscribed.length}}</span>
+        </h3>
+      </div>
+
+      <div class="sheet-list clearfix">
+        <app-single-sheet
+        class="sheet-item"
+        *ngFor="let item of userSheet.subscribed"
+        [sheet]="item"
+        [routerLink]="['/sheetInfo', item.id]"
+        (onPlay)="onPlaySheet($event)">
+        </app-single-sheet>
+      </div>
+    </div>
+  </div>
+</div>

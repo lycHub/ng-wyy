@@ -1,32 +1,31 @@
 <div id="app">
-  <nz-progress *ngIf="loadPercent < 100" [nzStrokeWidth]="5" [nzShowInfo]="false" [nzPercent]="loadPercent" nzStatus="active"></nz-progress>
+  <nz-progress *ngIf="loadPercent < 100" nzStrokeWidth="5" [nzShowInfo]="false" nzStatus="active" [nzPercent]="loadPercent"></nz-progress>
   <nz-layout class="layout">
     <nz-header class="header">
       <div class="wrap">
         <div class="left">
           <h1>Music</h1>
-          <ul nz-menu [nzTheme]="'dark'" [nzMode]="'horizontal'">
-            <li nz-menu-item [nzSelected]="routeTitle === item.title" *ngFor="let item of menu" [routerLink]="item.path">{{item.title}}</li>
+          <ul nz-menu nzTheme="dark" nzMode="horizontal">
+            <li nz-menu-item *ngFor="let item of menu" [nzSelected]="routeTitle === item.label" [routerLink]="item.path">{{item.label}}</li>
           </ul>
         </div>
         <div class="right">
-          <app-wy-search [searchResult]="searchResult" (onSearch)="onSearch($event)"></app-wy-search>
-          
+          <app-wy-search (onSearch)="onSearch($event)" [searchResult]="searchResult"></app-wy-search>
           <div class="member">
             <div class="no-login" *ngIf="!user else logined">
-              <ul nz-menu nzMode="horizontal" nzTheme="dark">
+              <ul nz-menu nzTheme="dark" nzMode="horizontal">
                 <li nz-submenu>
                   <div title>
                     <span>登陆</span>
-                    <i nz-icon nzType="down" nzTheme="outline"></i>
+                    <i nz-icon type="down" nzTheme="outline"></i>
                   </div>
                   <ul>
                     <li nz-menu-item (click)="openModal('loginByPhone')">
-                      <i nz-icon nzType="mobile" nzTheme="outline"></i>
+                      <i nz-icon type="mobile" nzTheme="outline"></i>
                       手机登陆
                     </li>
                     <li nz-menu-item (click)="openModal('register')">
-                      <i nz-icon nzType="user-add" nzTheme="outline"></i>
+                      <i nz-icon type="user-add" nzTheme="outline"></i>
                       注册
                     </li>
                   </ul>
@@ -35,45 +34,53 @@
             </div>
 
             <ng-template #logined>
-              <div class="login" *ngIf="user">
+              <div class="login">
                 <ul nz-menu nzMode="horizontal" nzTheme="dark">
                   <li nz-submenu>
                     <div title>
                       <nz-avatar nzIcon="user" [nzSrc]="user.profile.avatarUrl"></nz-avatar>
-                      <i nz-icon nzType="down" nzTheme="outline"></i>
+                      <i nz-icon type="down" nzTheme="outline"></i>
                     </div>
                     <ul>
-                      <li nz-menu-item [routerLink]="['/userCenter', user.profile.userId]">
-                        <i nz-icon nzType="user" nzTheme="outline"></i>
-                        我的主页
+                      <li nz-menu-item [routerLink]="['/member', user.profile.userId]">
+                        <i nz-icon nzType="user" nzTheme="outline"></i>我的主页
                       </li>
-                      <li nz-menu-item (click)="onLogOut()">
-                        <i nz-icon nzType="close-circle" nzTheme="outline"></i>
-                        退出
+                      <li nz-menu-item (click)="onLogout()">
+                        <i nz-icon nzType="close-circle" nzTheme="outline"></i>退出
                       </li>
                     </ul>
                   </li>
                 </ul>
               </div>
             </ng-template>
+
           </div>
         </div>
       </div>
     </nz-header>
+<<<<<<< HEAD
     <nz-content class="content"><router-outlet></router-outlet></nz-content>
     <nz-footer class="footer">Ant Design ©2019 Implement By Angular</nz-footer>
+=======
+    <nz-content class="content">
+      <router-outlet></router-outlet>
+    </nz-content>
+    <nz-footer class="footer">
+      Ant Design ©2019 Implement By Angular
+    </nz-footer>
+>>>>>>> 13-6
   </nz-layout>
 </div>
+
 <app-wy-player></app-wy-player>
 
-<app-wy-layer-modal [showSpin]="showSpin" (onLoadSheetList)="onLoadSheetList()">
-  <app-wy-login-phone name="login" [wyUserLogin]="wyUserLogin" (onChangeModalType)="onChangeModalType($event)" (onLogin)="onLogin($event)"></app-wy-login-phone>
-  <app-wy-layer-register name="register" (onChangeModalType)="onChangeModalType($event)"></app-wy-layer-register>
-  <app-wy-layer-like name="like" [mySheets]="userSheet?.self"></app-wy-layer-like>
-  <app-wy-layer-share name="share"></app-wy-layer-share>
-  <app-wy-login-default (onChangeModalType)="onChangeModalType($event)"></app-wy-login-default>
+<app-wy-layer-modal [visible]="visible" [showSpin]="showSpin" [currentModalType]="currentModalType" (onLoadMySheets)="onLoadMySheets()">
+  <app-wy-layer-login name="login" [visible]="visible" [wyRememberLogin]="wyRememberLogin" (onLogin)="onLogin($event)" (onChangeModalType)="onChangeModalType($event)"></app-wy-layer-login>
+  <app-wy-layer-like name="like" [visible]="visible" [likeId]="likeId" [mySheets]="mySheets" (onCreateSheet)="onCreateSheet($event)" (onLikeSong)="onLikeSong($event)"></app-wy-layer-like>
+  <app-wy-layer-share name="share" [visible]="visible" [shareInfo]="shareInfo" (onCancel)="closeModal()" (onShare)="onShare($event)"></app-wy-layer-share>
+  <app-wy-layer-register name="register" [visible]="visible" (onChangeModalType)="onChangeModalType($event)" (onRegister)="onRegister($event)"></app-wy-layer-register>
+  <app-wy-layer-default (onChangeModalType)="onChangeModalType($event)"></app-wy-layer-default>
 </app-wy-layer-modal>
-
 
 <nz-back-top [nzTemplate]="tpl">
   <ng-template #tpl>

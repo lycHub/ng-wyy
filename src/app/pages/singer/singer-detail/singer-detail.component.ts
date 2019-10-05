@@ -1,17 +1,17 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { map, takeUntil } from 'rxjs/operators';
-import { SingerDetail } from '../../../service/singer.service';
-import { Singer, Song } from 'src/app/service/data-modals/common.models';
-import { Observable, Subject } from 'rxjs';
+import { map, takeUntil } from 'rxjs/internal/operators';
+import { SingerDetail, Song, Singer } from '../../../services/data-types/common.types';
 import { AppStoreModule } from 'src/app/store';
-import { MultipleReducersService } from 'src/app/store/multiple-reducers.service';
 import { Store, select } from '@ngrx/store';
+import { SongService } from 'src/app/services/song.service';
 import { NzMessageService } from 'ng-zorro-antd';
-import { MemberService } from 'src/app/service/member.service';
-import { SongService } from 'src/app/service/song.service';
+import { BatchActionsService } from 'src/app/store/batch-actions.service';
 import { getCurrentSong } from 'src/app/store/selectors/player.selector';
 import { findIndex } from 'src/app/utils/array';
+import { Subject } from 'rxjs';
+import { SetShareInfo } from 'src/app/store/actions/member.actions';
+import { MemberService } from '../../../services/member.service';
 
 @Component({
   selector: 'app-singer-detail',
@@ -19,73 +19,73 @@ import { findIndex } from 'src/app/utils/array';
   styleUrls: ['./singer-detail.component.less']
 })
 export class SingerDetailComponent implements OnInit, OnDestroy {
-  detail: SingerDetail;
+  singerDetail: SingerDetail;
   simiSingers: Singer[];
-  alias = '';
   currentIndex = -1;
+  currentSong: Song;
   hasLiked = false;
-
-  private currentSong: Song;
-  private appStore$: Observable<AppStoreModule>;
   private destroy$ = new Subject<void>();
   constructor(
     private route: ActivatedRoute,
+    private store$: Store<AppStoreModule>,
     private songServe: SongService,
-    private memberServe: MemberService,
-    private messageServe: NzMessageService,
-    private multipleReducerServe: MultipleReducersService,
-    private store$: Store<AppStoreModule>
+    private batchActionServe: BatchActionsService,
+    private nzMessageServe: NzMessageService,
+    private memberServe: MemberService
   ) {
-    this.route.data.pipe(map(res => res.singerDatas)).subscribe(([detail, singers]) => {
-      this.detail = detail;
-      this.simiSingers = singers;
-      if (this.detail) {
-        this.alias = this.detail.artist.alias.join('；');
-      }
+    this.route.data.pipe(map(res => res.singerDetail)).subscribe(([detail, simiSingers]) => {
+      this.singerDetail = detail;
+      this.simiSingers = simiSingers;
+      this.listenCurrent();
     });
-    this.listenCurrentSong();
   }
 
   ngOnInit() {
   }
 
 
-  playSong(songs: Song[]) {
+  private listenCurrent() {
+    this.store$
+    .pipe(select('player'), select(getCurrentSong), takeUntil(this.destroy$))
+    .subscribe(song => {
+      this.currentSong = song;
+      if (song) {
+        this.currentIndex = findIndex(this.singerDetail.hotSongs, song);
+      } else {
+        this.currentIndex = -1;
+      }
+    });
+  }
+
+  onAddSongs(songs: Song[], isPlay = false) {
     this.songServe.getSongList(songs).subscribe(list => {
       if (list.length) {
-        this.multipleReducerServe.selectPlay(({ list, index: 0 }));
+        if (isPlay) {
+          this.batchActionServe.selectPlayList({ list, index: 0 });
+        }else {
+          this.batchActionServe.insertSongs(list);
+        }
       }
     });
   }
 
 
    // 添加一首歌曲
-   onAddSong(song: Song, play = false) {
+   onAddSong(song: Song, isPlay = false) {
     if (!this.currentSong || this.currentSong.id !== song.id) {
-      this.songServe.getSongList(song).subscribe(list => this.multipleReducerServe.insertSong(list[0], play));
+      this.songServe.getSongList(song)
+      .subscribe(list => {
+        if (list.length) {
+          this.batchActionServe.insertSong(list[0], isPlay);
+        }else {
+          this.nzMessageServe.create('warning', '无url!');
+        }
+      });
     }
-  }
-  
-  // 添加歌单
-  onAddSongs(songs: Song[]) {
-    this.songServe.getSongList(songs).subscribe(list => {
-      this.multipleReducerServe.insertSongs(list);
-    });
-  }
-
-
-  // 批量收藏歌曲
-  onLikeSongs(songs: Song[]) {
-    this.onLikeSong(songs.map(item => item.id).join(','));
-  }
-
-   // 收藏歌曲
-   onLikeSong(ids: string) {
-    this.multipleReducerServe.likeSongs(ids);
   }
 
   // 收藏歌手
-  onLikeSinger(id: number) {
+  onLikeSinger(id: string) {
     let typeInfo = {
       type: 1,
       msg: '收藏'
@@ -96,47 +96,39 @@ export class SingerDetailComponent implements OnInit, OnDestroy {
         msg: '取消收藏'
       }
     }
-    this.memberServe.likeSinger(id, typeInfo.type).subscribe(code => {
-      if (code === 200) {
-        this.hasLiked = !this.hasLiked;
-        this.alertMessage('success', typeInfo.msg + '成功');
-      }
-    }, error => {
-      this.alertMessage('error', error.msg ||  typeInfo.msg + '失败');
+    this.memberServe.likeSinger(id, typeInfo.type).subscribe(() => {
+      this.hasLiked = !this.hasLiked;
+      this.nzMessageServe.create('success', typeInfo.msg + '成功');
+    }, err => {
+      this.nzMessageServe.create('error', err.msg || typeInfo.msg + '失败');
     });
   }
 
 
+  // 批量收藏
+  onLikeSongs(songs: Song[]) {
+    const ids = songs.map(item => item.id).join(',');
+    this.onLikeSong(ids);
+  }
+
+
+   // 收藏歌曲
+   onLikeSong(id: string) {
+    this.batchActionServe.likeSong(id);
+  }
+
   // 分享
-  onShare(info: Song, type = 'song') {
-    const txt = this.makeTxt('单曲', info.name, (<Song>info).ar);
-    this.multipleReducerServe.share({ id: info.id, type, txt });
+  onShareSong(resource: Song, type = 'song') {
+    const txt = this.makeTxt('歌曲', resource.name, resource.ar);
+    this.store$.dispatch(SetShareInfo({ info: { id: resource.id.toString(), type, txt } }));
   }
 
   private makeTxt(type: string, name: string, makeBy: Singer[]): string {
     const makeByStr = makeBy.map(item => item.name).join('/');
-    return `${type}：${name} -- ${makeByStr}`;
+    return `${type}: ${name} -- ${makeByStr}`;
   }
 
 
-
-
-  private listenCurrentSong() {
-    this.appStore$ = this.store$.pipe(select('player'), takeUntil(this.destroy$));
-    this.appStore$.pipe(select(getCurrentSong)).subscribe(song => {
-      this.currentSong = song;
-      if (song) {
-        this.currentIndex = findIndex(this.detail.hotSongs, song);
-      }else{
-        this.currentIndex = -1;
-      }
-    });
-  }
-
-
-  private alertMessage(type: string, msg: string) {
-    this.messageServe.create(type, msg);
-  }
 
   ngOnDestroy(): void {
     this.destroy$.next();

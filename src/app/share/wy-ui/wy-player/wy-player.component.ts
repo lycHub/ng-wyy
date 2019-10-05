@@ -1,25 +1,21 @@
-import { AfterViewInit, Component, ElementRef, Inject, OnDestroy, ViewChild } from '@angular/core';
-import {fromEvent, Subscription, Observable, Subject} from "rxjs/index";
-import {DOCUMENT} from "@angular/common";
-import {shuffle} from "../../../utils/array";
-import { Song, Singer } from '../../../service/data-modals/common.models';
-import { WyPlayerPanelComponent } from './wy-player-panel/wy-player-panel.component';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, Inject } from '@angular/core';
 import { Store, select } from '@ngrx/store';
-import { AppStoreModule } from 'src/app/store';
-import { getSongList, getPlayList, getCurrentSong, getPlayMode, getCurrentIndex, getCurrentAction } from 'src/app/store/selectors/player.selector';
-import { SetCurrentIndex, SetPlayMode, SetPlayList, SetCurrentAction } from '../../../store/actions/player.actions';
-import { MultipleReducersService } from 'src/app/store/multiple-reducers.service';
+import { AppStoreModule } from '../../../store/index';
+import { getSongList, getPlayList, getCurrentIndex, getPlayMode, getCurrentSong, getCurrentAction } from '../../../store/selectors/player.selector';
+import { Song, Singer } from '../../../services/data-types/common.types';
+import { PlayMode } from './player-type';
+import { SetCurrentIndex, SetCurrentAction } from 'src/app/store/actions/player.actions';
+import { Subscription, fromEvent, timer } from 'rxjs';
+import { DOCUMENT } from '@angular/common';
+import { SetPlayMode, SetPlayList, SetSongList } from '../../../store/actions/player.actions';
+import { shuffle, findIndex } from 'src/app/utils/array';
+import { WyPlayerPanelComponent } from './wy-player-panel/wy-player-panel.component';
 import { NzModalService } from 'ng-zorro-antd';
-import { trigger, state, style, transition, animate, AnimationEvent } from '@angular/animations';
-import { WINDOW } from '../../../core/inject-tokens';
-import { CurrentActions } from '../../../store/reducers/player.reducer';
+import { BatchActionsService } from 'src/app/store/batch-actions.service';
 import { Router } from '@angular/router';
-
-// 播放模式
-export type PlayMode = {
-  type: 'loop' | 'random' | 'singleLoop',
-  label: '循环' | '单曲循环' | '随机'
-};
+import { trigger, style, transition, animate, state, AnimationEvent } from '@angular/animations';
+import { CurrentActions } from '../../../store/reducers/player.reducer';
+import { SetShareInfo } from 'src/app/store/actions/member.actions';
 
 
 const modeTypes: PlayMode[] = [{
@@ -33,6 +29,13 @@ const modeTypes: PlayMode[] = [{
   label: '单曲循环'
 }];
 
+
+enum TipTitles {
+  Add = '已添加到列表',
+  Play = '已开始播放'
+}
+
+
 @Component({
   selector: 'app-wy-player',
   templateUrl: './wy-player.component.html',
@@ -40,92 +43,72 @@ const modeTypes: PlayMode[] = [{
   animations: [trigger('showHide', [
     state('show', style({ bottom: 0 })),
     state('hide', style({ bottom: -71 })),
-    transition('show=>hide', [ animate('0.3s') ]),
-    transition('hide=>show', [ animate('0.1s') ])
+    transition('show=>hide', [animate('0.3s')]),
+    transition('hide=>show', [animate('0.1s')])
   ])]
 })
-export class WyPlayerComponent implements AfterViewInit {
+export class WyPlayerComponent implements OnInit {
   showPlayer = 'hide';
-  lockPlayer = false;
+  isLocked = false;
+
+  controlTooltip = {
+    title: '',
+    show: false
+  }
 
   // 是否正在动画
   animating = false;
-  songList: Song[];
-  
-  private playList: Song[];
-  
-  // 是否可以播放
-  private songReady = false;
-  
-  // 播放状态vuex
-  playing = false;
-  
-  // 当前播放的索引vuex
-  currentIndex: number;
-  
-  // 正在播放vuex
-  currentSong: Song;
-  
-  
-  // 播放时间
-  currentTime: number;
-  
-  // 总时长
-  duration: number;
-  
-  // 播放进度（百分比）
+
   percent = 0;
-  
-  // 缓冲进度（百分比）
   bufferPercent = 0;
- 
- // 当前音量
-  currentVol = 60;
-  
-  // 显示音量控件
-  showVolPanel = false;
-  
-  // 是否点击了音量控件
-  selfClick = false;
-  
-  modeCount = 0;
-  
-  
-  // 当前模式vuex
-  currentMode: PlayMode;
 
-  controlToolTip = {
-    show: false,
-    title: ''
-  }
-  showToolTip = false;
-  private toolTipTimer: number;
-  
-  @ViewChild('audio', { static: true }) private audio: ElementRef;
+  songList: Song[];
+  playList: Song[];
+  currentIndex: number;
+  currentSong: Song;
 
-  // WyPlayerPanelComponent不是静态的
-  @ViewChild(WyPlayerPanelComponent, { static: false }) private playPanel: WyPlayerPanelComponent;
-  private audioEl: HTMLAudioElement;
-  
-  private winClick$: Subscription;
-  
+  duration: number;
+  currentTime: number;
+
+  // 播放状态
+  playing = false;
+
+  // 是否可以播放
+  songReady = false;
+
+  // 音量
+  volume = 60;
+
+  // 是否显示音量面板
+  showVolumnPanel = false;
+
+  // 是否显示列表面板
   showPanel = false;
 
-  private appStore$: Observable<AppStoreModule>;
+  // 是否绑定document click事件
+  bindFlag = false;
+
+  private winClick: Subscription;
+
+  // 当前模式
+  currentMode: PlayMode;
+  modeCount = 0;
+
+
+  @ViewChild('audio', { static: true }) private audio: ElementRef;
+  @ViewChild(WyPlayerPanelComponent, { static: false }) private playerPanel: WyPlayerPanelComponent;
+  private audioEl: HTMLAudioElement;
+
 
   constructor(
-    @Inject(DOCUMENT) private doc: Document,
-    @Inject(WINDOW) private win: Window,
     private store$: Store<AppStoreModule>,
-    private multipleReducerServe: MultipleReducersService,
-    private modalService: NzModalService,
+    @Inject(DOCUMENT) private doc: Document,
+    private nzModalServe: NzModalService,
+    private batchActionsServe: BatchActionsService,
     private router: Router
   ) {
-    this.appStore$ = this.store$.pipe(select('player'));
-    const arr = [{
-      type: getPlayMode,
-      cb: mode => this.watchMode(mode)
-    }, {
+    const appStore$ = this.store$.pipe(select('player'));
+    const stateArr = [{
       type: getSongList,
       cb: list => this.watchList(list, 'songList')
     }, {
@@ -135,30 +118,27 @@ export class WyPlayerComponent implements AfterViewInit {
       type: getCurrentIndex,
       cb: index => this.watchCurrentIndex(index)
     }, {
-      type: getCurrentAction,
-      cb: action => this.watchCurrentAction(action)
+      type: getPlayMode,
+      cb: mode => this.watchPlayMode(mode)
     }, {
       type: getCurrentSong,
       cb: song => this.watchCurrentSong(song)
+    }, {
+      type: getCurrentAction,
+      cb: action => this.watchCurrentAction(action)
     }];
-    arr.forEach(item => {
-      this.appStore$.pipe(select(item.type)).subscribe(item.cb);
+
+    stateArr.forEach(item => {
+      appStore$.pipe(select(item.type)).subscribe(item.cb);
     });
-    // this.appStore$.pipe(select(getPlayMode)).subscribe(mode => this.watchMode(mode));
+  }
+
+  ngOnInit() {
+    this.audioEl = this.audio.nativeElement;
   }
 
 
-  private watchMode(mode: PlayMode) {
-    this.currentMode = mode;
-    if (this.songList) {
-      let list = this.songList.slice();
-      if (mode.type === 'random') {
-        list = shuffle(this.songList);
-      }
-      this.updateCurrentIndex(list, this.currentSong);
-      this.store$.dispatch(SetPlayList({ list }));
-    }
-  }
+
 
   private watchList(list: Song[], type: string) {
     this[type] = list;
@@ -168,139 +148,128 @@ export class WyPlayerComponent implements AfterViewInit {
     this.currentIndex = index;
   }
 
-  private watchCurrentAction(action: CurrentActions) {
-    switch (CurrentActions[action]) {
-      case 'Add':
-        this.controlToolTip.title = '已添加到列表';
-        this.readyShowToolTip();
-        break;
-      case 'Play':
-        this.controlToolTip.title = '已开始播放';
-        this.readyShowToolTip();
-        break;
+  private watchPlayMode(mode: PlayMode) {
+    console.log('mode :', mode);
+    this.currentMode = mode;
+    if (this.songList) {
+      let list = this.songList.slice();
+      if (mode.type === 'random') {
+        list = shuffle(this.songList);
+      }
+      this.updateCurrentIndex(list, this.currentSong);
+      this.store$.dispatch(SetPlayList({ playList: list }));
     }
     
-    this.store$.dispatch(SetCurrentAction({ action: CurrentActions.Other }));
   }
 
-  private readyShowToolTip() {
-    if (this.showPlayer === 'hide') {
-      this.togglePlayer('show');
-      this.showToolTip = true;
-    }else{
-      this.controlToolTip.show = true;
-    }
-  }
-  
   private watchCurrentSong(song: Song) {
     this.currentSong = song;
     if (song) {
       this.duration = song.dt / 1000;
     }
   }
-  
-  
-  // 控制音量面板
-  toggleVolPanel(e: MouseEvent) {
-    e.stopPropagation();
-    this.togglePanel('showVolPanel');
+
+  private watchCurrentAction(action: CurrentActions) {
+    const title = TipTitles[CurrentActions[action]];
+    if (title) {
+      this.controlTooltip.title = title;
+      if (this.showPlayer === 'hide') {
+        this.togglePlayer('show');
+      }else{
+        this.showToolTip();
+      }
+    }
+    this.store$.dispatch(SetCurrentAction({ currentAction: CurrentActions.Other }));
   }
-  
+
+  onAnimateDone(event: AnimationEvent) {
+    this.animating = false;
+    if (event.toState === 'show' && this.controlTooltip.title) {
+      this.showToolTip();
+    }
+  }
+
+  private showToolTip() {
+    this.controlTooltip.show = true;
+    timer(1500).subscribe(() => {
+      this.controlTooltip = {
+        title: '',
+        show: false
+      }
+    });
+  }
+
+
+  private updateCurrentIndex(list: Song[], song: Song) {
+    const newIndex = findIndex(list, song);
+    this.store$.dispatch(SetCurrentIndex({ currentIndex: newIndex }));
+  }
+
+  // 改变模式
+  changeMode() {
+    this.store$.dispatch(SetPlayMode({ playMode: modeTypes[++this.modeCount % 3] }))
+  }
+
+  onClickOutSide(target: HTMLElement) {
+    if (target.dataset.act !== 'delete') {
+      this.showVolumnPanel = false;
+      this.showPanel = false;
+      this.bindFlag = false;
+    }
+  }
+
+
+  onPercentChange(per: number) {
+    if (this.currentSong) {
+      const currentTime =  this.duration * (per / 100);
+      this.audioEl.currentTime = currentTime;
+      if (this.playerPanel) {
+        this.playerPanel.seekLyric(currentTime * 1000);
+      }
+    }
+  }
+
+  // 控制音量
+  onVolumeChange(per: number) {
+    this.audioEl.volume = per / 100;
+  }
+
+  // 控制音量面板
+  toggleVolPanel() {
+    this.togglePanel('showVolumnPanel');
+  }
+
+
   // 控制列表面板
-  toggleListPanel(e: MouseEvent) {
-    // e.stopPropagation();
+  toggleListPanel() {
     if (this.songList.length) {
       this.togglePanel('showPanel');
     }
   }
+
+
   
-  private togglePanel(type: string) {
+  togglePanel(type: string) {
     this[type] = !this[type];
-    if (this['showPanel'] || this['showVolPanel']) {
-      this.bindDocumentClickListener();
-    }else {
-      this.unbindDocumentClickListener();
-    }
+    this.bindFlag = (this.showVolumnPanel || this.showPanel);
   }
-  
-  
-  private bindDocumentClickListener() {
-    if (!this.winClick$) {
-      this.winClick$ = fromEvent(this.doc, 'click').subscribe(() => {
-        if (!this.selfClick) {  // 说明点击了控件外的其它地方
-          this.showVolPanel = false;
-          this.showPanel = false;
-          this.unbindDocumentClickListener();
-        }
-        this.selfClick = false;
-      });
+
+
+  private unbindDocumentClickListener() {
+    if (this.winClick) {
+      this.winClick.unsubscribe();
+      this.winClick = null;
     }
   }
 
-  unbindDocumentClickListener() {
-    if (this.winClick$) {
-      this.winClick$.unsubscribe();
-      this.winClick$ = null;
-    }
-  }
-  
-  changeMode() {
-    this.store$.dispatch(SetPlayMode({ mode: modeTypes[++this.modeCount % 3] }));
-  }
 
-
-   // 面板切歌
-   onChangeSong(song: Song) {
-    this.updateCurrentIndex(this.playList, song);
-  }
-
-   // 面板删除歌曲
-   onDeleteSong(song: Song) {
-    this.modalService.confirm({
-      nzTitle: '确认删除?',
-      nzOnOk: () => this.multipleReducerServe.deleteSong(song)
-    });
-  }
-   
-  // 面板删除歌曲
-  onClearSong() {
-    this.modalService.confirm({
-      nzTitle: '确认删除?',
-      nzOnOk: () => {
-        this.multipleReducerServe.clearSong();
-        this.showPanel = false;
-      }
-    });
-  }
-
-  private updateCurrentIndex(list: Song[], song: Song) {
-    const index = list.findIndex(item => item.id === song.id);
-    this.store$.dispatch(SetCurrentIndex({ index }));
-  }
-  
-  
-  ngAfterViewInit(): void {
-    this.audioEl = this.audio.nativeElement;
-  }
-  
-  onPercentChange(per: number) {
-    if (!this.currentSong) return;
-    const currentTime = this.duration * (per / 100);
-    this.audioEl.currentTime = currentTime;
-    if (this.playPanel) {
-      this.playPanel.lyric.seek(currentTime * 1000);
-      // this.playPanel.lyric.updateLineNum(currentTime * 1000);
-    }
-  }
-  
-  
+  // 播放/暂停
   onToggle() {
     if (!this.currentSong) {
       if (this.playList.length) {
-        this.store$.dispatch(SetCurrentIndex({ index: 0 }));
-        this.songReady = false;
+        this.updateIndex(0);
       }
-    }else{
+    }else {
       if (this.songReady) {
         this.playing = !this.playing;
         if (this.playing) {
@@ -310,133 +279,146 @@ export class WyPlayerComponent implements AfterViewInit {
         }
       }
     }
-    
   }
-  
+
+
+  // 上一曲
   onPrev(index: number) {
     if (!this.songReady) return;
-    if (this.songList.length === 1) {
+    if (this.playList.length === 1) {
       this.loop();
-    }else{
-      const newIndex = index < 0 ? this.songList.length - 1 : index;
-      // this.updateCurrentSong();
-      this.store$.dispatch(SetCurrentIndex({ index: newIndex }));
+    }else {
+      const newIndex = index <= 0 ? this.playList.length - 1 : index;
+      this.updateIndex(newIndex);
     }
+  }
+
+
+  // 下一曲
+  onNext(index: number) {
+    if (!this.songReady) return;
+    if (this.playList.length === 1) {
+      this.loop();
+    }else {
+      const newIndex = index >= this.playList.length ? 0 : index;
+      this.updateIndex(newIndex);
+    }
+  }
+
+
+  // 播放结束
+  onEnded() {
+    this.playing = false;
+    if (this.currentMode.type === 'singleLoop') {
+      this.loop();
+    }else {
+      this.onNext(this.currentIndex + 1);
+    }
+  }
+
+
+  // 播放错误
+  onError() {
+    this.playing = false;
+    this.bufferPercent = 0;
+  }
+
+
+  // 单曲循环
+  private loop() {
+    this.audioEl.currentTime = 0;
+    this.play();
+    if (this.playerPanel) {
+      this.playerPanel.seekLyric(0);
+    }
+  }
+
+
+  private updateIndex(index: number) {
+    this.store$.dispatch(SetCurrentIndex({ currentIndex: index }));
     this.songReady = false;
   }
 
-  onNext(index: number) {
-    if (!this.songReady) return;
-    if (this.songList.length === 1) {
-      this.loop();
-    }else{
-      const newIndex = index >= this.songList.length ? 0 : index;
-      // this.updateCurrentSong();
-      this.store$.dispatch(SetCurrentIndex({ index: newIndex }));
-    }
-    this.songReady = false;
-    
-  }
-  
-  private play() {
-    this.audioEl.play();
-    this.playing = true;
-    // this.playPanel.lyric.play();
-  }
-  
-  // 缓存一定数据足以播放时触发
-  onCanPlay() {
+
+  onCanplay() {
     this.songReady = true;
     this.play();
   }
-  
-  
-  
-  onTimeUpdate(e) {
-    this.currentTime = e.target.currentTime;
+
+
+  onTimeUpdate(e: Event) {
+    this.currentTime = (<HTMLAudioElement>e.target).currentTime;
     this.percent = (this.currentTime / this.duration) * 100;
     const buffered = this.audioEl.buffered;
     if (buffered.length && this.bufferPercent < 100) {
       this.bufferPercent = (buffered.end(0) / this.duration) * 100;
     }
   }
-  
-  // 改变音量
-  onVolChange(val: number) {
-    this.audioEl.volume = val / 100;
-  }
-  
-  
-  onError() {
-    this.playing = false;
-    if (this.currentSong) {
-      this.songReady = true;
-    }
-  }
-  
-  onEnded() {
-    this.playing = false;
-    if (this.currentMode.type !== 'singleLoop') {
-      this.onNext(this.currentIndex + 1);
-    }else {
-      this.loop();
-    }
-  }
-  
-  // 单曲循环
-  private loop() {
-    this.audioEl.currentTime = 0;
-    if (this.playPanel) {
-      this.playPanel.lyric.seek(0);
-    }
-    this.play();
+
+  private play() {
+    this.audioEl.play();
+    this.playing = true;
   }
 
 
-  // 播放器动画
-  togglePlayer(type: string, cb?: () => void) {
-    if (!this.lockPlayer && !this.animating) {
-      this.showPlayer = type;
-      if (cb) cb();
-    }
+  get picUrl(): string {
+    return this.currentSong ? this.currentSong.al.picUrl : '//s4.music.126.net/style/web2/img/default/default_album.jpg';
   }
 
-  onAnimateDone(event: AnimationEvent) {
-    this.animating = false;
-    if (event.toState === 'show' && this.showToolTip) {
-      this.controlToolTip.show = true;
-      if (this.toolTipTimer) {
-        this.win.clearTimeout(this.toolTipTimer);
-        this.toolTipTimer = null;
+
+
+  // 改变歌曲
+  onChangeSong(song: Song) {
+    this.updateCurrentIndex(this.playList, song);
+  }
+
+
+  // 删除歌曲
+  onDeleteSong(song: Song) {
+    this.batchActionsServe.deleteSong(song);
+  }
+
+  // 清空歌曲
+  onClearSong() {
+    this.nzModalServe.confirm({
+      nzTitle: '确认清空列表?',
+      nzOnOk: () => {
+        this.batchActionsServe.clearSong();
       }
-      this.toolTipTimer = this.win.setTimeout(() => {
-        this.showToolTip = false;
-        this.controlToolTip.show = false;
-        this.controlToolTip.title = '';
-      }, 2000);
+    });
+  }
+
+  // 跳转
+  toInfo(path: [string, number]) {
+    console.log('toInfo :', path);
+    if (path[1]) {
+      this.showVolumnPanel = false;
+      this.showPanel = false;
+      this.router.navigate(path);
     }
   }
 
 
-   // 分享
-   onShareSong(song: Song) {
-    const txt = this.makeTxt('单曲', song.name, song.ar);
-    this.multipleReducerServe.share({ id: song.id, type: 'song', txt });
+  togglePlayer(type: string) {
+    if (!this.isLocked && !this.animating) {
+      this.showPlayer = type;
+    }
+  }
+
+
+   // 收藏歌曲
+   onLikeSong(id: string) {
+    this.batchActionsServe.likeSong(id);
+  }
+
+  // 分享
+  onShareSong(resource: Song, type = 'song') {
+    const txt = this.makeTxt('歌曲', resource.name, resource.ar);
+    this.store$.dispatch(SetShareInfo({ info: { id: resource.id.toString(), type, txt } }));
   }
 
   private makeTxt(type: string, name: string, makeBy: Singer[]): string {
-    let makeByStr = makeBy.map(item => item.name).join('/');
-    return `${type}：${name} -- ${makeByStr}`;
-  }
-
-   // 收藏歌曲
-  onLikeSong(id: string) {
-    console.log('onLikeSong');
-    this.multipleReducerServe.likeSongs(id);
-  }
-
-  toInfo(path: [string, number]) {
-    this.showPanel = false;
-    this.router.navigate(path);
+    const makeByStr = makeBy.map(item => item.name).join('/');
+    return `${type}: ${name} -- ${makeByStr}`;
   }
 }

@@ -1,10 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NzIconModule, NzInputModule } from 'ng-zorro-antd';
 import { WySearchComponent } from './wy-search.component';
+import { NzIconModule, NzInputModule } from 'ng-zorro-antd';
 import { WySearchPanelComponent } from './wy-search-panel/wy-search-panel.component';
 import { OverlayModule } from '@angular/cdk/overlay';
-import { WySerchBusService } from './wy-serch-bus.service';
+
+
+
 @NgModule({
   declarations: [WySearchComponent, WySearchPanelComponent],
   entryComponents: [WySearchPanelComponent],
@@ -14,7 +16,6 @@ import { WySerchBusService } from './wy-serch-bus.service';
     NzInputModule,
     OverlayModule
   ],
-  exports: [WySearchComponent],
-  providers: [WySerchBusService]
+  exports: [WySearchComponent]
 })
 export class WySearchModule { }

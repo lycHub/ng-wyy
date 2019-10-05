@@ -1,43 +1,42 @@
 <div class="register modal-content">
   <div class="modal-wrap" *ngIf="!showCode else code">
-    <form nz-form nzLayout="vertical" [formGroup]="formModel" class="login-form" (ngSubmit)="submitForm()">
+    <form nz-form nzLayout="vertical" [formGroup]="formModel" (ngSubmit)="onSubmit()">
       <nz-form-item>
         <nz-form-label>手机号</nz-form-label>
-        <nz-form-control nzHasFeedback nzErrorTip="请输入正确的手机号">
+        <nz-form-control nzHasFeedback nzErrorTip="请填写正确的手机号">
           <nz-input-group nzPrefixIcon="mobile">
-            <input type="tel" nz-input formControlName="phone" placeholder="请输入手机号" />
+            <input type="tel" nz-input placeholder="请输入手机号" formControlName="phone">
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
         <nz-form-label>密码</nz-form-label>
-        <nz-form-control nzHasFeedback nzErrorTip="password is required">
+        <nz-form-control nzHasFeedback nzErrorTip="请输入密码">
           <nz-input-group nzPrefixIcon="lock">
-            <input type="password" nz-input formControlName="password" placeholder="请输入密码" />
+            <input type="password" nz-input placeholder="请输入密码" formControlName="password">
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
         <nz-form-control>
-          <button nz-button [disabled]="!formModel.valid" [nzType]="'primary'" nzBlock>下一步</button>
+          <button nz-button nzBlock nzType="primary" [disabled]="!formModel.valid">下一步</button>
         </nz-form-control>
       </nz-form-item>
     </form>
   </div>
 
-
   <ng-template #code>
     <div class="modal-wrap">
-      <app-check-code
-      [phone]="formModel.get('phone').value"
-      [timing]="timing"
-      (onRegister)="onRegister($event)"
-      (onRepeatSendCode)="sendCode()">
-    </app-check-code>
+      <app-wy-check-code
+        [phone]="formModel.get('phone').value"
+        [codePass]="codePass"
+        [timing]="timing"
+        (onCheckCode)="onCheckCode($event)"
+        (onReatSendCode)="sendCode()"
+        (onCheckExist)="onCheckExist()">
+      </app-wy-check-code>
     </div>
   </ng-template>
 </div>
 
-<div class="m-footer clearfix">
-  <a (click)="otherMethod()"><  其他登录方式</a>
-</div>
+<div class="m-footer clearfix"><a (click)="changeType()">&lt; 其它登陆方式</a></div>

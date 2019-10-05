@@ -1,0 +1,57 @@
+<div class="wy-sec">
+  <div class="u-title wy-sec-wrap clearfix">
+    <h3 class="wy-sec-tit"><span class="f-ff2">听歌排行</span></h3>
+    <span class="sub s-fc3">
+      累计听歌{{listenSongs}}首
+    </span>
+    <div class="more tab-type">
+      <span [class.active]="recordType === 1" (click)="onChangeType.emit(1)">最近一周</span>
+      <nz-divider nzType="vertical"></nz-divider>
+      <span [class.active]="recordType === 0" (click)="onChangeType.emit(0)">所有时间</span>
+    </div>
+  </div>
+
+  <nz-table
+    class="wy-table"
+    #basicTable
+    [nzData]="records"
+    [nzFrontPagination]="false"
+    nzBordered
+    nzNoResult="暂无音乐！">
+    <thead>
+      <tr>
+        <th nzWidth="80px"></th>
+        <th>标题</th>
+        <th nzWidth="120px">时长</th>
+        <th nzWidth="80px">歌手</th>
+        <th>播放次数</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of basicTable.data; index as i">
+        <td class="first-col">
+          <span>{{i + 1}}</span>
+          <i class="ico play-song" title="播放" [class.current]="currentIndex === i" (click)="onAddSong.emit([item.song, true])"></i>
+        </td>
+        <td class="song-name">
+          <a [routerLink]="['/songInfo', item.id]">{{item.song.name}}</a>
+        </td>
+        <td class="time-col">
+          <span>{{item.song.dt / 1000 | formatTime}}</span>
+          <p class="icons">
+            <i class="ico add" title="添加" (click)="onAddSong.emit([item.song, false])"></i>
+            <i class="ico like" title="收藏" (click)="onLikeSong.emit(item.song.id)"></i>
+            <i class="ico share" title="分享" (click)="onShareSong.emit(item.song)"></i>
+          </p>
+        </td>
+        <td>
+          <ng-container *ngFor="let singer of item.song.ar; last as isLast">
+            <a [routerLink]="['/singer', singer.id]">{{singer.name}}</a>
+            <em [hidden]="isLast">/</em>
+          </ng-container>
+        </td>
+        <td>{{item.playCount}}</td>
+      </tr>
+    </tbody>
+  </nz-table>
+</div>

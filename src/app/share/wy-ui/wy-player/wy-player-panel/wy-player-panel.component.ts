@@ -1,183 +1,188 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChildren, QueryList, Inject } from '@angular/core';
-import {SongService} from "../../../../service/song.service";
-import {WyScrollComponent} from "../wy-scroll.component";
-import { WINDOW } from 'src/app/core/inject-tokens';
+import { Component, OnInit, Input, OnChanges, SimpleChanges, Output, EventEmitter, ViewChildren, QueryList, Inject } from '@angular/core';
+import { Song } from 'src/app/services/data-types/common.types';
+import { WyScrollComponent } from '../wy-scroll/wy-scroll.component';
 import { findIndex } from 'src/app/utils/array';
-import {Song} from "../../../../service/data-modals/common.models";
-import {LyricParser} from "../../../wy-lyric";
-
-export type LyricItem = {
-  time: number;
-  txt: string;
-  txtCn?: string;
-}
+import { timer } from 'rxjs';
+import { SongService } from '../../../../services/song.service';
+import { WyLyric, BaseLyricLine } from './wy-lyric';
 
 @Component({
   selector: 'app-wy-player-panel',
   templateUrl: './wy-player-panel.component.html',
   styleUrls: ['./wy-player-panel.component.less']
 })
-export class WyPlayerPanelComponent implements OnChanges {
+export class WyPlayerPanelComponent implements OnInit, OnChanges {
+  @Input() playing: boolean;
   @Input() songList: Song[];
   @Input() currentSong: Song;
-  @Input() playing: boolean;
-  @Input() show = false;
-  
-  currentIndex: number;
-  lyric: LyricParser | null;
-  currentLyric: LyricItem[];
-  currentLineIndex: number;
-  
-  // 关闭面板
+  @Input() show: boolean;
+
   @Output() onClose = new EventEmitter<void>();
-  
-  // 切歌
   @Output() onChangeSong = new EventEmitter<Song>();
-
-  // 删除歌曲
   @Output() onDeleteSong = new EventEmitter<Song>();
-
-  // 清空歌曲
   @Output() onClearSong = new EventEmitter<void>();
-
+  @Output() onToInfo = new EventEmitter<[string, number]>();
   @Output() onLikeSong = new EventEmitter<string>();
   @Output() onShareSong = new EventEmitter<Song>();
 
-  @Output() onToInfo = new EventEmitter<[string, number]>();
-  
-  @ViewChildren(WyScrollComponent) private wyScroll: QueryList<WyScrollComponent>;
-  private lyricRefs: NodeList;
-  
-  // 当前滚动的位置
   scrollY = 0;
 
-  private isCnSong: boolean;
+  currentIndex: number;
+  currentLyric: BaseLyricLine[];
+  currentLineNum: number;
+
+  private lyric: WyLyric;
+  private lyricRefs: NodeList;
+  private startLine = 2;
+
+  @ViewChildren(WyScrollComponent) private wyScroll: QueryList<WyScrollComponent>;
   
-  constructor(private songServe: SongService, @Inject(WINDOW) private win: Window) {}
+  constructor(private songServe: SongService) { }
+
+  ngOnInit() {
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['playing']) {
-      if(!changes['playing'].firstChange) {
+      if (!changes['playing'].firstChange) {
         this.lyric && this.lyric.togglePlay(this.playing);
       }
     }
-    
-    if (changes['show']) {
-      if (!changes['show'].firstChange && changes['show'].currentValue) {
-        this.wyScroll.first.refreshScroll();
-        this.wyScroll.last.refreshScroll();
-        this.win.setTimeout(() => {
-          if (this.currentSong) {
-            this.scrollToCurrent(0);
-          }
-          if (this.lyricRefs) {
-            const targetLine = this.lyricRefs[this.currentLineIndex - this.startLine];
-            if (targetLine) {
-              this.wyScroll.last.scrollToElement(targetLine, 0, false, false);
-            }
-          }
-        }, 80);
-      }else{
-        this.wyScroll && this.wyScroll.first.scrollTo(0, 0);
-      }
-    }
+
 
     if (changes['songList']) {
       if (this.currentSong) {
-        // if (this.lyric) this.lyric.togglePlay();
-        this.currentIndex = findIndex(changes['songList'].currentValue, this.currentSong);
-        
+        this.updateCurrentIndex();
       }
     }
-  
-  
-    let currentSong = null;
+
     if (changes['currentSong']) {
-      currentSong = changes['currentSong'].currentValue;
-      if (currentSong) {
-        this.currentIndex = findIndex(this.songList, currentSong);
+      if (this.currentSong) {
+        console.log('currentSong :', this.currentSong);
+        this.updateCurrentIndex();
         this.updateLyric();
         if (this.show) {
           this.scrollToCurrent();
         }
-      }else{
+      }else {
         this.resetLyric();
+      }
+    }
+
+
+    if (changes['show']) {
+      if (!changes['show'].firstChange && this.show) {
+        // console.log('wyScroll :', this.wyScroll);
+        this.wyScroll.first.refreshScroll();
+        this.wyScroll.last.refreshScroll();
+        timer(80).subscribe(() => {
+          if (this.currentSong) {
+            this.scrollToCurrent(0);
+          }
+          if (this.lyricRefs) {
+            this.scrollToCurrentLyric(0);
+          }
+        });
       }
     }
   }
 
+  private updateCurrentIndex() {
+    this.currentIndex = findIndex(this.songList, this.currentSong);
+  }
 
-  
-  // 获取歌词
-  updateLyric() {
+
+  private updateLyric() {
     this.resetLyric();
-    this.currentLineIndex = 0;
-    this.songServe.getLyric(this.currentSong.id).subscribe(({ lyric, tlyric }) => {
-      this.lyric = new LyricParser({ lyric, tlyric });
-      this.handleLyric();
+    this.songServe.getLyric(this.currentSong.id).subscribe(res => {
+      // console.log('res :', res);
+      this.lyric = new WyLyric(res);
       this.currentLyric = this.lyric.lines;
-      if (tlyric) {
-        this.isCnSong = false;
-      }else{
-        this.isCnSong = true;
-      }
-
+      // console.log('currentLyric :', this.currentLyric);
+      this.startLine = res.tlyric ? 1 : 3;
+      this.handleLyric();
       this.wyScroll.last.scrollTo(0, 0);
+     
+      
       if (this.playing) {
         this.lyric.play();
       }
-      
- 
-    this.win.setTimeout(() => {
-      this.lyricRefs = this.wyScroll.last.el.nativeElement.querySelectorAll('ul li');
-    }, 500);
     });
   }
 
   private handleLyric() {
     this.lyric.handler.subscribe(({ lineNum }) => {
-      if (!this.lyricRefs) return;
-      this.currentLineIndex = lineNum;
-    if (lineNum > this.startLine) {
-      const targetLine = this.lyricRefs[lineNum - this.startLine];
-      this.wyScroll.last.scrollToElement(targetLine, 300, false, false);
-    }else{
-      this.wyScroll.last.scrollTo(0, 0);
-    }
-    });
-    
-  }
-  
-  private scrollToCurrent(speed = 300) {
-    const songListRefs = this.wyScroll.first.el.nativeElement.querySelectorAll('ul li');
-    if (songListRefs.length) {
-      const dom = <HTMLElement>songListRefs[this.currentIndex || 0];
-      const offsetTop = dom.offsetTop;
-      const scrollY = this.scrollY;
-      if ((offsetTop < Math.abs(scrollY)) || (Math.abs(offsetTop - Math.abs(scrollY)) > 205)) {
-        this.wyScroll.first.scrollToElement(dom, speed, false, false);
+      if (!this.lyricRefs) {
+        this.lyricRefs = this.wyScroll.last.el.nativeElement.querySelectorAll('ul li');
+        // console.log('lyricRefs :', this.lyricRefs);
       }
-    }
+
+      
+
+      if (this.lyricRefs.length) {
+        this.currentLineNum = lineNum;
+        if (lineNum > this.startLine) {
+          this.scrollToCurrentLyric(300);
+        }else {
+          this.wyScroll.last.scrollTo(0, 0);
+        }
+        
+      }
+      
+      
+    });
   }
 
 
-  // 删除歌曲
-  onDelete(evt: MouseEvent, song: Song) {
-    evt.stopPropagation();
-    this.onDeleteSong.emit(song);
-  }
 
-
-  // 重置歌词
   private resetLyric() {
     if (this.lyric) {
       this.lyric.stop();
       this.lyric = null;
       this.currentLyric = [];
+      this.currentLineNum = 0;
+      this.lyricRefs = null;
     }
   }
-  
-  // 开始滚动的行
-  get startLine(): number {
-    return this.isCnSong ? 3 : 1;
+
+  seekLyric(time: number) {
+    if (this.lyric) {
+      this.lyric.seek(time);
+    }
+  }
+
+  private scrollToCurrent(speed = 300) {
+    const songListRefs = this.wyScroll.first.el.nativeElement.querySelectorAll('ul li');
+    if (songListRefs.length) {
+      const currentLi = <HTMLElement>songListRefs[this.currentIndex || 0];
+      const offsetTop = currentLi.offsetTop;
+      const offsetHeight = currentLi.offsetHeight;
+      console.log('scrollY :', this.scrollY);
+      console.log('offsetTop :', offsetTop);
+      if (((offsetTop - Math.abs(this.scrollY)) > offsetHeight * 5) || (offsetTop < Math.abs(this.scrollY))) {
+        this.wyScroll.first.scrollToElement(currentLi, speed, false, false);
+      }
+    }
+  }
+
+  private scrollToCurrentLyric(speed = 300) {
+    const targetLine = this.lyricRefs[this.currentLineNum - this.startLine];
+    if (targetLine) {
+      this.wyScroll.last.scrollToElement(targetLine, speed, false, false);
+    }
+  }
+
+  toInfo(evt: MouseEvent, path: [string, number]) {
+    evt.stopPropagation();
+    this.onToInfo.emit(path);
+  }
+
+  likeSong(evt: MouseEvent, id: string) {
+    evt.stopPropagation();
+    this.onLikeSong.emit(id);
+  }
+  shareSong(evt: MouseEvent, song: Song) {
+    evt.stopPropagation();
+    this.onShareSong.emit(song);
   }
 }

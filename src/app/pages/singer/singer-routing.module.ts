@@ -1,15 +1,16 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { SingerDetailComponent } from './singer-detail/singer-detail.component';
-import { SingerDetailResolverService } from './singer-detail/singer-detail-resolver.service';
+import { SingerResolverService } from './singer-detail/singer-resolver.service';
 
-const routes: Routes = [
-  { path: '', component: SingerDetailComponent, data: { title: '歌手主页' }, resolve: { singerDatas: SingerDetailResolverService } }
-];
+
+const routes: Routes = [{
+  path: 'singer/:id', component: SingerDetailComponent, data: { title: '歌手详情' }, resolve: { singerDetail: SingerResolverService }
+}];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
-  providers: [SingerDetailResolverService]
+  providers: [SingerResolverService]
 })
 export class SingerRoutingModule { }

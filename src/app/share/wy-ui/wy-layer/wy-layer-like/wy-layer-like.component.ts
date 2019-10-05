@@ -1,75 +1,45 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
-import { SongSheet } from 'src/app/service/data-modals/common.models';
-import { Store, select } from '@ngrx/store';
-import { AppStoreModule } from 'src/app/store';
-import { Observable, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-import { getLikeId } from '../../../../store/selectors/member.selector';
-import { MemberService } from 'src/app/service/member.service';
-import { NzMessageService } from 'ng-zorro-antd';
-import { SetModalVisible } from '../../../../store/actions/member.actions';
-import { ModalTypes } from 'src/app/store/reducers/member.reducer';
-import { MultipleReducersService } from '../../../../store/multiple-reducers.service';
+import { Component, OnInit, ChangeDetectionStrategy, Input, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
+import { SongSheet } from '../../../../services/data-types/common.types';
+import { LikeSongParams } from 'src/app/services/member.service';
+import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-wy-layer-like',
   templateUrl: './wy-layer-like.component.html',
-  styleUrls: ['./wy-layer-like.component.less']
+  styleUrls: ['./wy-layer-like.component.less'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class WyLayerLikeComponent implements OnInit, OnDestroy {
-  sheetName = '';
-  creating = false;
-  likeId: string;
+export class WyLayerLikeComponent implements OnInit, OnChanges {
   @Input() mySheets: SongSheet[];
-  private appStore$: Observable<AppStoreModule>;
-  private destroy$ = new Subject<void>();
-  constructor(
-    private store$: Store<AppStoreModule>,
-    private memberServe: MemberService,
-    private messageServe: NzMessageService,
-    private multipleReducerServe: MultipleReducersService
-  ) {
-    this.appStore$ = this.store$.pipe(select('member'), takeUntil(this.destroy$));
-    this.appStore$.pipe(select(getLikeId)).subscribe(id => this.watchLikeId(id));
-  }
-
-  ngOnInit() {
-  }
-
-  private watchLikeId(id: string) {
-    this.likeId = id;
-  }
-
-  // 收藏歌曲
-  onLike(id: number) {
-    this.memberServe.likeSongs(id, this.likeId).subscribe(code => {
-      if (code === 200) {
-        this.alertMessage('success', '收藏成功');
-        this.multipleReducerServe.controlModal(ModalTypes.Default, false);
-      }else{
-        this.alertMessage('error', '收藏失败');
-      }
-    }, error => {
-      this.alertMessage('error', error.msg || '收藏失败');
+  @Input() likeId: string;
+  @Input() visible: boolean;
+  @Output() onLikeSong = new EventEmitter<LikeSongParams>();
+  @Output() onCreateSheet = new EventEmitter<string>();
+  creating = false;
+  formModel: FormGroup;
+  constructor(private fb: FormBuilder) {
+    this.formModel = this.fb.group({
+      sheetName: ['', [Validators.required]]
     });
+  }
+
+  ngOnInit() {}
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['visible']) {
+      if (!this.visible) {
+        // this.formModel.get('sheetName').setValue('');
+        this.formModel.get('sheetName').reset();
+        this.creating = false;
+      }
+    }
+  }
+
+  onLike(pid: string) {
+    this.onLikeSong.emit({ pid, tracks: this.likeId });
   }
 
   onSubmit() {
-    this.memberServe.createSheet(this.sheetName).subscribe(res => {
-      if (res.code === 200) {
-        this.onLike(res.id);
-      }else{
-        this.alertMessage('error', res.msg || '新建歌单失败');
-      }
-    });
-  }
-
-  private alertMessage(type: string, msg: string) {
-    this.messageServe.create(type, msg);
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+    this.onCreateSheet.emit(this.formModel.get('sheetName').value);
   }
 }

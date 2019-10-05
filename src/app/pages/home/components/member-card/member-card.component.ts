@@ -1,8 +1,8 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import { User } from 'src/app/service/data-modals/member.models';
-import { MemberService } from 'src/app/service/member.service';
+import { User } from 'src/app/services/data-types/member.type';
+import { MemberService } from '../../../../services/member.service';
+import { timer } from 'rxjs';
 import { NzMessageService } from 'ng-zorro-antd';
-import Cookies from 'universal-cookie';
 
 @Component({
   selector: 'app-member-card',
@@ -10,31 +10,31 @@ import Cookies from 'universal-cookie';
   styleUrls: ['./member-card.component.less']
 })
 export class MemberCardComponent implements OnInit {
+  point: number;
+  tipTitle = '';
+  showTip = false;
   @Input() user: User;
   @Output() openModal = new EventEmitter<void>();
-
-  hasSignIn = false;
-  private cookieIns = new Cookies();
-  constructor(private memberServe: MemberService, private message: NzMessageService,) {
-    const cookIn = this.cookieIns.get('wySignIn');
-    this.hasSignIn = cookIn === 'true';
-  }
+  constructor(private memberServe: MemberService, private messageServe: NzMessageService) {}
 
   ngOnInit() {
-   
   }
 
-  onSignIn() {
-    this.memberServe.signIn().subscribe(() => {
-      this.cookieIns.set('wySignIn', true, { maxAge: 60*60*24 });
+  onSignin() {
+    this.memberServe.signin().subscribe(res => {
       this.alertMessage('success', '签到成功');
+      this.tipTitle = '积分+' + res.point;
+      this.showTip = true;
+      timer(1500).subscribe(() => {
+        this.showTip = false;
+        this.tipTitle = '';
+      });
     }, error => {
       this.alertMessage('error', error.msg || '签到失败');
     });
   }
 
   private alertMessage(type: string, msg: string) {
-    this.message.create(type, msg);
-    this.hasSignIn = true;
+    this.messageServe.create(type, msg);
   }
 }

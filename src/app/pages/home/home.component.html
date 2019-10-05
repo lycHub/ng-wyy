@@ -1,33 +1,38 @@
 <div class="home">
-  <wy-carousel #wyCarousel [activeIndex]="carouselActiveIndex" (changeSlide)="onChangeSlide($event)">
-    <nz-carousel nzAutoPlay [nzEffect]="'fade'" [nzDotRender]="wyCarousel.dotRef" (nzBeforeChange)="nzBeforeChange($event)">
+  <app-wy-carousel #wyCarousel [activeIndex]="carouselActiveIndex" (changeSlide)="onChangeSlide($event)">
+    <nz-carousel
+    nzAutoPlay
+    nzEffect="fade"
+    [nzDotRender]="wyCarousel.dotRef"
+    (nzBeforeChange)="onBeforeChange($event)">
       <div class="carousel-item" nz-carousel-content *ngFor="let item of banners">
         <a [href]="item.url" target="_blank" class="banner-item">
-          <img [src]="item.imageUrl" appImgDefault />
+          <img appImgDefault [src]="item.imageUrl" />
         </a>
       </div>
     </nz-carousel>
-  </wy-carousel>
+  </app-wy-carousel>
 
   <div class="main">
     <div class="wrap">
       <div class="left">
-        <section class="sec">
+        <div class="sec">
           <div class="up">
             <div class="navs">
               <h2>
                 <i></i>
-                <a routerLink="/sheet">热门推荐</a>
+                <a>热门推荐</a>
               </h2>
               <nav>
-                <a routerLink="/sheet" [queryParams]="{cat: item.name}" *ngFor="let item of hotTags">{{item.name}}</a>
+                <a *ngFor="let item of hotTags" routerLink="/sheet" [queryParams]="{cat: item.name}">{{item.name}}</a>
               </nav>
             </div>
-            <a routerLink="/sheet">
+            <a>
               更多
               <i nz-icon type="arrow-right" theme="outline"></i>
             </a>
           </div>
+
 
           <div class="down">
             <div class="down-wrap">
@@ -35,41 +40,34 @@
                 class="sheet-item"
                 *ngFor="let item of songSheetList"
                 [sheet]="item"
-                (onPlay)="playSheet($event)"
+                (onPlay)="onPlaySheet($event)"
                 (click)="toInfo(item.id)">
               </app-single-sheet>
             </div>
           </div>
-        </section>
+        </div>
       </div>
 
-      <aside class="right">
+
+
+      <div class="right">
         <app-member-card [user]="user" (openModal)="openModal()"></app-member-card>
 
         <div class="settled-singer">
-          <div class="tit">
-            <b>入驻歌手</b>
-            <span>
-              查看全部
-              <i nz-icon nzType="right" nzTheme="outline"></i>
-            </span>
-          </div>
-
+          <div class="tit"><b>入驻歌手</b></div>
           <div class="list">
-            <div class="card" *ngFor="let item of singers" [routerLink]="[ '/singer', item.id ]">
+            <div class="card" *ngFor="let item of singers" [routerLink]="['/singer', item.id]">
               <div class="pic">
-                <img appImgDefault class="full-height" [src]="item.img1v1Url" [alt]="item.name" />
+                <img appImgDefault [src]="item.picUrl" [alt]="item.name">
               </div>
               <div class="txt">
                 <b class="ellipsis">{{item.name}}</b>
-                <span class="ellipsis">
-                  专辑数：{{item.albumSize}}
-                </span>
+                <span>专辑数：{{item.albumSize}}</span>
               </div>
             </div>
           </div>
         </div>
-      </aside>
+      </div>
     </div>
   </div>
 </div>

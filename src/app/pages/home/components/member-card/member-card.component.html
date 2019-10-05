@@ -1,15 +1,17 @@
 <div class="member">
   <div class="login" *ngIf="!user else logined">
     <p>登录网易云音乐，可以享受无限收藏的乐趣，并且无限同步到手机</p>
-    <button nz-button class="btn" (click)="openModal.emit()">用户登录</button>
+    <button nz-button class="btn" (click)="openModal.emit()">用户登陆</button>
   </div>
-  
+
+
+
   <ng-template #logined>
-    <div class="n-myinfo" *ngIf="user">
+    <div class="n-myinfo">
       <div class="f-cb clearfix">
-        <a class="head">
-          <img appImgDefault [src]="user.profile.avatarUrl" [alt]="user.profile.nickname" />
-        </a>
+        <div class="head">
+          <img [src]="user.profile.avatarUrl" [alt]="user.profile.nickname" />
+        </div>
         <div class="info">
           <h4><a class="nm ellipsis">{{user.profile.nickname}}</a></h4>
           <p class="lv">
@@ -17,12 +19,12 @@
               {{user.level}}<i class="lvright u-icn2"></i>
             </span>
           </p>
-          <div class="btnwrap f-pr">
-            <button nz-button nzType="primary" [disabled]="hasSignIn" nzBlock (click)="onSignIn()">签到</button>
+          <div class="btnwrap f-pr" nz-tooltip [nzTitle]="tipTitle" nzPlacement="bottom" [nzVisible]="showTip">
+            <button nz-button nzType="primary" nzBlock (click)="onSignin()">签到</button>
           </div>
-        </div>
+        </div> 
       </div>
-      
+  
       <ul class="dny clearfix">
         <li class="fst">
           <strong class="ellipsis">{{user.profile.eventCount}}</strong>
@@ -39,5 +41,4 @@
       </ul>
     </div>
   </ng-template>
-  
 </div>

@@ -1,29 +1,25 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WyLayerModalComponent } from './wy-layer-modal/wy-layer-modal.component';
-import { NzButtonModule } from 'ng-zorro-antd/button';
-import { OverlayModule, OverlayContainer } from '@angular/cdk/overlay';
+import { WyLayerDefaultComponent } from './wy-layer-default/wy-layer-default.component';
+import { NzButtonModule, NzInputModule, NzCheckboxModule, NzSpinModule, NzAlertModule, NzListModule, NzIconModule, NzFormModule } from 'ng-zorro-antd';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { WyLoginPhoneComponent } from './wy-login-phone/wy-login-phone.component';
-import { WyLayerRegisterComponent } from './wy-layer-register/wy-layer-register.component';
+import { WyLayerLoginComponent } from './wy-layer-login/wy-layer-login.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { NzInputModule, NzAlertModule, NzCheckboxModule, NzFormModule, NzSpinModule, NzListModule, NzIconModule } from 'ng-zorro-antd';
-import { WyLoginDefaultComponent } from './wy-login-default/wy-login-default.component';
 import { WyLayerLikeComponent } from './wy-layer-like/wy-layer-like.component';
 import { WyLayerShareComponent } from './wy-layer-share/wy-layer-share.component';
-import { CheckCodeComponent } from '../check-code/check-code.component';
-import { CodeComponent } from '../check-code/code/code.component';
-import { WyLayerService } from './wy-layer.service';
+import { WyLayerRegisterComponent } from './wy-layer-register/wy-layer-register.component';
+import { WyCheckCodeComponent } from './wy-check-code/wy-check-code.component';
+import { WyCodeComponent } from './wy-check-code/wy-code/wy-code.component';
+
 
 
 @NgModule({
-  declarations: [WyLayerModalComponent, WyLoginPhoneComponent, WyLayerRegisterComponent, WyLoginDefaultComponent, WyLayerLikeComponent, WyLayerShareComponent, CheckCodeComponent, CodeComponent],
+  declarations: [WyLayerModalComponent, WyLayerDefaultComponent, WyLayerLoginComponent, WyLayerLikeComponent, WyLayerShareComponent, WyLayerRegisterComponent, WyCheckCodeComponent, WyCodeComponent],
   imports: [
     CommonModule,
     NzButtonModule,
-    OverlayModule,
     DragDropModule,
-    FormsModule,
     ReactiveFormsModule,
     NzInputModule,
     NzCheckboxModule,
@@ -31,9 +27,9 @@ import { WyLayerService } from './wy-layer.service';
     NzAlertModule,
     NzListModule,
     NzIconModule,
-    NzFormModule
+    NzFormModule,
+    FormsModule
   ],
-  providers: [OverlayContainer, WyLayerService],
-  exports: [WyLayerModalComponent, WyLoginPhoneComponent, WyLayerRegisterComponent, WyLoginDefaultComponent, WyLayerLikeComponent, WyLayerShareComponent, CheckCodeComponent, CodeComponent]
+  exports: [WyLayerModalComponent, WyLayerDefaultComponent, WyLayerLoginComponent, WyLayerLikeComponent, WyLayerShareComponent, WyLayerRegisterComponent, WyCheckCodeComponent]
 })
 export class WyLayerModule { }
