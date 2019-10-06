@@ -1,31 +1,39 @@
-import { Injectable, Inject } from '@angular/core';
-import { ServicesModule, WINDOW } from './services.module';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
+import { ServicesModule } from './services.module';
 import { AnyJson } from './data-types/common.types';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
   providedIn: ServicesModule
 })
 export class StorageService {
-
-  constructor(@Inject(WINDOW) private win: Window) {
-
+  private isBrowser: boolean;
+  constructor(@Inject(PLATFORM_ID) private plateformId: object) {
+    this.isBrowser = isPlatformBrowser(this.plateformId);
   }
 
   getStorage(key: string, type = 'local'): string {
-    return this.win[type + 'Storage'].getItem(key);
+    if (this.isBrowser) {
+      return window[type + 'Storage'].getItem(key);
+    }
+    return '';
   }
 
   setStorage(params: AnyJson | AnyJson[], type = 'local') {
-    const kv = Array.isArray(params) ? params : [params];
-    for (const { key, value } of kv) {
-      this.win[type + 'Storage'].setItem(key, value.toString());
+    if (this.isBrowser) {
+      const kv = Array.isArray(params) ? params : [params];
+      for (const { key, value } of kv) {
+        window[type + 'Storage'].setItem(key, value.toString());
+      }
     }
   }
 
   removeStorage(params: string | string[], type = 'local') {
-    const kv = Array.isArray(params) ? params : [params];
-    for (const key of kv) {
-      this.win[type + 'Storage'].removeItem(key);
+    if (this.isBrowser) {
+      const kv = Array.isArray(params) ? params : [params];
+      for (const key of kv) {
+        window[type + 'Storage'].removeItem(key);
+      }
     }
   }
 }

@@ -1,11 +1,12 @@
-import { Component, OnInit, ChangeDetectionStrategy, ElementRef, ChangeDetectorRef, AfterViewInit, ViewChild, Renderer2, Inject, Output, EventEmitter, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ElementRef, ChangeDetectorRef, AfterViewInit, ViewChild, Renderer2, Inject, Output, EventEmitter, Input, OnChanges, SimpleChanges, PLATFORM_ID } from '@angular/core';
 import { ModalTypes } from '../../../../store/reducers/member.reducer';
 import { Overlay, OverlayRef, OverlayKeyboardDispatcher, BlockScrollStrategy, OverlayContainer } from '@angular/cdk/overlay';
 import { BatchActionsService } from 'src/app/store/batch-actions.service';
 import { ESCAPE } from '@angular/cdk/keycodes';
-import { DOCUMENT } from '@angular/common';
-import { WINDOW } from 'src/app/services/services.module';
+import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { trigger, style, transition, animate, state } from '@angular/animations';
+
+interface SizeType { w: number; h: number; }
 
 @Component({
   selector: 'app-wy-layer-modal',
@@ -38,9 +39,9 @@ export class WyLayerModalComponent implements OnInit, AfterViewInit, OnChanges {
   private resizeHandler: () => void;
   @ViewChild('modalContainer', { static: false }) private modalRef: ElementRef;
   @Output() onLoadMySheets = new EventEmitter<void>();
-
+  private isBrowser: boolean;
   constructor(
-    @Inject(WINDOW) private win: Window,
+    @Inject(PLATFORM_ID) private plateformId: object,
     @Inject(DOCUMENT) private doc: Document,
     private overlay: Overlay,
     private elementRef: ElementRef,
@@ -50,6 +51,7 @@ export class WyLayerModalComponent implements OnInit, AfterViewInit, OnChanges {
     private rd: Renderer2,
     private overlayContainerServe: OverlayContainer
   ) {
+    this.isBrowser = isPlatformBrowser(this.plateformId);
     this.scrollStrategy = this.overlay.scrollStrategies.block();
   }
 
@@ -112,13 +114,15 @@ export class WyLayerModalComponent implements OnInit, AfterViewInit, OnChanges {
 
 
   private listenResizeToCenter() {
-    const modal = this.modalRef.nativeElement;
-    const modalSize = this.getHideDomSize(modal);
-    this.keepCenter(modal, modalSize);
-    this.resizeHandler = this.rd.listen('window', 'resize', () => this.keepCenter(modal, modalSize));
+    if (this.isBrowser) {
+      const modal = this.modalRef.nativeElement;
+      const modalSize = this.getHideDomSize(modal);
+      this.keepCenter(modal, modalSize);
+      this.resizeHandler = this.rd.listen('window', 'resize', () => this.keepCenter(modal, modalSize));
+    }
   }
 
-  private keepCenter(modal: HTMLElement, size: { w: number, h: number }) {
+  private keepCenter(modal: HTMLElement, size: SizeType) {
     const left = (this.getWIndowSize().w - size.w) / 2;
     const top = (this.getWIndowSize().h - size.h) / 2;
     modal.style.left = left + 'px';
@@ -126,16 +130,16 @@ export class WyLayerModalComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
 
-  private getHideDomSize(dom: HTMLElement) {
+  private getHideDomSize(dom: HTMLElement): SizeType {
     return {
       w: dom.offsetWidth,
       h: dom.offsetHeight
     };
   }
-  private getWIndowSize() {
+  private getWIndowSize(): SizeType {
     return {
-      w: this.win.innerWidth || this.doc.documentElement.clientWidth || this.doc.body.offsetWidth,
-      h: this.win.innerHeight || this.doc.documentElement.clientHeight || this.doc.body.offsetHeight
+      w: window.innerWidth || this.doc.documentElement.clientWidth || this.doc.body.offsetWidth,
+      h: window.innerHeight || this.doc.documentElement.clientHeight || this.doc.body.offsetHeight
     };
   }
 }
