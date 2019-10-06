@@ -247,19 +247,9 @@ export class WyPlayerComponent implements OnInit {
     }
   }
 
-
-
   togglePanel(type: string) {
     this[type] = !this[type];
     this.bindFlag = (this.showVolumnPanel || this.showPanel);
-  }
-
-
-  private unbindDocumentClickListener() {
-    if (this.winClick) {
-      this.winClick.unsubscribe();
-      this.winClick = null;
-    }
   }
 
 

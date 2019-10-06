@@ -3,11 +3,12 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --port 4800",
+    "start": "ng serve",
     "build": "ng build --prod --optimization --progress --extractCss",
     "test": "ng test",
     "lint": "ng lint --typeCheck --fix",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "server": "node server.js"
   },
   "private": true,
   "dependencies": {
@@ -40,6 +41,8 @@
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "~8.9.4",
     "codelyzer": "^5.0.0",
+    "express": "^4.17.1",
+    "http-proxy-middleware": "^0.20.0",
     "jasmine-core": "~3.4.0",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~4.1.0",
