@@ -163,6 +163,7 @@ export class WyPlayerComponent implements OnInit {
 
   private watchCurrentSong(song: Song) {
     this.currentSong = song;
+    this.bufferPercent = 0;
     if (song) {
       this.duration = song.dt / 1000;
     }

@@ -27,7 +27,7 @@
                 <a *ngFor="let item of hotTags" routerLink="/sheet" [queryParams]="{cat: item.name}">{{item.name}}</a>
               </nav>
             </div>
-            <a>
+            <a routerLink="/sheet">
               更多
               <i nz-icon type="arrow-right" theme="outline"></i>
             </a>
