@@ -2,26 +2,18 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.0.
 
-## Development server
+## 启动接口（[网易云音乐接口](NeteaseCloudMusicApi)）：
+- git clone https://github.com/Binaryify/NeteaseCloudMusicApi.git
+- npm i
+- npm start
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
-## Code scaffolding
+## 启动项目：
+- git clone https://github.com/lycHub/ng-wyy.git
+- npm i
+- npm start
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+## 视频地址：
+- B站：https://www.bilibili.com/video/av70355308
+- 网易云课堂：https://study.163.com/course/courseMain.htm?share=2&shareId=480000001947524&courseId=1209529841&_trace_c_p_k2_=832892bbbabb45d2889f5308a17244e8
