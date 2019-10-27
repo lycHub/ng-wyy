@@ -278,7 +278,7 @@ export class WyPlayerComponent implements OnInit {
     if (this.playList.length === 1) {
       this.loop();
     } else {
-      const newIndex = index <= 0 ? this.playList.length - 1 : index;
+      const newIndex = index < 0 ? this.playList.length - 1 : index;
       this.updateIndex(newIndex);
     }
   }
