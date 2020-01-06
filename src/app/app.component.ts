@@ -13,7 +13,7 @@ import { User } from './services/data-types/member.type';
 import { NzMessageService } from 'ng-zorro-antd';
 import { codeJson } from './utils/base64';
 import { StorageService } from './services/storage.service';
-import { getLikeId, getModalVisible, getModalType, getShareInfo } from './store/selectors/member.selector';
+import { getLikeId, getModalVisible, getModalType, getShareInfo, getMember } from './store/selectors/member.selector';
 import { Router, ActivatedRoute, NavigationEnd, NavigationStart } from '@angular/router';
 import { Observable, interval } from 'rxjs';
 import { filter, map, mergeMap, takeUntil } from 'rxjs/internal/operators';
@@ -121,24 +121,11 @@ export class AppComponent {
 
 
   private listenStates() {
-    const appStore$ = this.store$.pipe(select('member'));
-    const stateArr = [{
-      type: getLikeId,
-      cb: id => this.watchLikeId(id)
-    }, {
-      type: getModalVisible,
-      cb: visib => this.watchModalVisible(visib)
-    }, {
-      type: getModalType,
-      cb: type => this.watchModalType(type)
-    }, {
-      type: getShareInfo,
-      cb: info => this.watchShareInfo(info)
-    }];
-
-    stateArr.forEach(item => {
-      appStore$.pipe(select(item.type)).subscribe(item.cb);
-    });
+    const appStore$ = this.store$.pipe(select(getMember));
+    appStore$.pipe(select(getLikeId)).subscribe(id => this.watchLikeId(id));
+    appStore$.pipe(select(getModalVisible)).subscribe(visib => this.watchModalVisible(visib));
+    appStore$.pipe(select(getModalType)).subscribe(type => this.watchModalType(type));
+    appStore$.pipe(select(getShareInfo)).subscribe(info => this.watchShareInfo(info));
   }
 
 

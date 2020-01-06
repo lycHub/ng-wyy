@@ -8,6 +8,8 @@ import { shuffle, findIndex } from '../utils/array';
 import { MemberState, ModalTypes } from './reducers/member.reducer';
 import { SetModalType, SetModalVisible, SetLikeId } from './actions/member.actions';
 import { timer } from 'rxjs';
+import { getMember } from './selectors/member.selector';
+import { getPlayer } from './selectors/player.selector';
 
 @Injectable({
   providedIn: AppStoreModule
@@ -16,8 +18,8 @@ export class BatchActionsService {
   private playerState: PlayState;
   private memberState: MemberState;
   constructor(private store$: Store<AppStoreModule>) {
-    this.store$.pipe(select('player')).subscribe(res => this.playerState = res);
-    this.store$.pipe(select('member')).subscribe(res => this.memberState = res);
+    this.store$.pipe(select(getPlayer)).subscribe(res => this.playerState = res);
+    this.store$.pipe(select(getMember)).subscribe(res => this.memberState = res);
   }
 
   // 播放列表

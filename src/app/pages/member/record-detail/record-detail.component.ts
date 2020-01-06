@@ -14,6 +14,7 @@ import { SheetService } from 'src/app/services/sheet.service';
 import { getCurrentSong } from 'src/app/store/selectors/player.selector';
 import { findIndex } from 'src/app/utils/array';
 import { SetShareInfo } from 'src/app/store/actions/member.actions';
+import { getPlayer } from '../../../store/selectors/player.selector';
 
 @Component({
   selector: 'app-record-detail',
@@ -51,7 +52,7 @@ export class RecordDetailComponent implements OnInit, OnDestroy {
   }
 
   private listenCurrentSong() {
-    this.store$.pipe(select('player'), select(getCurrentSong), takeUntil(this.destory$)).subscribe(song => {
+    this.store$.pipe(select(getPlayer), select(getCurrentSong), takeUntil(this.destory$)).subscribe(song => {
       this.currentSong = song;
       if (song) {
         const songs = this.records.map(item => item.song);

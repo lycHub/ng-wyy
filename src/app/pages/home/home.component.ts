@@ -9,7 +9,7 @@ import { ModalTypes } from '../../store/reducers/member.reducer';
 import { User } from 'src/app/services/data-types/member.type';
 import { AppStoreModule } from '../../store/index';
 import { Store, select } from '@ngrx/store';
-import { getUserId } from '../../store/selectors/member.selector';
+import { getUserId, getMember } from '../../store/selectors/member.selector';
 import { MemberService } from 'src/app/services/member.service';
 import { SetUserId } from 'src/app/store/actions/member.actions';
 
@@ -42,7 +42,7 @@ export class HomeComponent implements OnInit {
       this.songSheetList = songSheetList;
       this.singers = singers;
     });
-    this.store$.pipe(select('member'), select(getUserId)).subscribe(id => {
+    this.store$.pipe(select(getMember), select(getUserId)).subscribe(id => {
       if (id) {
         this.getUserDetail(id);
       } else {

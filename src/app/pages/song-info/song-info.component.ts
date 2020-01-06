@@ -11,6 +11,7 @@ import { BatchActionsService } from 'src/app/store/batch-actions.service';
 import { NzMessageService } from 'ng-zorro-antd';
 import { getCurrentSong } from 'src/app/store/selectors/player.selector';
 import { SetShareInfo } from 'src/app/store/actions/member.actions';
+import { getPlayer } from '../../store/selectors/player.selector';
 
 @Component({
   selector: 'app-song-info',
@@ -49,7 +50,7 @@ export class SongInfoComponent implements OnInit, OnDestroy {
 
   private listenCurrent() {
     this.store$
-    .pipe(select('player'), select(getCurrentSong), takeUntil(this.destroy$))
+    .pipe(select(getPlayer), select(getCurrentSong), takeUntil(this.destroy$))
     .subscribe(song => this.currentSong = song);
   }
 

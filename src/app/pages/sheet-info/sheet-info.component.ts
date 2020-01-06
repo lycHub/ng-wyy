@@ -5,7 +5,7 @@ import { SongSheet, Song, Singer } from '../../services/data-types/common.types'
 import { AppStoreModule } from '../../store/index';
 import { Store, select } from '@ngrx/store';
 import { Observable, Subject } from 'rxjs';
-import { getCurrentSong } from '../../store/selectors/player.selector';
+import { getCurrentSong, getPlayer } from '../../store/selectors/player.selector';
 import { SongService } from '../../services/song.service';
 import { BatchActionsService } from '../../store/batch-actions.service';
 import { NzMessageService } from 'ng-zorro-antd';
@@ -59,7 +59,7 @@ export class SheetInfoComponent implements OnInit, OnDestroy {
 
   private listenCurrent() {
     this.store$
-    .pipe(select('player'), select(getCurrentSong), takeUntil(this.destroy$))
+    .pipe(select(getPlayer), select(getCurrentSong), takeUntil(this.destroy$))
     .subscribe(song => {
       this.currentSong = song;
       if (song) {

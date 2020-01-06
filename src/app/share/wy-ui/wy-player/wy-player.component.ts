@@ -1,11 +1,11 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, Inject } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Inject } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppStoreModule } from '../../../store/index';
-import { getSongList, getPlayList, getCurrentIndex, getPlayMode, getCurrentSong, getCurrentAction } from '../../../store/selectors/player.selector';
+import { getSongList, getPlayList, getCurrentIndex, getPlayMode, getCurrentSong, getCurrentAction, getPlayer } from '../../../store/selectors/player.selector';
 import { Song, Singer } from '../../../services/data-types/common.types';
 import { PlayMode } from './player-type';
 import { SetCurrentIndex, SetCurrentAction } from 'src/app/store/actions/player.actions';
-import { Subscription, fromEvent, timer } from 'rxjs';
+import { Subscription, timer } from 'rxjs';
 import { DOCUMENT } from '@angular/common';
 import { SetPlayMode, SetPlayList, SetSongList } from '../../../store/actions/player.actions';
 import { shuffle, findIndex } from 'src/app/utils/array';
@@ -107,30 +107,13 @@ export class WyPlayerComponent implements OnInit {
     private batchActionsServe: BatchActionsService,
     private router: Router
   ) {
-    const appStore$ = this.store$.pipe(select('player'));
-    const stateArr = [{
-      type: getSongList,
-      cb: list => this.watchList(list, 'songList')
-    }, {
-      type: getPlayList,
-      cb: list => this.watchList(list, 'playList')
-    }, {
-      type: getCurrentIndex,
-      cb: index => this.watchCurrentIndex(index)
-    }, {
-      type: getPlayMode,
-      cb: mode => this.watchPlayMode(mode)
-    }, {
-      type: getCurrentSong,
-      cb: song => this.watchCurrentSong(song)
-    }, {
-      type: getCurrentAction,
-      cb: action => this.watchCurrentAction(action)
-    }];
-
-    stateArr.forEach(item => {
-      appStore$.pipe(select(item.type)).subscribe(item.cb);
-    });
+    const appStore$ = this.store$.pipe(select(getPlayer));
+    appStore$.pipe(select(getSongList)).subscribe(list => this.watchList(list, 'songList'));
+    appStore$.pipe(select(getPlayList)).subscribe(list => this.watchList(list, 'playList'));
+    appStore$.pipe(select(getCurrentIndex)).subscribe(index => this.watchCurrentIndex(index));
+    appStore$.pipe(select(getPlayMode)).subscribe(mode => this.watchPlayMode(mode));
+    appStore$.pipe(select(getCurrentSong)).subscribe(song => this.watchCurrentSong(song));
+    appStore$.pipe(select(getCurrentAction)).subscribe(action => this.watchCurrentAction(action));
   }
 
   ngOnInit() {

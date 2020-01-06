@@ -10,7 +10,7 @@ import { NzMessageService } from 'ng-zorro-antd';
 import { Song, Singer } from '../../../services/data-types/common.types';
 import { AppStoreModule } from 'src/app/store';
 import { Store, select } from '@ngrx/store';
-import { getCurrentSong } from '../../../store/selectors/player.selector';
+import { getCurrentSong, getPlayer } from '../../../store/selectors/player.selector';
 import { findIndex } from '../../../utils/array';
 import { Subject } from 'rxjs';
 import { SetShareInfo } from 'src/app/store/actions/member.actions';
@@ -54,7 +54,7 @@ export class CenterComponent implements OnInit, OnDestroy {
   }
 
   private listenCurrentSong() {
-    this.store$.pipe(select('player'), select(getCurrentSong), takeUntil(this.destory$)).subscribe(song => {
+    this.store$.pipe(select(getPlayer), select(getCurrentSong), takeUntil(this.destory$)).subscribe(song => {
       this.currentSong = song;
       if (song) {
         const songs = this.records.map(item => item.song);

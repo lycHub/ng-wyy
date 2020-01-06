@@ -12,6 +12,7 @@ import { findIndex } from 'src/app/utils/array';
 import { Subject } from 'rxjs';
 import { SetShareInfo } from 'src/app/store/actions/member.actions';
 import { MemberService } from '../../../services/member.service';
+import { getPlayer } from '../../../store/selectors/player.selector';
 
 @Component({
   selector: 'app-singer-detail',
@@ -46,7 +47,7 @@ export class SingerDetailComponent implements OnInit, OnDestroy {
 
   private listenCurrent() {
     this.store$
-    .pipe(select('player'), select(getCurrentSong), takeUntil(this.destroy$))
+    .pipe(select(getPlayer), select(getCurrentSong), takeUntil(this.destroy$))
     .subscribe(song => {
       this.currentSong = song;
       if (song) {
