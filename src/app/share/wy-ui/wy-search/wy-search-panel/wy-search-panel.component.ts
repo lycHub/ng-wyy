@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SearchResult } from '../../../../services/data-types/common.types';
 import { Router } from '@angular/router';
+import { JumpService } from '../jump.service';
 
 @Component({
   selector: 'app-wy-search-panel',
@@ -9,7 +10,7 @@ import { Router } from '@angular/router';
 })
 export class WySearchPanelComponent implements OnInit {
   searchResult: SearchResult;
-  constructor(private router: Router) { }
+  constructor(private router: Router, private jumpServe: JumpService) { }
 
   ngOnInit() {
   }
@@ -17,6 +18,7 @@ export class WySearchPanelComponent implements OnInit {
   // 跳转
   toInfo(path: [string, number]) {
     if (path[1]) {
+      this.jumpServe.jump();
       this.router.navigate(path);
     }
   }

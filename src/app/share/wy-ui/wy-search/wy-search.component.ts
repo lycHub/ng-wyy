@@ -6,6 +6,7 @@ import { isEmptyObject } from 'src/app/utils/tools';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { WySearchPanelComponent } from './wy-search-panel/wy-search-panel.component';
+import { JumpService } from './jump.service';
 
 @Component({
   selector: 'app-wy-search',
@@ -26,10 +27,14 @@ export class WySearchComponent implements OnInit, AfterViewInit, OnChanges {
   @ViewChild('nzInput', { static: false }) private nzInput: ElementRef;
   constructor(
     private overlay: Overlay,
-    private viewContainerRef: ViewContainerRef
+    private viewContainerRef: ViewContainerRef,
+    private jumpServe: JumpService
   ) {}
 
   ngOnInit() {
+    this.jumpServe.handleJump().subscribe(() => {
+      this.hideOverlayPanel();
+    });
   }
 
   ngAfterViewInit() {
@@ -45,7 +50,7 @@ export class WySearchComponent implements OnInit, AfterViewInit, OnChanges {
       if (!isEmptyObject(this.searchResult)) {
         this.showOverlayPanel();
       } else {
-        this.showOverlayPanel();
+        this.hideOverlayPanel();
       }
     }
   }
@@ -56,9 +61,7 @@ export class WySearchComponent implements OnInit, AfterViewInit, OnChanges {
     }
   }
 
-  onBlur() {
-    this.hideOverlayPanel();
-  }
+  // 删除onBlur，改成jumpServe监听跳转，隐藏面板
 
   showOverlayPanel() {
     this.hideOverlayPanel();
@@ -71,7 +74,7 @@ export class WySearchComponent implements OnInit, AfterViewInit, OnChanges {
       overlayY: 'top'
     }]).withLockedPosition(true);
     this.overlayRef = this.overlay.create({
-      // hasBackdrop: true,
+      hasBackdrop: true,
       positionStrategy,
       scrollStrategy: this.overlay.scrollStrategies.reposition()
     });
