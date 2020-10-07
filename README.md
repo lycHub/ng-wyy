@@ -1,3 +1,5 @@
+> 最新的Angular 10出来咯，点击试看 >>> [Angular完全解读](https://www.bilibili.com/video/BV1zy4y1k7Dw)
+
 # NgWyy
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.0.
