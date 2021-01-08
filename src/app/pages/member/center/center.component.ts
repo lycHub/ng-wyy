@@ -51,6 +51,7 @@ export class CenterComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    console.log('center :>> ');
   }
 
   private listenCurrentSong() {
